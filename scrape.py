@@ -1,6 +1,7 @@
 import requests
 import html5print
 import re
+from google_images_download import google_images_download  
 
 
 x = requests.get('https://exrx.net/Lists/Directory')
@@ -138,96 +139,102 @@ for i in detailmusclescsv:
 #CSV file format: Name, Id, GeneralID, Othernames(comma-sep), heads, related muscles, comments
 a = open("detail-muscles.csv","w", newline='\n')
 for entry in detailmusclescsv:
-    line = []
-    line.append(entry) #Name
+    # line = []
+    # line.append(entry) #Name
 
-    line.append(detailmusclescsv[entry][0]) #ID
-    line.append(detailmusclescsv[entry][1]) #General ID
+    # line.append(detailmusclescsv[entry][0]) #ID
+    # line.append(detailmusclescsv[entry][1]) #General ID
 
-    s = ""
-    for e in range(len(detailmusclescsv[entry][2][0])):
-        if len(detailmusclescsv[entry][2][0]) > 1 and e != len(detailmusclescsv[entry][2][0]) - 1:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][0][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1] + ","
-        else:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][0][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1]
-    line.append(s) #Othernames
+    # s = ""
+    # for e in range(len(detailmusclescsv[entry][2][0])):
+    #     if len(detailmusclescsv[entry][2][0]) > 1 and e != len(detailmusclescsv[entry][2][0]) - 1:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][0][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1] + ","
+    #     else:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][0][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1]
+    # line.append(s) #Othernames
 
-    s = ""
-    for e in range(len(detailmusclescsv[entry][2][1])):
-        if len(detailmusclescsv[entry][2][1]) > 1 and e != len(detailmusclescsv[entry][2][1]) - 1:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][1][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1] + ","
-        else:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][1][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1]
-    line.append(s) #heads
+    # s = ""
+    # for e in range(len(detailmusclescsv[entry][2][1])):
+    #     if len(detailmusclescsv[entry][2][1]) > 1 and e != len(detailmusclescsv[entry][2][1]) - 1:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][1][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1] + ","
+    #     else:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][1][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1]
+    # line.append(s) #heads
 
-    s = ""
-    for e in range(len(detailmusclescsv[entry][2][2])):
-        if len(detailmusclescsv[entry][2][2]) > 1 and e != len(detailmusclescsv[entry][2][2]) - 1:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][2][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1] + ","
-        else:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][2][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1]
-    line.append(s) #related muscles
+    # s = ""
+    # for e in range(len(detailmusclescsv[entry][2][2])):
+    #     if len(detailmusclescsv[entry][2][2]) > 1 and e != len(detailmusclescsv[entry][2][2]) - 1:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][2][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1] + ","
+    #     else:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][2][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1]
+    # line.append(s) #related muscles
 
-    s = ""
-    for e in range(len(detailmusclescsv[entry][2][3])):
-        if len(detailmusclescsv[entry][2][3]) > 1 and e != len(detailmusclescsv[entry][2][3]) - 1:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][3][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1] + ","
-        else:
-            z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][3][e],re.MULTILINE | re.DOTALL)
-            z = z.replace("\n","")
-            if z:
-                s = s + z
-                if s[-1] == " ":
-                    s = s[:-1]
-    line.append(s) #Comments
+    # s = ""
+    # for e in range(len(detailmusclescsv[entry][2][3])):
+    #     if len(detailmusclescsv[entry][2][3]) > 1 and e != len(detailmusclescsv[entry][2][3]) - 1:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][3][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1] + ","
+    #     else:
+    #         z = re.sub(r"(<[^>]*>)","",detailmusclescsv[entry][2][3][e],re.MULTILINE | re.DOTALL)
+    #         z = z.replace("\n","")
+    #         if z:
+    #             s = s + z
+    #             if s[-1] == " ":
+    #                 s = s[:-1]
 
 
-    linestr = ""
-    for e in line:
-        if e != line[-1]:
-            linestr = linestr + str(e) + "~"
-        else:
-            linestr = linestr + str(e)
+    # <img[^>]*src="(https:[^>]*?)"/> regex for selecting internet srcs
+    e = entry.replace(" ","")
+    print(f"https://www.google.com/search?q={e}muscles&tbm=isch&ved=2ahUKEwjk34r_sIz-AhXrM94AHVscCf8Q2-cCegQIABAA&oq={e}muscles&gs_lcp=CgNpbWcQAzIFCAAQgAQyBQgAEIAEOgoIABCKBRCxAxBDOggIABCABBCxAzoHCAAQigUQQzoGCAAQBRAeOgkIABCABBAKEBg6BwgAEIAEEBhQpA1Y2hlgwBpoAHAAeACAAV2IAYIHkgECMTKYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=AxQqZKTSH-vn-LYP27ik-A8&bih=1021&biw=1064")
+    a = requests.get(f"https://www.google.com/search?q={e}muscles&tbm=isch&ved=2ahUKEwjk34r_sIz-AhXrM94AHVscCf8Q2-cCegQIABAA&oq={e}muscles&gs_lcp=CgNpbWcQAzIFCAAQgAQyBQgAEIAEOgoIABCKBRCxAxBDOggIABCABBCxAzoHCAAQigUQQzoGCAAQBRAeOgkIABCABBAKEBg6BwgAEIAEEBhQpA1Y2hlgwBpoAHAAeACAAV2IAYIHkgECMTKYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=AxQqZKTSH-vn-LYP27ik-A8&bih=1021&biw=1064")
+    print(a.text)
+    # print(re.match(r"<img[^>]*src=\"(https:[^>]*?)\"/>", a.text, re.MULTILINE | re.DOTALL))
 
-    linestr += '\n'
-
-    a.write(linestr)
+    # line.append(s) #Comments
 
 
 
-print()
+    # linestr = ""
+    # for e in line:
+    #     if e != line[-1]:
+    #         linestr = linestr + str(e) + "~"
+    #     else:
+    #         linestr = linestr + str(e)
+
+    # linestr += '\n'
+
+    # a.write(linestr)
