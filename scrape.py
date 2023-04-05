@@ -161,7 +161,7 @@ for entry in detailmusclescsv:
                 s = s + z
                 if s[-1] == " ":
                     s = s[:-1]
-    line.append(s) #Othernames
+    line.append([s]) #Othernames
 
     s = ""
     for e in range(len(detailmusclescsv[entry][2][1])):
@@ -179,7 +179,7 @@ for entry in detailmusclescsv:
                 s = s + z
                 if s[-1] == " ":
                     s = s[:-1]
-    line.append(s) #heads
+    line.append([s]) #heads
 
     s = ""
     for e in range(len(detailmusclescsv[entry][2][2])):
@@ -197,7 +197,7 @@ for entry in detailmusclescsv:
                 s = s + z
                 if s[-1] == " ":
                     s = s[:-1]
-    line.append(s) #related muscles
+    line.append([s]) #related muscles
 
     s = ""
     for e in range(len(detailmusclescsv[entry][2][3])):
@@ -216,21 +216,25 @@ for entry in detailmusclescsv:
                 if s[-1] == " ":
                     s = s[:-1]
 
-
-    # <img[^>]*src="(https:[^>]*?)"/> regex for selecting internet srcs
-    # e = entry.replace(" ","")
-    # print(f"https://www.google.com/search?q={e}muscles&tbm=isch&ved=2ahUKEwjk34r_sIz-AhXrM94AHVscCf8Q2-cCegQIABAA&oq={e}muscles&gs_lcp=CgNpbWcQAzIFCAAQgAQyBQgAEIAEOgoIABCKBRCxAxBDOggIABCABBCxAzoHCAAQigUQQzoGCAAQBRAeOgkIABCABBAKEBg6BwgAEIAEEBhQpA1Y2hlgwBpoAHAAeACAAV2IAYIHkgECMTKYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=AxQqZKTSH-vn-LYP27ik-A8&bih=1021&biw=1064")
-    # a = requests.get(f"https://www.google.com/search?q={e}muscles&tbm=isch&ved=2ahUKEwjk34r_sIz-AhXrM94AHVscCf8Q2-cCegQIABAA&oq={e}muscles&gs_lcp=CgNpbWcQAzIFCAAQgAQyBQgAEIAEOgoIABCKBRCxAxBDOggIABCABBCxAzoHCAAQigUQQzoGCAAQBRAeOgkIABCABBAKEBg6BwgAEIAEEBhQpA1Y2hlgwBpoAHAAeACAAV2IAYIHkgECMTKYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=AxQqZKTSH-vn-LYP27ik-A8&bih=1021&biw=1064")
-    # print(a.text)
-    # print(re.match(r"<img[^>]*src=\"(https:[^>]*?)\"/>", a.text, re.MULTILINE | re.DOTALL))
-
     line.append(s) #Comments
 
+    # <img[^>]*src="(https:[^>]*?)"/> regex for selecting internet srcs
+    e = entry.replace(" ","+")
+    q = requests.get(f"https://www.google.com/search?q={e + '+muscle'}&source=lnms&tbm=isch&sa=X&ved=2ahUKEwior6_O05H-AhVlk4kEHTVEBYsQ0pQJegQIBRAC&biw=2133&bih=1032&dpr=0.9")
+    line.append(re.findall(r"<img[^>]*src=\"(https:[^>]*?)\"/>", q.text, re.MULTILINE | re.DOTALL)[0])
 
 
     linestr = ""
     for e in line:
         if e != line[-1]:
+            if e == line[3] or e == line[4] or e == line[5]:
+                for k in e:
+                    if k != e[-1]:
+                        linestr += k + ","
+                    else:
+                        linestr += k
+                linestr += "~"
+                continue
             linestr = linestr + str(e) + "~"
         else:
             linestr = linestr + str(e)
