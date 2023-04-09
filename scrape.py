@@ -25,41 +25,53 @@ for i in range(len(generalmuscles)):
 #Need to extract non <a> links and append them to <a> below
     # \\n<li>([A-Za-z]*?)\\n<ul>
     #Extracts all partial names
+    
+#Issue --> Hip Flexors vs Wrist Flexors
 
 second = {}
 
 for i in temp:
-    # print(temp[i])
-    r = re.findall(r">([A-za-z &]*?)</a>", temp[i][0], re.MULTILINE | re.DOTALL)
+    r = re.findall(r">([A-za-z &;]*?)</a>", temp[i][0], re.MULTILINE | re.DOTALL)
     second[i] = r
+    
+    
 
 #Update Muscles based on their
 for i in range(len(generalmuscles)):
     if generalmuscles[i] in second[generalmuscles[i]]:
         second[generalmuscles[i]].remove(generalmuscles[i])
+        
+second['Forearms'][1] = 'Wrist Flexors'
+second['Forearms'][2] = 'Wrist Extensors'
+        
 
 generalmusclescsv = {}
 #Next Build csv with general muscles first
 for i in range(len(generalmuscles)):
-    generalmusclescsv[generalmuscles[i]] = [i]
+    generalmusclescsv[generalmuscles[i]] = [i+1]
 
 #Build csv for individual muscles now
-counter = 0
+counter = 1
 detailmusclescsv = {}
 
 for i in range(len(second)):
     for j in range(len(second[generalmuscles[i]])):
-        if second[generalmuscles[i]][j] == 'Flexors' or second[generalmuscles[i]][j] == 'Extensors':
-            second[generalmuscles[i]][j] = 'Wrist ' + second[generalmuscles[i]][j]
-        elif second[generalmuscles[i]][j] == 'Upper' or second[generalmuscles[i]][j] == 'Middle' or second[generalmuscles[i]][j] == 'Lower':
+        if second[generalmuscles[i]][j] == 'Upper' or second[generalmuscles[i]][j] == 'Middle' or second[generalmuscles[i]][j] == 'Lower':
             second[generalmuscles[i]][j] = 'Trapezius ' + second[generalmuscles[i]][j]
         elif second[generalmuscles[i]][j] == 'Sternal' or second[generalmuscles[i]][j] == 'Clavicular':
             second[generalmuscles[i]][j] = 'Pectoralis Major ' + second[generalmuscles[i]][j]
         elif second[generalmuscles[i]][j] == 'General':
             second[generalmuscles[i]][j] = second[generalmuscles[i]][j] + ' ' + generalmuscles[i]
+        elif second[generalmuscles[i]][j] == 'Anterior' or second[generalmuscles[i]][j] == 'Lateral' or second[generalmuscles[i]][j] == 'Posterior':
+            second[generalmuscles[i]][j] += ' Deltoid'
+        elif second[generalmuscles[i]][j] == 'Latissimus Dorsi &amp; Teres Major':
+            second[generalmuscles[i]][j] = 'Latissimus Dorsi & Teres Major'
+        elif second[generalmuscles[i]][j] == 'Infraspinatus &amp; Teres Minor':
+            second[generalmuscles[i]][j] = 'Infraspinatus & Teres Minor'
 
         detailmusclescsv[second[generalmuscles[i]][j]] = [counter, generalmusclescsv[generalmuscles[i]][0]]
         counter += 1
+    
 
 
         
@@ -82,14 +94,19 @@ for i in detailmusclescsv:
 
     test = i.replace(" ","")
 
-    if test == "Anterior" or test == "Lateral" or test == 'Posterior':
-        test = "Deltoid"+test
+    if test == "AnteriorDeltoid" or test == "LateralDeltoid" or test == 'PosteriorDeltoid':
+        test = "Deltoid"+test[:-7]
     elif test == "PectoralisMajorSternal" or test == "PectoralisMajorClavicular":
         test = test.replace("Major", "")
     elif test == "HipAdductors":
         test = "Adductors" 
     elif test == 'DeepExternalRotators':
         test = 'HipExternalRotators'
+    elif test == 'LatissimusDorsi&TeresMajor':
+        test = 'LatissimusDorsi'
+    elif test == 'Infraspinatus&TeresMinor':
+        test = 'Infraspinatus'
+
 
     x = requests.get(f'https://exrx.net/Muscles/{test}')
     html = x.text
