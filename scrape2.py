@@ -18,6 +18,7 @@ links = ['https://exrx.net/Lists/' + item if 'https://exrx.net/Lists/' not in it
 
 identity = {}
 identity2 = {}
+identity3 = {}
 #Links stores the link for each major muscle group page
 
 #Load in detail-muscles.csv and extract necessary fields
@@ -27,6 +28,8 @@ for row in csvreader:
     #Make dict storing Name, and general muscle group
     if row[2] not in identity2:
         identity2[row[2]] = []
+    
+    identity3[row[0]] = row[1]
     
     identity2[row[2]].append(row[0])
     identity[row[0]] = [row[2]]
@@ -141,8 +144,11 @@ for i in identity:
             sel = sel[0]
             #Select all links from this
             indlinks[i].append((j,sel.find_all("a")))
+            
+# print(indlinks)
 
 for i in indlinks:
+    temp = []
     if indlinks[i]:
         for j in indlinks[i]:
             l = []
@@ -150,8 +156,126 @@ for i in indlinks:
                 # k.replace("../../", "https://exrx.net/")
                 l.append(k['href'].replace("../../","https://exrx.net/"))
                 lks.add(k['href'].replace("../../","https://exrx.net/"))
-            indlinks[i] = (j[0],l)
+            temp.append((j[0],l))
+        indlinks[i] = temp
             
+            
+#At this point: Have links for each muscle group with what mechanic is used
+#From Here: Make csv file with each exercise
+#CSV Format:
+#ID, muscleID, name, utility, mechanics, force, method, preparation, execution, comments, gif/video
+
+counter = 684
+
+# print(identity3)
+a = open('exercises.csv','a')
+for i in indlinks:
+    # ID = counter
+    # muscleID = identity3[i]
+    # Name, Utility, mechanics, force, preparation, execution, comments scraped
+    # Extract method from indlinks[i][j]
+    
+    # Name extraction: look for <title> tags
+    # Utility, Mechanics, Force extraction: Use regex to pull each out indiv
+    
+    # Utility: <strong>Utility(.*?)</tr>
+    # Mechanics: <strong>Mechanics(.*?)</tr>
+    # Force: <strong>Force(.*?)</tr>
+    
+    # Preparation: <p><strong>Preparation</strong></p>(.*?)</p>
+    # Execution: <p><strong>Execution</strong></p>(.*?)</p>
+    # Comments: <h2>Comments</h2>(.*?)</p>
+    # Extract from p tags for this  
+
+    if int(identity3[i]) < 24:
+        continue
+    
+    for j in indlinks[i]:
+        
+        for k in j[1]:
+            csvstring = ''
+            counter += 1
+            genid = str(counter) #ID
+            muscleid = identity3[i] #MUSCLE ID
+            
+            if 'https://exrx.net' not in k:
+                counter -= 1
+                continue
+            
+            z = requests.get(k)
+            html = z.text
+            
+            soup = BeautifulSoup(html, 'html.parser')
+            name = soup.find('title').text.replace("ExRx.net : ","")
+            
+            #Equipment --> j[0]
+            equipment = j[0] #EQUIPMENT
+            
+            u = re.findall(r"<strong>Utility(.*?)</tr>", html, re.MULTILINE | re.DOTALL)
+            m = re.findall(r"<strong>Mechanics(.*?)</tr>", html, re.MULTILINE | re.DOTALL)
+            f = re.findall(r"<strong>Force(.*?)</tr>", html, re.MULTILINE | re.DOTALL)
+
+            if u:
+                u = re.findall(r">(.*?)<", u[0], re.MULTILINE | re.DOTALL)
+                u = ''.join(u).replace('/n','') #UTILITY
+            else:
+                u = ""
+            
+            if m:
+                m = re.findall(r">(.*?)<", m[0], re.MULTILINE | re.DOTALL)
+                m = ''.join(m).replace('/n','') #MECHANICS
+            else:
+                m = ""
+                
+            if f:
+                f = re.findall(r">(.*?)<", f[0], re.MULTILINE | re.DOTALL)
+                f = ''.join(f).replace('/n','') #FORCE
+            else:
+                f =""
+            
+            p = re.findall(r"<p><strong>Preparation</strong></p>(.*?)</p>", html, re.MULTILINE | re.DOTALL)
+            e = re.findall(r"<p><strong>Execution</strong></p>(.*?)</p>", html, re.MULTILINE | re.DOTALL)
+            c = re.findall(r"<h2>Comments</h2>(.*?)</p>", html, re.MULTILINE | re.DOTALL)
+            
+            if p:
+                p = re.sub(r"(<[^>]*>)","",p[0], re.MULTILINE | re.DOTALL).replace("\n","") #PREPARATION
+            else:
+                p = ""
+                
+            if e:
+                e = re.sub(r"(<[^>]*>)","",e[0], re.MULTILINE | re.DOTALL).replace("\n","") #EXECUTION
+            else:
+                e = ""
+                
+            if c:
+                c = re.sub(r"(<[^>]*>)","",c[0], re.MULTILINE | re.DOTALL).replace("\n","") #COMMENTS
+            else:
+                c = ""
+            
+            temp = name.replace(" ", "+")
+            img = requests.get(f'https://www.google.com/search?q={temp}&tbm=isch&ved=2ahUKEwj2_9PYppv-AhV_EGIAHUxUDAgQ2-cCegQIABAA&oq={temp}&gs_lcp=CgNpbWcQAzoKCAAQigUQsQMQQzoHCAAQigUQQzoFCAAQgAQ6CAgAEIAEELEDUPQJWP5fYNliaABwAHgAgAFAiAG2AZIBATOYAQCgAQGqAQtnd3Mtd2l6LWltZ7ABAMABAQ&sclient=img&ei=euYxZPbaJ_-giLMPzKixQA&bih=929&biw=1920')
+            if img:
+                img = re.findall(r"<img[^>]*src=\"(https:[^>]*?)\"/>", img.text, re.MULTILINE | re.DOTALL)[0] #IMAGE
+            else:
+                img = ""
+            
+            genid = genid.replace("\n","")
+            muscleid = muscleid.replace("\n","")
+            name = name.replace("\n","")
+            equipment = equipment.replace("\n","") 
+            u = u.replace("\n","")
+            m = m.replace("\n","")
+            f = f.replace("\n","")
+            p = p.replace("\n","")
+            e = e.replace("\n","")
+            c = c.replace("\n","")
+            img = img.replace("\n","")
+            
+            csvline = f'{genid}~{muscleid}~{name}~{equipment}~{u}~{m}~{f}~{p}~{e}~{c}~{img}\n'
+            a.write(csvline)
+            print(counter)
             
 
-print(indlinks)
+            
+
+# print(indlinks)
