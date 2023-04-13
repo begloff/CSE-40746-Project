@@ -15,7 +15,7 @@ searches = dict()
 count = 1
 with open("searchs.csv", "a") as f:
     while line := oCSV.readline().strip():
-        if count > 322:
+        if count > 756:
             sleep(random.randint(1,3))
             workout = line.split('~')[2].split(' ')
             workout_s = '+'.join(workout)
