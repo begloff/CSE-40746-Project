@@ -1,0 +1,60 @@
+
+SQL*Loader: Release 11.2.0.2.0 - Production on Tue Apr 11 15:43:05 2023
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Control File:   detail_muscles.ctl
+Data File:      detail-muscles.csv
+  Bad File:     detail-muscles.bad
+  Discard File:  none specified
+ 
+ (Allow all discards)
+
+Number to load: ALL
+Number to skip: 0
+Errors allowed: 50
+Bind array:     64 rows, maximum of 256000 bytes
+Continuation:    none specified
+Path used:      Conventional
+
+Table DETAIL_MUSCLES, loaded from every logical record.
+Insert option in effect for this table: INSERT
+
+   Column Name                  Position   Len  Term Encl Datatype
+------------------------------ ---------- ----- ---- ---- ---------------------
+MUSCLE_NAME                         FIRST  4000   ~       CHARACTER            
+DETAIL_ID                            NEXT     *   ~       CHARACTER            
+GENERAL_ID                           NEXT     *   ~       CHARACTER            
+OTHER_NAMES                          NEXT  4000   ~       CHARACTER            
+    NULL if OTHER_NAMES = BLANKS
+MUSCLE_HEADS                         NEXT  4000   ~       CHARACTER            
+    NULL if MUSCLE_HEADS = BLANKS
+RELATED_MUSCLES                      NEXT  4000   ~       CHARACTER            
+    NULL if RELATED_MUSCLES = BLANKS
+COMMENTS                             NEXT  4000   ~       CHARACTER            
+    NULL if COMMENTS = BLANKS
+IMG                                  NEXT  4000   ~       CHARACTER            
+    NULL if IMG = BLANKS
+
+value used for ROWS parameter changed from 64 to 10
+
+Table DETAIL_MUSCLES:
+  45 Rows successfully loaded.
+  0 Rows not loaded due to data errors.
+  0 Rows not loaded because all WHEN clauses were failed.
+  0 Rows not loaded because all fields were null.
+
+
+Space allocated for bind array:                 245280 bytes(10 rows)
+Read   buffer bytes: 1048576
+
+Total logical records skipped:          0
+Total logical records read:            45
+Total logical records rejected:         0
+Total logical records discarded:        0
+
+Run began on Tue Apr 11 15:43:05 2023
+Run ended on Tue Apr 11 15:43:06 2023
+
+Elapsed time was:     00:00:00.05
+CPU time was:         00:00:00.01

@@ -1,0 +1,67 @@
+
+SQL*Loader: Release 11.2.0.2.0 - Production on Tue Apr 11 15:43:06 2023
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Control File:   exercises.ctl
+Data File:      exercises.csv
+  Bad File:     exercises.bad
+  Discard File:  none specified
+ 
+ (Allow all discards)
+
+Number to load: ALL
+Number to skip: 0
+Errors allowed: 50
+Bind array:     64 rows, maximum of 256000 bytes
+Continuation:    none specified
+Path used:      Conventional
+
+Table EXERCISES, loaded from every logical record.
+Insert option in effect for this table: INSERT
+
+   Column Name                  Position   Len  Term Encl Datatype
+------------------------------ ---------- ----- ---- ---- ---------------------
+EXERCISE_ID                         FIRST     *   ~  O(") CHARACTER            
+DETAIL_ID                            NEXT     *   ~  O(") CHARACTER            
+EXERCISE_NAME                        NEXT  4000   ~  O(") CHARACTER            
+    NULL if EXERCISE_NAME = BLANKS
+EQUIPMENT                            NEXT  4000   ~  O(") CHARACTER            
+    NULL if EQUIPMENT = BLANKS
+UTILITY                              NEXT  4000   ~  O(") CHARACTER            
+    NULL if UTILITY = BLANKS
+MECHANICS                            NEXT  4000   ~  O(") CHARACTER            
+    NULL if MECHANICS = BLANKS
+MUSCLE_FORCE                         NEXT  4000   ~  O(") CHARACTER            
+    NULL if MUSCLE_FORCE = BLANKS
+PREPARATION                          NEXT  4000   ~  O(") CHARACTER            
+    NULL if PREPARATION = BLANKS
+EXECUTION                            NEXT  4000   ~  O(") CHARACTER            
+    NULL if EXECUTION = BLANKS
+COMMENTS                             NEXT  4000   ~  O(") CHARACTER            
+    NULL if COMMENTS = BLANKS
+IMG                                  NEXT  4000   ~  O(") CHARACTER            
+    NULL if IMG = BLANKS
+
+value used for ROWS parameter changed from 64 to 7
+
+Table EXERCISES:
+  2417 Rows successfully loaded.
+  0 Rows not loaded due to data errors.
+  0 Rows not loaded because all WHEN clauses were failed.
+  0 Rows not loaded because all fields were null.
+
+
+Space allocated for bind array:                 255738 bytes(7 rows)
+Read   buffer bytes: 1048576
+
+Total logical records skipped:          0
+Total logical records read:          2417
+Total logical records rejected:         0
+Total logical records discarded:        0
+
+Run began on Tue Apr 11 15:43:06 2023
+Run ended on Tue Apr 11 15:43:06 2023
+
+Elapsed time was:     00:00:00.78
+CPU time was:         00:00:00.04
