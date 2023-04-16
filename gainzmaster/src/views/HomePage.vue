@@ -1,6 +1,7 @@
 <template>
   <p>You are now logged in</p>
-  <p>Welcome: {{this.$store.state.user_details.username}}</p>
+  <p v-if="this.$store.state.user_details">Welcome: {{this.$store.state.user_details.username}}</p>
+  <button @click="logout">LOG OUT</button>
 </template>
 
 <script>
@@ -12,6 +13,9 @@ export default {
 		}
 	},
 	methods:{
+        logout(){
+            this.$store.dispatch('logout')
+        }
 	}
 };
 </script>

@@ -39,7 +39,7 @@ const loginUser = async (context, details) => {
         }
     }
 
-    router.push('/home')
+    router.replace({name: 'home'})
 
     
 }
@@ -123,7 +123,7 @@ const registerUser = async (context, details) => {
 
     console.log(context.state.user, context.state.user_details)
 
-    router.push('/home')
+    router.replace({name: 'home'})
 
 }
 
@@ -132,7 +132,7 @@ const logout = async (context) => {
 
     context.commit('CLEAR_USER')
 
-    router.push('/')
+    router.replace({'name': 'login'})
 }
 
 const fetchUser = async (context, user) => {
@@ -148,10 +148,6 @@ const fetchUser = async (context, user) => {
         
 
             context.commit('SET_USER',{user: user, email: user.email, username: resp.data[0][0]})
-
-            console.log(context.state.user, context.state.user_details)
-
-            //Can push to auth side of website
 
         }
     })
