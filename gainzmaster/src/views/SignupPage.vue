@@ -3,32 +3,32 @@
 	<div>
 		<img class="logo2" src="../assets/gainzlogo.png">
 	</div>
-	  <form action="" method="post">
+	  <form @submit.prevent="registerUser">
 		<div class="container2">
 			<b>Create an Account!</b>
 			<br>
 			<br>
 			<label for="email"><b>Email</b></label>
 			<br>
-			<input type="text" placeholder="Enter Email" name="email" required>
+			<input v-model="email" type="email" placeholder="Enter Email" name="email" required>
 			<br>
 			<br>
 			<label for="username"><b>Username</b></label>
 			<br>
-			<input type="text" placeholder="Enter Username" name="username" required>
+			<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
 			<br>
 			<br>
 			<label for="pswd"><b>Password</b></label>
 			<br>
-			<input type="password" placeholder="Enter Password" name="pswd" required>
+			<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
 			<br>
 			<br>
-			<nav>
-				<button class="btn" type="submit"><router-link class="link-text" to="/">Back</router-link></button>
-				<button class="btn" type="submit"><router-link class="link-text" to="/">Create Account</router-link></button>
-			</nav>
+			<button class="btn" type="submit">Create Account</button>
 		</div>
 	  </form>
+		<nav>
+			<button class="btn" type="submit"><router-link class="link-text" to="/">Back</router-link></button>
+		</nav>
 	  <div class="bottom-border">
 		<p></p>
 	  </div>
@@ -39,8 +39,24 @@
 // @ is an alias to /src
 
 export default {
-  name: 'home',
+  	name: 'register',
+
 	components: {},
+
+	data(){
+		return{
+			username: null,
+			email: null,
+			password: null
+		}
+	},
+
+	methods:{
+		registerUser(){
+			//call store function to register user
+			this.$store.dispatch('registerUser', {username:this.username, email:this.email, password:this.password})
+		}
+	}
 };
 </script>
 
