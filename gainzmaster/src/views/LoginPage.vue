@@ -3,18 +3,21 @@
 	<div>
 			<img class="logo" src="../assets/gainzlogo.png">
 	</div>
-	  <form action="" method="post">
+	  <form @submit.prevent="loginUser">
 		<div class="container1">
 			<label style="padding: 15px;" for="username"><b class="text-label">Username</b></label>
-			<input type="text" placeholder="Enter Username" name="username" required>
+			<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
 			<label style="padding: 15px;" for="pswd"><b class="text-label">Password</b></label>
-			<input type="password" placeholder="Enter Password" name="pswd" required>
-			<nav>
-				<button class="btn" type="submit"><router-link to="/" class="link-text">Login</router-link></button>
-				<button class="btn" type="submit"><router-link to="/about" class="link-text">Sign up</router-link></button>
-			</nav>
+			<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
+			<button class="btn" type="submit" style="display: block; margin-right: auto; margin-left: auto; margin-top: 25px;">Login</button>
 		</div>
 	  </form>
+	  <nav>
+		<button class="btn" type="submit"><router-link to="/signup" class="link-text">Sign up</router-link></button>
+		<!-- This button is completely temporary -->
+		<button class="btn" @click="$store.dispatch('logout')">Logout</button>
+	  </nav>
+	  <p>{{username}} | {{password}}</p>
 	  <div class="bottom-border">
 		<p></p>
 	  </div>
@@ -25,8 +28,20 @@
 // @ is an alias to /src
 
 export default {
-  name: 'home',
+  	name: 'login',
 	components: {},
+	data(){
+		return{
+			password: null,
+			username: null,
+		}
+	},
+	methods:{
+		loginUser(){
+			// To do: take username and password and pass to the store to login
+			this.$store.dispatch("loginUser", {username: this.username, password: this.password})
+		}
+	}
 };
 </script>
 

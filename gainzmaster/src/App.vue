@@ -2,6 +2,20 @@
   <router-view/>
 </template>
 
+<script>
+import { onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
+
+export default{
+  async beforeCreate(){
+    const store = useStore()
+    store.dispatch('fetchUser')
+  }
+}
+
+</script>
+
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
