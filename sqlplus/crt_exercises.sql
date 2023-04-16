@@ -10,6 +10,7 @@ create table exercises
     execution varchar(750),
     comments varchar(1050),
     img varchar(150),
+    preferability int,
     constraint exercise_idpk primary key (exercise_id),
     constraint exercise_idpos check(exercise_id > 0),
     constraint detail_idfk foreign key (detail_id) references detail_muscles (detail_id)
