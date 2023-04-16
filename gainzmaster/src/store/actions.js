@@ -15,7 +15,6 @@ const loginUser = async (context, details) => {
     sql = `select user_email from users where username = '${username}'`
     resp = await axios.get(`http://34.206.226.160/?sql=${sql}`)
 
-    console.log(resp)
     var email = resp.data[0][0]
 
     try{
