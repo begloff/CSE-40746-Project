@@ -1,7 +1,7 @@
 <template>
   <div>
 	<div>
-		<img class="logo2" src="../assets/gainzlogo.png">
+		<img class="logo2" src="../assets/gainzmaster.png">
 	</div>
 	  <form @submit.prevent="registerUser">
 		<div class="container2">
