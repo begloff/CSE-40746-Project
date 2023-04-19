@@ -43,4 +43,13 @@
     height: 70px;
     text-align: center;
     }
+    /* body {
+        width: 100%;
+        margin: 0;
+        height: 100vh;
+        background-image: linear-gradient(rgba(34, 34, 34, 0.75),rgba(65, 65, 65, 0.75)) ,url(../assets/gymbackground.jpg);
+        background-size: cover;
+        background-position: center;
+        overflow: auto;
+    } */
 </style>

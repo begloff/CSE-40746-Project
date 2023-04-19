@@ -1,20 +1,22 @@
 <template>
-	<div class="row">
-		<div class="col">
-			<img class="logo" src="../assets/gainzmaster-6.png">
+	<div class="backimage">
+		<div class="row">
+			<div class="col">
+				<img class="logo" src="../assets/gainzmaster-6.png">
+			</div>
 		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col">
-			<form @submit.prevent="loginUser">
-					<p style="color: white;">Login</p>
-					<label style="padding: 15px;" for="username"><b class="text-label">Username</b></label>
-					<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
-					<label style="padding: 15px;" for="pswd"><b class="text-label">Password</b></label>
-					<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
-					<button class="btn" type="submit" >Login</button>
-			</form>
+		<hr>
+		<div class="row">
+			<div class="col">
+				<form @submit.prevent="loginUser">
+						<h2 style="color: white;">Login</h2>
+						<label style="padding: 15px;" for="username"><b class="text-label">Username</b></label>
+						<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
+						<label style="padding: 15px;" for="pswd"><b class="text-label">Password</b></label>
+						<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
+						<button class="btn" type="submit" >Login</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </template>
@@ -41,11 +43,13 @@ export default {
 </script>
 
 <style scoped>
-body {
+.backimage {
 	max-width: 100%;
 	margin: 0;
-	/* height: 100vh; */
+	height: 100vh;
+	background-color: #000000;
 	background-image: linear-gradient(rgba(34, 34, 34, 0.75),rgba(65, 65, 65, 0.75)) ,url(../assets/gymbackground.jpg);
+	border: none;
 	background-size: cover;
 	background-position: center;
 	overflow: auto;
@@ -58,6 +62,7 @@ body {
 	margin-left: auto; 
 	margin-top: 75px;
 	width: 25%;
+	font-size: 1.1em;
 	height: 50px;
 }
 
@@ -111,7 +116,8 @@ input{
     box-sizing: border-box;
     border: none;
     border-bottom: 4px solid #fffdfd;
-    color: yellow;
+    color: white;
+	font-size: 1.1em;
 	background:transparent
 }
 
@@ -120,6 +126,25 @@ form{
 	display: inline-block;
 	margin-left: 10px;
 }
+
+hr {
+	border: none;
+	border-top: 7px double white;
+	color: white;
+	overflow: visible;
+	text-align: center;
+	height: 5px;
+}
+
+hr:after {
+	background: transparent;
+	content: '🏋️‍♂️💪🏃‍♂️';
+	font-size: 1.5em;
+	padding: 0 10px;
+	position: relative;
+	top: -22px;
+}
+
 
 
 </style>

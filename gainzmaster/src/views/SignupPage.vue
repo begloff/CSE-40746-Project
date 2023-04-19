@@ -1,35 +1,37 @@
 <template>
-	<div class="row">
-		<div class="col">
-			<img class="logo2" src="../assets/gainzmaster-6.png">
+	<div class="backimage">
+		<div class="row">
+			<div class="col">
+				<img class="logo2" src="../assets/gainzmaster-6.png">
+			</div>
 		</div>
-	</div>
 
-	<hr>
+		<hr>
 
-	<div class="row">
-		<div class="col">
-			<form @submit.prevent="registerUser">
-					<p style="color: white;">Create an Account!</p>
-					<br>
-					<br>
-					<label for="email"><b class="text-label">Email</b></label>
-					<br>
-					<input v-model="email" type="email" placeholder="Enter Email" name="email" required>
-					<br>
-					<br>
-					<label for="username"><b class="text-label">Username</b></label>
-					<br>
-					<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
-					<br>
-					<br>
-					<label for="pswd"><b class="text-label">Password</b></label>
-					<br>
-					<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
-					<br>
-					<br>
-					<button class="btn" type="submit">Create Account</button>
-			</form>
+		<div class="row">
+			<div class="col">
+				<form @submit.prevent="registerUser">
+						<h2 style="color: white;">Create an Account!</h2>
+						<br>
+						<br>
+						<label for="email"><b class="text-label">Email</b></label>
+						<br>
+						<input v-model="email" type="email" placeholder="Enter Email" name="email" required>
+						<br>
+						<br>
+						<label for="username"><b class="text-label">Username</b></label>
+						<br>
+						<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
+						<br>
+						<br>
+						<label for="pswd"><b class="text-label">Password</b></label>
+						<br>
+						<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
+						<br>
+						<br>
+						<button class="btn" type="submit">Create Account</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </template>
@@ -59,15 +61,18 @@ export default {
 };
 </script>
 
-<style>
-body {
-	width: 100%;
+<style scoped>
+.backimage {
+	max-width: 100%;
 	margin: 0;
 	height: 100vh;
+	background-color: #000000;
 	background-image: linear-gradient(rgba(34, 34, 34, 0.75),rgba(65, 65, 65, 0.75)) ,url(../assets/gymbackground.jpg);
+	border: none;
 	background-size: cover;
 	background-position: center;
 	overflow: auto;
+	text-align: center;
 }
 
 .text-label {
@@ -90,9 +95,10 @@ body {
 .btn {
 	background-color: #FFC631;
 	border-color: #002540;
+	font-size: 1.1em;
 }
 .btn:hover {
-	background-color: #104B1E;
+	background-color: #145c8b;
 }
 .link-text {
 	color: #002540;
@@ -129,7 +135,8 @@ input{
     box-sizing: border-box;
     border: none;
     border-bottom: 4px solid #fffdfd;
-    color: yellow;
+    color: white;
+	font-size: 1.1em;
 	background:transparent
 }
 form{

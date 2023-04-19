@@ -65,6 +65,10 @@ const routes = [
     meta:{
       title: 'Gainzmaster'
     }
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/'
   }
 ]
 

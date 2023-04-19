@@ -1,12 +1,19 @@
 <template>
-  <PublicNavBar/>
-  <router-view/>
+  <div v-if="!$store.state.user" clas="public">
+    <PublicNavBar/>
+    <router-view/>
+  </div>
+  <div v-else>
+    <PrivateNavBar/>
+    <router-view/>
+  </div>
 </template>
 
 <script>
 import { onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import PublicNavBar from './components/PublicNavBar.vue'
+import PrivateNavBar from './components/PrivateNavBar.vue'
 
 export default{
   async beforeCreate(){
@@ -14,7 +21,8 @@ export default{
     store.dispatch('fetchUser')
   },
   components:{
-    PublicNavBar
+    PublicNavBar,
+    PrivateNavBar
   }
 }
 
@@ -41,5 +49,10 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
 </style>
