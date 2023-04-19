@@ -1,38 +1,37 @@
 <template>
-  <div>
-	<div>
-		<img class="logo2" src="../assets/gainzmaster.png">
-	</div>
-	  <form @submit.prevent="registerUser">
-		<div class="container2">
-			<b>Create an Account!</b>
-			<br>
-			<br>
-			<label for="email"><b>Email</b></label>
-			<br>
-			<input v-model="email" type="email" placeholder="Enter Email" name="email" required>
-			<br>
-			<br>
-			<label for="username"><b>Username</b></label>
-			<br>
-			<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
-			<br>
-			<br>
-			<label for="pswd"><b>Password</b></label>
-			<br>
-			<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
-			<br>
-			<br>
-			<button class="btn" type="submit">Create Account</button>
+	<div class="row">
+		<div class="col">
+			<img class="logo2" src="../assets/gainzmaster-6.png">
 		</div>
-	  </form>
-		<nav>
-			<button class="btn" type="submit"><router-link class="link-text" to="/">Back</router-link></button>
-		</nav>
-	  <div class="bottom-border">
-		<p></p>
-	  </div>
-  </div>
+	</div>
+
+	<hr>
+
+	<div class="row">
+		<div class="col">
+			<form @submit.prevent="registerUser">
+					<p style="color: white;">Create an Account!</p>
+					<br>
+					<br>
+					<label for="email"><b class="text-label">Email</b></label>
+					<br>
+					<input v-model="email" type="email" placeholder="Enter Email" name="email" required>
+					<br>
+					<br>
+					<label for="username"><b class="text-label">Username</b></label>
+					<br>
+					<input v-model="username" type="text" placeholder="Enter Username" name="username" required>
+					<br>
+					<br>
+					<label for="pswd"><b class="text-label">Password</b></label>
+					<br>
+					<input v-model="password" type="password" placeholder="Enter Password" name="pswd" required>
+					<br>
+					<br>
+					<button class="btn" type="submit">Create Account</button>
+			</form>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -62,23 +61,30 @@ export default {
 
 <style>
 body {
-	background-image: url('../assets/gymbackground.jpg');
-	background-repeat: no-repeat;
+	width: 100%;
+	margin: 0;
+	height: 100vh;
+	background-image: linear-gradient(rgba(34, 34, 34, 0.75),rgba(65, 65, 65, 0.75)) ,url(../assets/gymbackground.jpg);
 	background-size: cover;
+	background-position: center;
+	overflow: auto;
 }
-.container2 {
-	display: inline-block;
-	width: 854px;
-	background-color: white;
-	margin-top: -5px;
-	justify-content: center;
+
+.text-label {
+	color: #ffc631;
+	text-transform: uppercase;
+    display: inline-block;
+    margin: 25px 0 15px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
 .logo2 {
 	display: inline-block;
 	margin-top: -10px;
-	height: 243px;
-	width:	427px;
+	width:	35%;
 }
 
 .btn {
@@ -95,9 +101,6 @@ body {
 	color: #FFC631;
 }
 
-.text-label {
-	color: #002540;
-}
 
 .bottom-border {
 	position: fixed;
@@ -108,6 +111,44 @@ body {
 	width: 854px;
 	height: 100%;
 	z-index: -1;
-	background-color: white;
+	/* background-color: white; */
 }
+
+::placeholder{
+	color: #aaa;
+	text-transform: uppercase;
+    font-size: 0.8em;
+
+}
+
+input{
+    display: block;
+    padding: 10px 6px;
+	padding-left: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 4px solid #fffdfd;
+    color: yellow;
+	background:transparent
+}
+form{
+	width:80%;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.btn:hover {
+	background-color: #145c8b;
+}
+
+.btn {
+	border-color: #FFC631;
+	background-color: #002540;
+	color: white;
+	padding: 10px;
+	border-radius: 6px;
+	margin-bottom: 50px;
+}
+
 </style>

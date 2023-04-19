@@ -131,7 +131,7 @@ const logout = async (context) => {
 
     context.commit('CLEAR_USER')
 
-    router.replace({'name': 'login'})
+    router.replace({'name': 'publichome'})
 }
 
 const fetchUser = async (context, user) => {

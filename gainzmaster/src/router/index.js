@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '../views/LoginPage.vue'
 import SignupPage from '../views/SignupPage.vue'
 import HomePage from '../views/HomePage.vue'
+import PublicHomePage from '../views/PublicHomePage.vue'
 import { auth } from '../firebase'
 
 import store from '../store/store'
@@ -27,7 +28,7 @@ const notRequireAuth=(to,from,next)=>{
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: LoginPage,
     beforeEnter: notRequireAuth,
@@ -56,6 +57,15 @@ const routes = [
       title: 'Gainzmaster - Home',
     }
   },
+  {
+    path: '/',
+    name: 'publichome',
+    component: PublicHomePage,
+    beforeEnter: notRequireAuth,
+    meta:{
+      title: 'Gainzmaster'
+    }
+  }
 ]
 
 const router = createRouter({

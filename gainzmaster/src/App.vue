@@ -1,15 +1,20 @@
 <template>
+  <PublicNavBar/>
   <router-view/>
 </template>
 
 <script>
 import { onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
+import PublicNavBar from './components/PublicNavBar.vue'
 
 export default{
   async beforeCreate(){
     const store = useStore()
     store.dispatch('fetchUser')
+  },
+  components:{
+    PublicNavBar
   }
 }
 
