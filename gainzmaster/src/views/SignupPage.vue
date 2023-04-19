@@ -158,4 +158,22 @@ form{
 	margin-bottom: 50px;
 }
 
+hr {
+	border: none;
+	border-top: 7px double white;
+	color: white;
+	overflow: visible;
+	text-align: center;
+	height: 5px;
+}
+
+hr:after {
+	background: transparent;
+	content: '🏋️‍♂️💪🏃‍♂️';
+	font-size: 1.5em;
+	padding: 0 10px;
+	position: relative;
+	top: -22px;
+}
+
 </style>

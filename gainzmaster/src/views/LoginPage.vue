@@ -46,13 +46,14 @@ export default {
 .backimage {
 	max-width: 100%;
 	margin: 0;
-	height: 100vh;
+	height: 100%;
 	background-color: #000000;
 	background-image: linear-gradient(rgba(34, 34, 34, 0.75),rgba(65, 65, 65, 0.75)) ,url(../assets/gymbackground.jpg);
 	border: none;
 	background-size: cover;
+	background-repeat: no-repeat;
 	background-position: center;
-	overflow: auto;
+	overflow-y: visible;
 	text-align: center;
 }
 
@@ -69,7 +70,7 @@ export default {
 .logo {
 	display: inline-block;
 	margin-top: -10px;
-	width: 50%;
+	width: 35%;
 }
 
 .btn {

@@ -1,7 +1,7 @@
 <template>
     <div class="backimage">
         <div>
-            <img src="../assets/gainzmaster-6.png" style="max-width:50%;">
+            <img src="../assets/gainzmaster-6.png" style="width:40%;">
         </div>
 
         <hr>
@@ -19,7 +19,7 @@
                 <ul class = "list">
                     <li class="list">Workout Creator with over 2500 Exercises</li>
                     <li class="list">Workout Log To View Past Workouts</li>
-                    <li class="list">Detailed Muscle & Exercise Catalog</li>
+                    <li class="list">Detailed Muscle & Exercise Catalogs</li>
                     <li class="list">Advanced Exercise Search Engine</li>
                 </ul>
             </div>
@@ -62,13 +62,13 @@ export default {
     .backimage {
         max-width: 100%;
         margin: 0;
-        height: 100vh;
+        height: auto;
         background-color: #000000;
         background-image: linear-gradient(rgba(34, 34, 34, 0.75),rgba(65, 65, 65, 0.75)) ,url(../assets/gymbackground.jpg);
         border: none;
         background-size: cover;
         background-position: center;
-        overflow: auto;
+        overflow-y:visible;
         text-align: center;
     }
     .non-intrusive, .non-intrusive:visited, .non-intrusive:link{   
@@ -124,7 +124,7 @@ export default {
     }
 
     li.list{
-        margin-top:15px;
+        margin-top:30px;
     }
 
     hr {

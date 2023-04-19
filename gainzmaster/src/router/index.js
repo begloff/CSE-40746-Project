@@ -3,6 +3,7 @@ import LoginPage from '../views/LoginPage.vue'
 import SignupPage from '../views/SignupPage.vue'
 import HomePage from '../views/HomePage.vue'
 import PublicHomePage from '../views/PublicHomePage.vue'
+import MuscleCatalog from '../views/MuscleCatalog.vue'
 import { auth } from '../firebase'
 
 import store from '../store/store'
@@ -64,6 +65,15 @@ const routes = [
     beforeEnter: notRequireAuth,
     meta:{
       title: 'Gainzmaster'
+    }
+  },
+  {
+    path: '/musclecatalog',
+    name: 'musclecatalog',
+    component: MuscleCatalog,
+    beforeEnter: requireAuth,
+    meta:{
+      title: 'Gainzmaster - Muscles'
     }
   },
   {

@@ -37,7 +37,7 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: rgb(0, 37, 64,.75);
+  background-color: rgb(0, 37, 64);
   height: 3em;
 }
 
