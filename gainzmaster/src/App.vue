@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!$store.state.user" clas="public">
+  <div v-if="!$store.state.user" class="page">
     <PublicNavBar/>
     <router-view/>
   </div>
-  <div v-else>
+  <div v-else class="page">
     <PrivateNavBar/>
     <router-view/>
   </div>
@@ -36,6 +36,9 @@ export default{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 nav {
@@ -51,8 +54,39 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 
-body {
+body, html {
   margin: 0;
   padding: 0;
+  height: 100vh;
+}
+
+.page{
+  height: 100vh;
+}
+
+hr {
+	border: none;
+	border-top: 7px double white;
+	color: white;
+	overflow: visible;
+	text-align: center;
+	height: 5px;
+}
+
+hr:after {
+	background: transparent;
+	content: '🏋️‍♂️💪🏃‍♂️';
+	font-size: 1.5em;
+	padding: 0 10px;
+	position: relative;
+	top: -22px;
+}
+
+.row{
+    display: flex;
+}
+
+.col{
+    flex: 1;
 }
 </style>
