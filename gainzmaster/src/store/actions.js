@@ -13,7 +13,7 @@ const loginUser = async (context, details) => {
 
     //Need to fetch email from db
     sql = `select user_email from users where username = '${username}'`
-    resp = await axios.get(`http://34.206.226.160/?sql=${sql}`)
+    resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
 
     var email = resp.data[0][0]
 
@@ -60,7 +60,7 @@ const registerUser = async (context, details) => {
 
     //1
     sql = `select * from users where username = '${username}'`
-    resp = await axios.get(`http://34.206.226.160/?sql=${sql}`)
+    resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
     resp = resp.data
     if (resp.length){
         alert('Username already exists: please use another name')
@@ -69,7 +69,7 @@ const registerUser = async (context, details) => {
 
     //2
     sql = `select * from users where user_email = '${email}'`
-    resp = await axios.get(`http://34.206.226.160/?sql=${sql}`)
+    resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
     resp = resp.data
     if (resp.length){
         alert('Email already has an account: please login or use another email')
@@ -107,7 +107,7 @@ const registerUser = async (context, details) => {
     //What if error occurs in between here --> not good
 
     sql = `insert into users (user_email, username) values ('${email}', '${username}')`
-    resp = await axios.post(`http://34.206.226.160/?sql=${sql}`)
+    resp = await axios.post(`http://3.89.12.221/db.py/?sql=${sql}`)
     var result = resp.data.includes('Successfully executed')
     if (!result){
         alert('Error creating user. Please try again')
@@ -143,7 +143,7 @@ const fetchUser = async (context, user) => {
         } else {
 
             var sql = `select username from users where user_email = '${user.email}'`
-            var resp = await axios.get(`http://34.206.226.160/?sql=${sql}`)
+            var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
         
 
             context.commit('SET_USER',{user: user, email: user.email, username: resp.data[0][0]})
