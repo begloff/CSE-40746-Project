@@ -78,8 +78,8 @@ const routes = [
     }
   },
   {
-    path: '/musclecatalog/id=2',
-    name: 'musclecatalog/id=?',
+    path: '/musclecatalog/:id',
+    name: 'detailedMuscle',
     component: MuscleDescription,
     beforeEnter: requireAuth,
     meta:{

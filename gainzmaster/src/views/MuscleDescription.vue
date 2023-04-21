@@ -12,7 +12,7 @@
             <div class="searchEngine">
                 <div class="row">
                     <div class="col" v-if="muscleImg">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSefRgkx3-jr_PRFGr3sV9u-GGKuiuYdXydnnl1YQnnXTMG0v35noQGd1h34F4&amp;s">
+                        <img :src="muscleImg">
                     </div>
                 </div>
 			</div>
@@ -32,7 +32,7 @@ import axios from 'axios'
 export default {
     methods:{
         async loadData(){
-            var sql = `select * from detail_muscles where detail_id = ${window.location.href.split("=")[1]}`
+            var sql = `select * from detail_muscles where detail_id = ${this.muscleId}`
             var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
             resp = resp.data
             this.muscleData = resp
@@ -76,7 +76,8 @@ export default {
             muscleName: null,
             generalSearch: null,
             filteredMuscleData: null,
-            defaultCat: ['All', 0]
+            defaultCat: ['All', 0],
+            muscleId: this.$route.params.id,
         }
     },
 

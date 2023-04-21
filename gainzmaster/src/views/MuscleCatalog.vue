@@ -64,7 +64,7 @@
                     </tr>
                 </thead>
                 <tbody v-if="muscleDict">
-                    <tr @click="muscleDescription(muscle)" v-for="muscle in muscleData" class="hoverable">
+                    <tr @click="$router.push({ path: `/musclecatalog/${muscle[1]}`})" v-for="muscle in muscleData" class="hoverable">
                         <th scope="row">{{muscle[0]}}</th>
                         <th scope="row">{{this.muscleDict[muscle[2] - 1][0]}}</th>
                         <th scope="row" v-if="muscle[3]">{{muscle[3]}}</th>
@@ -121,11 +121,6 @@ export default {
                 console.log(this.filteredMuscleData)
             }
         },
-
-        muscleDescription(arg) {
-            console.log(arg[1])
-            window.location.href = '/musclecatalog/id=' + arg[1]
-        }
     },
 
     data(){
