@@ -93,14 +93,16 @@ export default {
     methods:{
         async loadData(){
             var sql = `select * from detail_muscles`
-            var resp = await axios.get(`http://34.206.226.160/?sql=${sql}`)
+            var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
             resp = resp.data
             this.muscleData = resp
+
+            console.log(resp)
 
             this.filteredMuscleData = this.muscleData
 
             sql = `select * from general_muscles`
-            resp = await axios.get(`http://34.206.226.160/?sql=${sql}`)
+            resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
             resp = resp.data
             this.muscleDict = resp
 
