@@ -1,5 +1,5 @@
 
-SQL*Loader: Release 11.2.0.2.0 - Production on Tue Apr 11 15:43:06 2023
+SQL*Loader: Release 11.2.0.2.0 - Production on Fri Apr 21 00:20:05 2023
 
 Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
 
@@ -60,8 +60,8 @@ Total logical records read:          2417
 Total logical records rejected:         0
 Total logical records discarded:        0
 
-Run began on Tue Apr 11 15:43:06 2023
-Run ended on Tue Apr 11 15:43:06 2023
+Run began on Fri Apr 21 00:20:05 2023
+Run ended on Fri Apr 21 00:20:06 2023
 
-Elapsed time was:     00:00:00.78
-CPU time was:         00:00:00.04
+Elapsed time was:     00:00:00.93
+CPU time was:         00:00:00.06
