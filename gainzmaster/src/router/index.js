@@ -4,6 +4,7 @@ import SignupPage from '../views/SignupPage.vue'
 import HomePage from '../views/HomePage.vue'
 import PublicHomePage from '../views/PublicHomePage.vue'
 import MuscleCatalog from '../views/MuscleCatalog.vue'
+import MuscleDescription from '../views/MuscleDescription.vue'
 import { auth } from '../firebase'
 
 import store from '../store/store'
@@ -74,6 +75,15 @@ const routes = [
     beforeEnter: requireAuth,
     meta:{
       title: 'Gainzmaster - Muscles'
+    }
+  },
+  {
+    path: '/musclecatalog/id=2',
+    name: 'musclecatalog/id=?',
+    component: MuscleDescription,
+    beforeEnter: requireAuth,
+    meta:{
+      title: 'Gainzmaster - Muscles Description'
     }
   },
   {
