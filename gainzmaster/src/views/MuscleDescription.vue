@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col">
-            <h1 v-for="muscle in muscleData">{{ muscle[0] }}</h1>
+            <h1 v-if="muscleData">{{ muscleData[0][0] }}</h1>
         </div>
     </div>
 
@@ -13,6 +13,33 @@
                 <div class="row">
                     <div class="col" v-if="muscleImg">
                         <img :src="muscleImg">
+                    </div>
+                </div>
+                <div v-if="muscleData" class="row">
+                    <div class="col">
+                        <h5>{{ muscleData[0][6] }}</h5>
+                    </div>
+                </div>
+                <div class="row" v-if="muscleData">
+                    <div class="col" v-if="muscleData[0][3]">
+                        <h3>Other Names</h3>
+                    </div>
+                    <div class="col" v-if="muscleData[0][4]">
+                        <h3>Muscle Heads</h3>
+                    </div>
+                    <div class="col" v-if="muscleData[0][5]">
+                        <h3>Related Muscles</h3>
+                    </div>
+                </div>
+                <div class="row" v-if="muscleData">
+                    <div class="col" v-if="muscleData[0][3]">
+                        <h3>{{ muscleData[0][3] }}</h3>
+                    </div>
+                    <div class="col" v-if="muscleData[0][4]">
+                        <h3>{{ muscleData[0][4] }}</h3>
+                    </div>
+                    <div class="col" v-if="muscleData[0][5]">
+                        <h3>{{ muscleData[0][5] }}</h3>
                     </div>
                 </div>
 			</div>
