@@ -29,22 +29,16 @@
                     <div class="col">
                         <label for="muscleCategory" class="text-label">Category</label>
                     </div>
-                    <div class="col">
-                        <label for="generalSearch" class="text-label">General Search</label>
-                    </div>
                 </div>
                 <div class="row" style="margin-bottom: 40px;">
                     <div class="col">
-                        <input type="text" name="muscleName" v-model="muscleName">
+                        <input type="text" name="muscleName" v-model="muscleName" @input="filterMuscles('name')">
                     </div>
                     <div class="col">
                         <select name="muscleCategory" id="" v-model="selectedCategory" @change="filterMuscles('category')">
-                            <option value="">All</option>
+                            <option value="All">All</option>
                             <option :value="entry" v-for="entry in this.muscleDict">{{entry[0]}}</option>
                         </select>
-                    </div>
-                    <div class="col">
-                        <input type="text" name="generalSearch" id="" v-model="generalSearch">
                     </div>
                 </div>
             </div>
@@ -64,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody v-if="muscleDict">
-                    <tr @click="$router.push({ path: `/musclecatalog/${muscle[1]}`})" v-for="muscle in muscleData" class="hoverable">
+                    <tr @click="$router.push({ path: `/musclecatalog/${muscle[1]}`})" v-for="muscle in filteredMuscleData" class="hoverable">
                         <th scope="row">{{muscle[0]}}</th>
                         <th scope="row">{{this.muscleDict[muscle[2] - 1][0]}}</th>
                         <th scope="row" v-if="muscle[3]">{{muscle[3]}}</th>
@@ -100,6 +94,8 @@ export default {
             console.log(resp)
 
             this.filteredMuscleData = this.muscleData
+            this.catFilter = this.muscleData
+            this.nameFilter = this.muscleData
 
             sql = `select * from general_muscles`
             resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
@@ -111,14 +107,57 @@ export default {
         filterMuscles(arg){
             if(arg == 'category'){
 
-                //Find id from muscleDict
-                var checkId = this.selectedCategory[1]
+                if( this.selectedCategory == 'All'){
+                    this.filteredMuscleData = this.nameFilter
+                } else {                
+                        //Find id from muscleDict
+                    var checkId = this.selectedCategory[1]
 
-                this.filteredMuscleData = this.filteredMuscleData.filter(function(entry){
-                    return entry[2] == checkId
-                })
+                    this.catFilter = this.muscleData.filter(function(entry){
+                        return entry[2] == checkId
+                    })
 
-                console.log(this.filteredMuscleData)
+                    //Use intermediate filter as a way to check name
+                    if (this.muscleName == null || this.muscleName == ''){
+
+                        this.filteredMuscleData = this.catFilter
+
+                    } else {
+
+                        this.filteredMuscleData = this.nameFilter.filter(function(entry){
+                            return entry[2] == checkId
+                        })
+                    }
+                }
+            } else if (arg == 'name') {
+
+                var temp = this.muscleName
+
+                if( this.muscleName == '' || this.muscleName == null){
+                    this.filteredMuscleData = this.catFilter
+                } else {                
+                    //Use intermediate filter as a way to check name
+
+                    console.log("ok", this.muscleName)
+
+                    this.nameFilter = this.muscleData.filter(function(entry){
+                        return entry[0].toLowerCase().includes(temp.toLowerCase())
+                    })
+
+
+                    if (this.selectedCategory == 'All'){
+
+                        this.filteredMuscleData = this.nameFilter
+
+                    } else {
+
+                        this.filteredMuscleData = this.catFilter.filter(function(entry){
+                            return entry[0].toLowerCase().includes(temp.toLowerCase())
+                        })
+                    }
+                }
+
+        
             }
         },
     },
@@ -128,10 +167,11 @@ export default {
             muscleData: null,
             muscleDict: null,
             categorySel: [],
-            selectedCategory: null,
+            selectedCategory: 'All',
             muscleName: null,
-            generalSearch: null,
             filteredMuscleData: null,
+            catFilter: null,
+            nameFilter: null,
             defaultCat: ['All', 0]
         }
     },
