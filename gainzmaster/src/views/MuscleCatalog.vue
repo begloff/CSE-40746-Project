@@ -7,7 +7,7 @@
 
     <div class="row">
         <div class="col">
-            <p>Learn more about muscle intricacies and details!</p>
+            <p style="font-style: italic;">Learn more about muscle intricacies and details!</p>
         </div>
     </div>
 
@@ -53,17 +53,23 @@
                         <th scope="col">Muscle Name</th>
                         <th scope="col">Muscle Category</th>
                         <th scope="col">Other Names</th>
-                        <th scope="col">Muscle Heads</th>
                         <th scope="col">Related Muscles</th>
                     </tr>
                 </thead>
                 <tbody v-if="muscleDict">
                     <tr @click="$router.push({ path: `/musclecatalog/${muscle[1]}`})" v-for="muscle in filteredMuscleData" class="hoverable">
                         <th scope="row">{{muscle[0]}}</th>
-                        <th scope="row">{{this.muscleDict[muscle[2] - 1][0]}}</th>
+                        <th scope="row">
+                            <div class="row">
+                                <div class="col">
+                                    <p>{{this.muscleDict[muscle[2] - 1][0]}}</p>
+                                </div>
+                                <div class="col">
+                                    <img :src="getSrc(this.muscleDict[muscle[2] - 1][0])" style="width: 100px; margin-top: 10px;">
+                                </div>
+                            </div>
+                        </th>
                         <th scope="row" v-if="muscle[3]">{{muscle[3]}}</th>
-                        <th scope="row" v-else>~</th>
-                        <th scope="row" v-if="muscle[4]">{{muscle[4]}}</th>
                         <th scope="row" v-else>~</th>
                         <th scope="row" v-if="muscle[5]">{{muscle[5]}}</th>
                         <th scope="row" v-else>~</th>
@@ -72,6 +78,8 @@
             </table>
         </div>
     </div>
+
+    <hr style="	border-top: 7px double #2c3e50; color: #2c3e50; margin-top: 25px;">
 
 </template>
 
@@ -160,6 +168,12 @@ export default {
         
             }
         },
+
+        getSrc(muscle){
+            console.log(muscle)
+            var images = require.context('../assets/muscles/', false, /\.jpg$/)
+            return images('./' + muscle + ".jpg")
+        }
     },
 
     data(){
