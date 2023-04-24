@@ -5,17 +5,22 @@ import HomePage from '../views/HomePage.vue'
 import PublicHomePage from '../views/PublicHomePage.vue'
 import MuscleCatalog from '../views/MuscleCatalog.vue'
 import MuscleDescription from '../views/MuscleDescription.vue'
+import ExerciseCatalog from '../views/ExerciseCatalog.vue'
 import { auth } from '../firebase'
 
 import store from '../store/store'
 
-const requireAuth=(to,from,next)=>{
+const requireAuth= async (to,from,next)=>{
   let user=auth.currentUser
-  if(!user){
-    next({name:'login'})
-  }else{
+  if(!store.state.exerciseData && user){
+    await store.dispatch('fillData')
     next()
+  } else if (user){
+    next()
+  } else {
+    next({name:'login'})
   }
+
 }
 
 const notRequireAuth=(to,from,next)=>{
@@ -75,6 +80,15 @@ const routes = [
     beforeEnter: requireAuth,
     meta:{
       title: 'Gainzmaster - Muscles'
+    }
+  },
+  {
+    path: '/exercisecatalog',
+    name: 'exercisecatalog',
+    component: ExerciseCatalog,
+    beforeEnter: requireAuth,
+    meta:{
+      title: 'Gainzmaster - Exercises'
     }
   },
   {

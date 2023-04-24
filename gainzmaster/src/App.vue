@@ -18,7 +18,7 @@ import PrivateNavBar from './components/PrivateNavBar.vue'
 export default{
   async beforeCreate(){
     const store = useStore()
-    store.dispatch('fetchUser')
+    await store.dispatch('fetchUser')
   },
   components:{
     PublicNavBar,
