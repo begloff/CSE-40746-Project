@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '../views/LoginPage.vue'
 import SignupPage from '../views/SignupPage.vue'
 import HomePage from '../views/HomePage.vue'
-import PublicHomePage from '../views/PublicHomePage
+import PublicHomePage from '../views/PublicHomePage'
 import WorkoutMaker from '../views/WorkoutMaker.vue'
 import MuscleCatalog from '../views/MuscleCatalog.vue'
 import MuscleDescription from '../views/MuscleDescription.vue'

@@ -2,11 +2,9 @@
 	<div class="header">
 		<div style="width:60%; background-color: white; margin: auto;">
 			<h1> Gainzmaster Home </h1>
-			<div class ="quote">
-				<img class="logo" src="../assets/lion.jpeg">
-				<div class ="centered">
-					<h3>{{  this.chosenQuote }}</h3>
-				</div>
+			<div class ="quote" style="position: relative;">
+				<img class="logo" src="../assets/lion.jpeg" style="width: 100%; position: relative;">
+				<h3 style="top: 43%; position: absolute; margin: auto; right: 0; left: 0;">{{  this.chosenQuote }}</h3>
 			</div>
 			<h2 style="text-decoration: solid;" v-if="this.$store.state.user_details">Good {{ this.timeOfDay }}, {{ this.$store.state.user_details.username }}! How may I help you?</h2>
 		</div>
