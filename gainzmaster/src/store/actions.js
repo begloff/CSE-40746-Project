@@ -145,16 +145,41 @@ const fetchUser = async (context, user) => {
             var sql = `select username from users where user_email = '${user.email}'`
             var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
         
-
             context.commit('SET_USER',{user: user, email: user.email, username: resp.data[0][0]})
 
         }
     })
 }
 
+const fillData = async (context) => {
+    if(!exerciseData || !muscleData || !muscleData){
+        //None of the data has been loaded --> load it
+        var sql = `select * from detail_muscles`
+        var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
+        resp = resp.data
+        var muscleData = resp
+
+        sql = `select * from general_muscles`
+        resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
+        resp = resp.data
+        var groupData = resp
+
+        var sql = `select * from exercises`
+        var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
+        resp = resp.data
+        var exerciseData = resp
+
+        //Call mutator to commit data
+        context.commit('SET_DATA', {m: muscleData, g: groupData, e: exerciseData})
+
+    }
+
+}
+
 export default{
     loginUser,
     registerUser,
     logout,
-    fetchUser
+    fetchUser,
+    fillData
 }

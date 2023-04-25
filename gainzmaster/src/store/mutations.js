@@ -12,8 +12,15 @@ const LOADED_PAGE = (state) => {
     state.pageLoaded = true
 }
 
+const SET_DATA = (state, payload) => {
+    state.muscleData = payload.m
+    state.groupData = payload.g
+    state.exerciseData = payload.e
+}
+
 export default{
     SET_USER,
     CLEAR_USER,
-    LOADED_PAGE
+    LOADED_PAGE,
+    SET_DATA,
 }
