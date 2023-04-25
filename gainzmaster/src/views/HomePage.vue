@@ -2,9 +2,11 @@
 	<div class="header">
 		<div style="width:60%; background-color: white; margin: auto;">
 			<h1> Gainzmaster Home </h1>
-			<div class ="quote" style="position: relative;">
-				<img class="logo" src="../assets/lion.jpeg" style="width: 100%; position: relative;">
-				<h3 style="top: 43%; position: absolute; margin: auto; right: 0; left: 0;">{{  this.chosenQuote }}</h3>
+			<div class ="quote">
+				<img class="logo" src="../assets/lion.jpeg" style="width: 100%; height:100%; position: absolute; left: 5%;">
+				<div style="position: absolute; top: 35%; width: 70%; left: 20%;">
+					<h3 style="font-size: 2.5vw; background-color: rgba(0, 0, 0, 0.623); padding-top:5px;">{{  this.chosenQuote }}</h3>
+				</div>
 			</div>
 			<h2 style="text-decoration: solid;" v-if="this.$store.state.user_details">Good {{ this.timeOfDay }}, {{ this.$store.state.user_details.username }}! How may I help you?</h2>
 		</div>
@@ -18,11 +20,12 @@
 		</div>
 	</div>
 
-	<div style="min-height:250px;">
+	<div >
 		<div class="randomWorkout">
 			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.randomWorkout.type }}</em> workout!</h3>
 			<p v-for="item in this.workout"> {{ item }} </p>
-			{{this.repsBySets}}
+			<h4>Barbell Bench Press : {{this.repsBySets}}</h4>
+			<h4> </h4>
 			<button class="btn" style="background-color: #f0f0f0; color: #002540"><strong>Regenerate Workout</strong></button>
 		</div>
 		<div class="break"></div>
@@ -80,6 +83,7 @@ export default {
 			randomWorkout: {type:null, workout:null},
     		lastWorkout: null,
     		workoutSplits: ['push', 'pull', 'legs', 'upper'],
+			splitMuscles: {'push':['chest'], 'pull':['back'], 'legs':['quads'], 'upper':['chest']}, // 4 - 5 muscles per split
 			repsBySets: null
 		}
 	},
@@ -111,24 +115,45 @@ export default {
 		getRandomWorkout(){
 			var chosenNum = Math.floor(Math.random() * this.workoutSplits.length);
 			var chosenSplit = this.workoutSplits[chosenNum];
-			
-			// make the query //
-			if (chosenSplit == 'push')
-				var sql = 'select _ from _';
-			else if (chosenSplit == 'pull')
-				var sql = 'select _ from _';
-			else if (chosenSplit == 'upper')
-				var sql = 'select _ from _';
-			else if (chosenSplit == 'legs')
-				var sql = 'select _ from _';
+			var muscles = null
+			var payload = '';
 
+			if (chosenSplit == 'push')
+				muscles = this.splitMuscles['push'];
+			else if (chosenSplit == 'pull')
+				muscles = this.splitMuscles['pull'];
+			else if (chosenSplit == 'upper')
+				muscles = this.splitMuscles['upper'];
+			else if (chosenSplit == 'legs')
+				muscles = this.splitMuscles['legs'];
+
+			// once we have the muscles, we want to query for workouts. How?
+				// one way would be to loop through the muscles and do a query for every single workout  - easy, not efficient
+				// another way would be to somehow figure out one query with a ton of subqueries in there ----- posssssible, more efficient
+					// building on this, we can make a base subquery for each, somehow have to implement a sense of randomness . . .
+						// otherwise each "random" push will be the same, as base query will return same shit everytime
+							// built in pseudo-randomness in sql??		--> order by rand() limit 1
+
+
+
+			// for muscle in muscles:			== each muscle gets two workouts -- one with preferability >3, one random
+				// this.queries.append('select * from exercises where muscle group = muscle sort by rand limit 1')
+				// this.queries.append('select * from exercises where muscle group = muscle and preferability > 3 sort by rand limit 1')
+		
+			//var payload = '';
+			// for query in this.queries:
+				//payload = payload + '(' + query + ')'
+
+			// sql = 'select * from ' + payload + ';'
+			
 			//var resp = await;
 			//axios.get('http://3.89.12.221:8004/db.py/?sql=${sql}');
 			
+			
 			this.randomWorkout.type = chosenSplit;
-			// for exercise in response:
-				this.getRepRange()
-			//	this.randomWorkout.exercise.append.push(exercise + this.reps)
+			// for exercise in response
+				// this.getRepRange()
+				// this.randomWorkout.exercises.push('{{exercise}} + {{this.repsBySets}}')
 		},
 
 		getRepRange(){
@@ -191,15 +216,14 @@ export default {
     height: 100%;
 }
 .header {
-	margin-top: 10px;
 	color:rgb(5, 107, 37);
 	background-color: #002540;
 }
 
 .quote {
-	margin-top: px;
-	color:rgb(0, 0, 0);
-	padding: 3px;
+	color:rgb(255, 255, 255);
+	font-family: fantasy;
+	position: relative; height:40vw; width:90%; vertical-align: middle;
 }
 
 
