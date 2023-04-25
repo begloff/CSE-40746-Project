@@ -11,6 +11,10 @@ export default createStore({
     exerciseData: null,
     muscleData: null,
     groupData: null,
+    randomWorkout: {type:"push", workout:["3x12 Bench", "2x12 Tricep Pushdown"]},
+    lastWorkout: ["3x12 Bench", "2x12 Tricep Pushdown"],
+    workoutSplits: ['push', 'pull', 'legs', 'upper'],
+		chosenQuote: null
   },
   mutations: mutations,
 
