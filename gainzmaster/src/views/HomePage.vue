@@ -123,7 +123,7 @@ export default {
 				var sql = 'select _ from _';
 
 			//var resp = await;
-			//axios.get('http://3.89.12.221/db.py/?sql=${sql}');
+			//axios.get('http://3.89.12.221:8004/db.py/?sql=${sql}');
 			
 			this.randomWorkout.type = chosenSplit;
 			// for exercise in response:
