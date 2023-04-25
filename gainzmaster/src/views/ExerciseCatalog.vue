@@ -67,7 +67,7 @@
                         <th scope="row">
                             <div class="row">
                                 <div class="col">
-                                    <p class="centered">{{this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2] - 1][0]}}</p>
+                                    <p class="center">{{this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2] - 1][0]}}</p>
                                 </div>
                                 <div class="col">
                                     <img :src="getSrc(this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2]-1][0])" style="width: 50px; margin-top: 10px;">

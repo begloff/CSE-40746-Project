@@ -62,7 +62,7 @@
                         <th scope="row">
                             <div class="row">
                                 <div class="col">
-                                    <p class="centered">{{this.$store.state.groupData[muscle[2] - 1][0]}}</p>
+                                    <p class="center">{{this.$store.state.groupData[muscle[2] - 1][0]}}</p>
                                 </div>
                                 <div class="col">
                                     <img :src="getSrc(this.$store.state.groupData[muscle[2] - 1][0])" style="width: 100px; margin-top: 10px;">
@@ -258,7 +258,7 @@ tr:nth-child(odd) {
     
 }
 
-.centered{
+.center{
     margin-top: 37%;
 }
 
