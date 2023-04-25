@@ -23,10 +23,24 @@
                 </div>
 
                 <div class="row">
-                    <div class="col"></div>
+                    <div class="col">
+                        <label for="exerciseName" class="text-label">Name</label>
+                    </div>
+                    <div class="col">
+                        <label for="muscleGroup" class="text-label">Muscle Group</label>
+                    </div>
                 </div>
 
-
+                <div class="row">
+                    <div class="col">
+                        <input type="text" name="exerciseName">
+                    </div>
+                    <div class="col">
+                        <select name="muscleGroup">
+                            
+                        </select>
+                    </div>
+                </div>
 
             </div>
         </div>
