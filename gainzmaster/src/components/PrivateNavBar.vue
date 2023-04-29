@@ -15,7 +15,7 @@
             <router-link class="nav-link" active-class="active" to="/home" style="color: #f8f8f8;">Workout Creator</router-link>
             </li>
             <li class="nav-item" >
-            <router-link class="nav-link" active-class="active" to="/home" style="color: #f8f8f8;">Exercise Catalog</router-link>
+            <router-link class="nav-link" active-class="active" to="/exercisecatalog" style="color: #f8f8f8;">Exercise Catalog</router-link>
             </li>
             <li class="nav-item" >
             <router-link class="nav-link" active-class="active" to="/musclecatalog" style="color: #f8f8f8;">Muscle Catalog</router-link>

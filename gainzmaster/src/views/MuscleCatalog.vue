@@ -37,7 +37,7 @@
                     <div class="col">
                         <select name="muscleCategory" id="" v-model="selectedCategory" @change="filterMuscles('category')">
                             <option value="All">All</option>
-                            <option :value="entry" v-for="entry in this.muscleDict">{{entry[0]}}</option>
+                            <option :value="entry" v-for="entry in this.$store.state.groupData">{{entry[0]}}</option>
                         </select>
                     </div>
                 </div>
@@ -56,16 +56,16 @@
                         <th scope="col">Related Muscles</th>
                     </tr>
                 </thead>
-                <tbody v-if="muscleDict">
+                <tbody v-if="filteredMuscleData">
                     <tr @click="$router.push({ path: `/musclecatalog/${muscle[1]}`})" v-for="muscle in filteredMuscleData" class="hoverable">
                         <th scope="row">{{muscle[0]}}</th>
                         <th scope="row">
                             <div class="row">
                                 <div class="col">
-                                    <p>{{this.muscleDict[muscle[2] - 1][0]}}</p>
+                                    <p class="center">{{this.$store.state.groupData[muscle[2] - 1][0]}}</p>
                                 </div>
                                 <div class="col">
-                                    <img :src="getSrc(this.muscleDict[muscle[2] - 1][0])" style="width: 100px; margin-top: 10px;">
+                                    <img :src="getSrc(this.$store.state.groupData[muscle[2] - 1][0])" style="width: 100px; margin-top: 10px;">
                                 </div>
                             </div>
                         </th>
@@ -94,21 +94,10 @@ import axios from 'axios'
 export default {
     methods:{
         async loadData(){
-            var sql = `select * from detail_muscles`
-            var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
-            resp = resp.data
-            this.muscleData = resp
 
-            console.log(resp)
-
-            this.filteredMuscleData = this.muscleData
-            this.catFilter = this.muscleData
-            this.nameFilter = this.muscleData
-
-            sql = `select * from general_muscles`
-            resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
-            resp = resp.data
-            this.muscleDict = resp
+            this.filteredMuscleData = this.$store.state.muscleData
+            this.catFilter = this.$store.state.muscleData
+            this.nameFilter = this.$store.state.muscleData
 
         },
 
@@ -121,7 +110,7 @@ export default {
                         //Find id from muscleDict
                     var checkId = this.selectedCategory[1]
 
-                    this.catFilter = this.muscleData.filter(function(entry){
+                    this.catFilter = this.$store.state.muscleData.filter(function(entry){
                         return entry[2] == checkId
                     })
 
@@ -146,9 +135,7 @@ export default {
                 } else {                
                     //Use intermediate filter as a way to check name
 
-                    console.log("ok", this.muscleName)
-
-                    this.nameFilter = this.muscleData.filter(function(entry){
+                    this.nameFilter = this.$store.state.muscleData.filter(function(entry){
                         return entry[0].toLowerCase().includes(temp.toLowerCase())
                     })
 
@@ -170,7 +157,6 @@ export default {
         },
 
         getSrc(muscle){
-            console.log(muscle)
             var images = require.context('../assets/muscles/', false, /\.jpg$/)
             return images('./' + muscle + ".jpg")
         }
@@ -186,7 +172,6 @@ export default {
             filteredMuscleData: null,
             catFilter: null,
             nameFilter: null,
-            defaultCat: ['All', 0]
         }
     },
 
@@ -247,6 +232,7 @@ tr:nth-child(odd) {
 
 .hoverable:hover {
     background-color: rgb(185, 228, 184);
+    cursor: pointer;
 }
 
 .text-label {
@@ -270,6 +256,10 @@ tr:nth-child(odd) {
     margin-right: auto;
     background-color: #80828336;
     
+}
+
+.center{
+    margin-top: 37%;
 }
 
 </style>
