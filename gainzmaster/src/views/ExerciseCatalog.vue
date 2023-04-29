@@ -84,16 +84,16 @@
 
                 <div class="row" style="margin-bottom: 50px;">
                     <div class="col">
-                        <input type="text" name="exerciseName" v-model="exerciseName">
+                        <input type="text" name="exerciseName" v-model="exerciseName" style="width: 75%;">
                     </div>
                     <div class="col">
-                        <select name="muscleGroup" v-model="muscleGroup">
+                        <select name="muscleGroup" v-model="muscleGroup" style="width: 75%;">
                             <option value="All">All</option>
                             <option :value="entry" v-for="entry in this.$store.state.groupData">{{entry[0]}}</option>
                         </select>
                     </div>
                     <div class="col">
-                        <select name="detailedMuscle" v-model="detailedMuscle">
+                        <select name="detailedMuscle" v-model="detailedMuscle" style="width: 75%;">
                             <option value="All">All</option>
                             <option :value="entry" v-for="entry in this.$store.state.muscleData">{{entry[0]}}</option>
                         </select>
@@ -117,32 +117,32 @@
 
                 <div class="row" style="margin-bottom: 50px;">
                     <div class="col">
-                        <select name="equipment" v-model="equipment">
+                        <select name="equipment" v-model="equipment" style="width: 75%;">
                             <option value="All">All</option>
                             <option :value="entry" v-for="entry in this.equipmentList">{{entry}}</option>
                         </select>
                     </div>
                     <div class="col">
-                        <select name="utility" v-model="utility">
+                        <select name="utility" v-model="utility" style="width: 75%;">
                             <option value="All">All</option>
                             <option :value="entry" v-for="entry in this.utilityList">{{entry}}</option>
                         </select>
                     </div>
                     <div class="col">
-                        <select name="mechanics" v-model="mechanics">
+                        <select name="mechanics" v-model="mechanics" style="width: 75%;">
                             <option value="All">All</option>
                             <option :value="entry" v-for="entry in this.mechanicsList">{{entry}}</option>
                         </select>
                     </div>
                     <div class="col">
-                        <select name="foce" v-model="force">
+                        <select name="foce" v-model="force" style="width: 75%;">
                             <option value="All">All</option>
                             <option :value="entry" v-for="entry in this.forceList">{{entry}}</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="row" style="margin-bottom: 20px;">
+                <div class="row">
                     <div class="col">
                         <button class="btn" @click="resetFields">Reset Fields</button>
                     </div>
@@ -379,6 +379,20 @@ export default {
 </script>
 
 <style>
+
+.btn {
+    border-color: #FFC631;
+    background-color: #002540;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 50px;
+    font-size: 1.0em;
+}
+
+.btn:hover {
+	background-color: #145c8b;
+}
 
 .square0{
   height: 50px;
