@@ -1,6 +1,6 @@
 <template>
-	<div class="header">
-		<div style="width:60%; background-color: white; margin: auto;">
+	<div class="homeHeader">
+		<div style="width:60%; background-color:white; margin: auto;">
 			<h1 style="font-family: monospace;"> Gainzmaster Home </h1>
 			<div class ="quote">
 				<img class="logo" src="../assets/lion.jpeg" style="width: 100%; height:100%; position: absolute; left: 5%;">
@@ -13,14 +13,14 @@
 	</div>
 	
 	<div style="background-color: #002540;">
-		<div class="buttons">
-			<button class="btn" id="workoutCreator"> Workout Creator </button>
-			<button class="btn" id="exerciseCreator"> Exercise Catalog </button>
-			<button class="btn" id="muscleCatalog"> Muscle Catalog </button>
+		<div class="homeButtons">
+			<button class="homeBtn" id="workoutCreator"> Workout Creator </button>
+			<button class="homeBtn" id="exerciseCreator"> Exercise Catalog </button>
+			<button class="homeBtn" id="muscleCatalog"> Muscle Catalog </button>
 		</div>
 	</div>
 
-	<div >
+	<div style="width:100%; height:auto;">
 		<div class="randomWorkout">
 			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.randomWorkout.type }}</em> workout!</h3>
 			<p v-for="item in this.randomWorkout"> {{ item }} </p>
@@ -28,15 +28,14 @@
 			<h4> </h4>
 			<button class="btn" style="background-color: #f0f0f0; color: #002540"><strong>Regenerate Workout</strong></button>
 		</div>
-		<div class="break"></div>
-		<div class="log">
+		<div class="workoutLog">
 			<h3>This is your last logged workout:</h3>
 			<p v-for="item in this.lastWorkout"> {{ item }} </p>
 			<button class="btn" style="background-color: #fafafa; color: #002540"><strong>View More Logs</strong></button>
 		</div>
 	</div>
 
-	<div style="margin-top:50px;">
+	<div style="margin-top:10px; width:100%; float:left;">
 		<p>You are now logged in</p>
 		<p v-if="this.$store.state.user_details">Welcome: {{this.$store.state.user_details.username}}</p>
 		<button @click="logout">LOG OUT</button>
@@ -210,14 +209,18 @@ export default {
 	padding:2.5%;
 	background-color: #f0f0f0;
 	color: #0f0f10;
+	height:auto;
+	min-height: 100%;
 }
 
-.log{
+.workoutLog{
 	float:right;
 	width:45%;
 	padding:2.5%;
 	background-color: #fafafa;
 	color: #050506;
+	min-height:auto;
+	min-height:100%;
 }
 
 .break{
@@ -225,7 +228,7 @@ export default {
     background-color: #ccc;
     height: 100%;
 }
-.header {
+.homeHeader {
 	color:#002540;
 	text-shadow: 2px 2px #FFC631;
 	background-color: #002540;
@@ -239,7 +242,7 @@ export default {
 }
 
 
-.btn {
+.homeBtn {
 	border-color: #FFC631;
 	background-color: #002540;
 	color: white;
@@ -251,11 +254,11 @@ export default {
 	margin: auto;
 	padding: 15px;
 }
-.btn:hover {
+.homeBtn:hover {
 	background-color: #145c8b;
 }
 
-.centered {
+.homeCentered {
   position: absolute;
   top: 47%;
   left: 50%;
@@ -267,7 +270,7 @@ export default {
   max-width:400px;
 }
 
-.buttons {
+.homeButtons {
 	width: 70%;
 	height: 100px;
 	display: flex;
@@ -278,7 +281,9 @@ export default {
 
 .gainzmasterLLC {
 	color: grey;
-	margin-bottom: 15px
+	margin-bottom: 15px;
+	width:100%;
+	float:left;
 
 }
 </style>

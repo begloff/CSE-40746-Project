@@ -14,7 +14,9 @@ export default createStore({
     randomWorkout: {type:"push", workout:["3x12 Bench", "2x12 Tricep Pushdown"]},
     lastWorkout: ["3x12 Bench", "2x12 Tricep Pushdown"],
     workoutSplits: ['push', 'pull', 'legs', 'upper'],
-		chosenQuote: null
+		chosenQuote: null,
+    createdWorkout: ['', '', []]   // [name, split, [['exercise1', sets, reps],['exercise1', sets, reps]]]
+    //  name = createdWorkout[0]  split = createdWorkout[1]  exercise_i_id = createdWorkout[2][i][0] exercise_i_sets = createdWorkout[2][i][1] ... reps
   },
   mutations: mutations,
 
