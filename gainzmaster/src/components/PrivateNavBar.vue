@@ -12,7 +12,10 @@
                 </router-link>
             </li>  
             <li class="nav-item" >
-            <router-link class="nav-link" active-class="active" to="/home" style="color: #f8f8f8;">Workout Creator</router-link>
+            <router-link class="nav-link" active-class="active" to="/workoutCreator" style="color: #f8f8f8;">Workout Creator</router-link>
+            </li>
+            <li class="nav-item" >
+            <router-link class="nav-link" active-class="active" to="/workoutlog" style="color: #f8f8f8;">Workout Log</router-link>
             </li>
             <li class="nav-item" >
             <router-link class="nav-link" active-class="active" to="/exercisecatalog" style="color: #f8f8f8;">Exercise Catalog</router-link>

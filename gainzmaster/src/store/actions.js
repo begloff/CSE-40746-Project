@@ -164,7 +164,7 @@ const fillData = async (context) => {
         resp = resp.data
         var groupData = resp
 
-        var sql = `select * from exercises`
+        var sql = `select * from exercises order by dbms_random.value`
         var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
         resp = resp.data
         var exerciseData = resp

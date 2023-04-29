@@ -11,6 +11,57 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col">
+            <p style="font-style: italic;">Each exercise can be searched by the equipment necessary, muscle utility, muscle mechanics, and muscle force.</p>
+        </div>
+    </div>
+
+    <hr style="	border-top: 7px double #2c3e50; color: #2c3e50;">
+
+    <div class="row">
+        <div class="col">
+            <h3>Preferability Scale:</h3>
+            <p style="font-style: italic">Each exercise is color coded according to how gym experts would rank them!</p>
+        </div>
+    </div>
+
+    <div class="row" style="padding-bottom: 20px; width: 95%;margin-left: auto;margin-right: auto;">
+        <div class="square0">
+            <p style="color:white; font-weight: bold;">0</p>
+        </div>
+        <div class="square1">
+            <p style="color:white; font-weight: bold;">1</p>
+        </div>
+        <div class="square2">
+            <p style="color:white; font-weight: bold;">2</p>
+        </div>
+        <div class="square3">
+            <p style="color:white; font-weight: bold;">3</p>
+        </div>
+        <div class="square4">
+            <p style="color:white; font-weight: bold;">4</p>
+        </div>
+        <div class="square5">
+            <p style="color:white; font-weight: bold;">5</p>
+        </div>
+        <div class="square6">
+            <p style="color:white; font-weight: bold;">6</p>
+        </div>
+        <div class="square7">
+            <p style="color:white; font-weight: bold;">7</p>
+        </div>
+        <div class="square8">
+            <p style="color:white; font-weight: bold;">8</p>
+        </div>
+        <div class="square9">
+            <p style="color:white; font-weight: bold;">9</p>
+        </div>
+        <div class="square10">
+            <p style="color:white; font-weight: bold;">10</p>
+        </div>
+    </div>
+
     <hr style="	border-top: 7px double #2c3e50; color: #2c3e50;">
 
     <div class="row">
@@ -120,6 +171,7 @@
                         <th scope="col">Utility</th>
                         <th scope="col">Mechanics</th>
                         <th scope="col">Muscle Force</th>
+                        <th scope="col">Preferability</th>
                     </tr>
                 </thead>
                 <tbody v-if="this.exerciseData">
@@ -131,7 +183,7 @@
                                     <p class="center">{{this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2] - 1][0]}}</p>
                                 </div>
                                 <div class="col">
-                                    <img :src="getSrc(this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2]-1][0])" style="width: 50px; margin-top: 10px;">
+                                    <img :src="getSrc(this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2]-1][0])" style="max-width: 100%; margin-top: 10px;">
                                 </div>
                             </div>
                         </th>
@@ -143,6 +195,7 @@
                         <th scope="row" v-else>~</th>
                         <th scope="row" v-if="entry[6]">{{entry[6]}}</th>
                         <th scope="row" v-else>~</th>
+                        <th scope="row" :style="colorCell(entry[11])">{{entry[11]}}</th>
                     </tr>
                 </tbody>
             </table>
@@ -175,6 +228,41 @@ export default {
     },
 
     methods:{
+        colorCell(range){
+            if (range == 1){
+                return 'background-color: #1fcc4d; color: white;'
+            }
+            else if (range == 0){
+                return 'background-color: #1aed76; color: white;'
+            }
+            else if (range == 2){
+                return 'background-color: #45de43; color: white;'
+            }
+            else if (range == 3){
+                return 'background-color: #7bde43; color: white;'
+            }
+            else if (range == 4){
+                return 'background-color: #98de43; color: white;'
+            }
+            else if (range == 5){
+                return 'background-color: #b2de43; color: white;'
+            }
+            else if (range == 6){
+                return 'background-color: #d6de43; color: white;'
+            }
+            else if (range == 7){
+                return 'background-color: #dec743; color: white;'
+            }
+            else if (range == 8){
+                return 'background-color: #dead43; color: white;'
+            }
+            else if (range == 9){
+                return 'background-color: #de9843; color: white;'
+            }
+            else if (range == 10){
+                return 'background-color: #de7b43; color: white;'
+            }
+        },
         async loadData(){
 
             this.exerciseData = this.$store.state.exerciseData
@@ -193,6 +281,11 @@ export default {
                     this.forceList.push(this.exerciseData[i][6])
                 }
             }
+
+            this.equipmentList = this.equipmentList.sort();
+            this.utilityList = this.utilityList.sort();
+            this.mechanicsList = this.mechanicsList.sort();
+            this.forceList = this.forceList.sort();
 
         },
 
@@ -292,5 +385,81 @@ export default {
 </script>
 
 <style>
+
+.square0{
+  height: 50px;
+  width: 50px;
+  background-color: #1aed76;
+  flex:1;    
+}
+.square1{
+  height: 50px;
+  width: 50px;
+  background-color: #1fcc4d; 
+  flex:1;    
+}
+.square2{
+  height: 50px;
+  width: 50px;
+  background-color: #45de43;  
+  flex:1;    
+
+}
+.square3{
+  height: 50px;
+  width: 50px;
+  background-color: #7bde43; 
+  flex:1;    
+
+}
+.square4{
+  height: 50px;
+  width: 50px;
+  background-color: #98de43;   
+  flex:1;    
+
+}
+.square5{
+  height: 50px;
+  width: 50px;
+  background-color: #b2de43;
+  flex:1;    
+
+}
+.square6{
+  height: 50px;
+  width: 50px;
+  background-color: #d6de43; 
+  flex:1;    
+
+}
+.square7{
+  height: 50px;
+  width: 50px;
+  background-color: #dec743;  
+  flex:1;    
+
+}
+.square8{
+  height: 50px;
+  width: 50px;
+  background-color: #dead43;  
+  flex:1;    
+
+}
+.square9{
+  height: 50px;
+  width: 50px;
+  background-color: #de9843; 
+  flex:1;    
+
+}
+.square10{
+  height: 50px;
+  width: 50px;
+  background-color: #de7b43; 
+  flex:1;    
+
+}
 
 </style>
