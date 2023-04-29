@@ -1,18 +1,18 @@
 <template>
-    <div class="header">
-        <h1>Workout Creator</h1>
+    <div class="creatorHeader">
+        <b>Workout Creator</b>
     </div>
 
     <div class="create">
-        <h2 style="font-size: larger;">Create me a random ___ workout:</h2>
+        Create me a random ___ workout:
         <div class="buttons">
             <button class="split" v-for="split in this.splits">{{split}}</button>
         </div>
         <button class="rainbow"><b>Surprise me!</b></button>
     </div>
 
-    <div style="margin-top:20px;">
-        <h2>Current Workout:</h2>
+    <div style="margin-top:20px; font-size: 3vw;">
+        Current Workout:
         <div class="hl"></div>
         <div class="workouts">
             <li style="font-size:larger;" v-for="workout in this.currWorkout">{{workout}}</li>
@@ -40,7 +40,11 @@ export default {
 	data(){
 		return {
 			splits: ['Push', 'Pull', 'Upper', 'Legs'],
-            currWorkout: ['a','b'],
+//            currWorkout: [],          MOVED TO STORE
+            date: '',
+            split: null,
+            reps: 0,
+            sets: 0
 		}
 	},
 	methods:{
@@ -50,6 +54,36 @@ export default {
         },
 
 
+        async addWorkout(){         // money
+            var sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.date}', 'yyyy-dd-mm'), '${this.$store.state.createdWorkout[1]}', ${this.$store.state.user_details.username}, '${this.$store.createdWorkout[0]}')`;
+            var resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            sql = `select session_id from sessions order by session_id`;
+            resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            var seshID = resp[-1][0]
+
+            sql = ``
+            for (exercise in this.$store.state.createdWorkout[2])
+                sql += `insert into log (exercise_id, session_id, reps, sets) values (${exercise[0]}, ${seshID}, ${exercise[2]}, ${exercise[1]});`
+
+            resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            this.$store.state
+        },
+
+        async deleteWorkout(seshID) {   // money??
+            var sql = `delete from log where session_id = ${seshID}`;
+            sql += `delete from sessions where session_id = ${seshID}`;
+            resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+        },
+
+        addToWorkout(id){           // good i think
+            var workout = [id, this.sets, this.reps];
+            this.$store.state.createdWorkout[2].push(workout)
+        },
+
+        removeFromWorkout(index){   // good i think
+            const garbage = this.$store.state.createdWorkout[2].splice(index,index)
+        }
+
     },
 	beforeMount(){
 	}
@@ -58,22 +92,31 @@ export default {
 
 <style>
 
-.header {
-	color:#002540;
-	text-shadow: 2px 2px #FFC631;
-	background-color: #ffffff;
-	font-size: 2.3vw;
+.creatorHeader {
+    color: #002540;
+    width: 60%;
+    border-bottom: 3px solid #002540;
+    text-shadow: 2px 2px #FFC631;
+    background-color: #ffffff;
+    font-size: 5.3vw;
+    margin: auto;
+    margin-bottom: 30px;
+    font-family: monospace;
+    height:auto;
 }
 
 .create {
     margin:auto;
-    width:90%;
-    height:235px;
+    margin-top:20px;
+    width:75%;
+    height:18vw;
     border: 3px dotted #002540;
+    padding-top: 2%;
+    font-size:1.5vw;
 }
 .buttons {
-	width: 70%;
-	height: 100px;
+	width: 90%;
+	height: 50%;
 	display: flex;
 	justify-content: space-around;
 	text-align:center;
@@ -84,18 +127,19 @@ export default {
 .split {
 	border-color: #FFC631;
 	background-color: #002540;
-    width: 180px;
+    width: 13%;
 	color: white;
 	padding: 10px;
 	border-radius: 6px;
 	margin-bottom: 50px;
 	justify-content: space-around;
 	text-align:center;
-    font-size:larger;
+    font-size:1.4vw;
     font-family:Georgia, 'Times New Roman', Times, serif;
 	margin: auto;
 	padding: 15px;
     display: inline-block;
+    height: 4vw;
 }
 .split:hover {
 	background-color: #145c8b;
@@ -110,19 +154,22 @@ export default {
     color: rgb(255, 255, 255);
 	padding: 10px;
 	border-radius: 6px;
-	margin-bottom: 50px;
 	justify-content: space-around;
 	text-align:center;
 	margin: auto;
 	padding: 15px;
     display: inline-block;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    width: 14vw;
+    height: 4vw;
+    font-size: 1.3vw;
 }
 .rainbow:hover{
     background-image: linear-gradient(to top left, indigo, violet, red, orange, yellow, green, blue );
 }
 .hl {
     height:2px;
-    width:80%;
+    width:30%;
     margin: auto;
     background-color: #002540;
 }
