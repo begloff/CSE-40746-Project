@@ -1,4 +1,4 @@
-load data infile 'exercises.csv'
+load data infile 'exercisesToInsert2.csv'
 insert into table exercises
 fields terminated by "~" optionally enclosed by '"'
 (exercise_id, 
@@ -11,4 +11,6 @@ muscle_force char(4000) NULLIF muscle_force=BLANKS,
 preparation char(4000) NULLIF preparation=BLANKS, 
 execution char(4000) NULLIF execution=BLANKS, 
 comments char(4000) NULLIF comments=BLANKS, 
-img char(4000) NULLIF img=BLANKS)
+img char(4000) NULLIF img=BLANKS,
+preferability,
+totalSearches)
