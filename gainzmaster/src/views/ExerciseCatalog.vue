@@ -123,7 +123,7 @@
                     </tr>
                 </thead>
                 <tbody v-if="this.exerciseData">
-                    <tr v-for="entry in this.exerciseData" class="hoverable">
+                    <tr @click="$router.push({ path: `/exercisecatalog/${entry[0]}`})" v-for="entry in this.exerciseData" class="hoverable">
                         <th scope="row">{{entry[2]}}</th>
                         <th scope="row">
                             <div class="row">

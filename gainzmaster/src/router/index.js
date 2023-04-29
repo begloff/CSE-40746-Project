@@ -7,6 +7,7 @@ import WorkoutCreator from '../views/WorkoutCreator.vue'
 import MuscleCatalog from '../views/MuscleCatalog.vue'
 import MuscleDescription from '../views/MuscleDescription.vue'
 import ExerciseCatalog from '../views/ExerciseCatalog.vue'
+import ExerciseDescription from '../views/ExerciseDescription.vue'
 import WorkoutLog from '../views/WorkoutLog.vue'
 
 import { auth } from '../firebase'
@@ -113,6 +114,15 @@ const routes = [
     }
   },
   {
+    path: '/exercisecatalog/:id',
+    name: 'detailedExercise',
+    componenet: ExerciseDescription,
+    beforeEnter: requireAuth,
+    meta:{
+      title: 'Gainzmaster - Exercises Description'
+    }
+  },
+  {
     path: '/workoutCreator',
     name: 'workoutCreator',
     component: WorkoutCreator,
@@ -121,7 +131,6 @@ const routes = [
       title: 'Gainzmaster - Workout Creator'
     }
   },
-
   {
     path: '/:catchAll(.*)',
     redirect: '/'
