@@ -1,14 +1,14 @@
 <template>
 	<div class="header">
 		<div style="width:60%; background-color: white; margin: auto;">
-			<h1> Gainzmaster Home </h1>
+			<h1 style="font-family: monospace;"> Gainzmaster Home </h1>
 			<div class ="quote">
 				<img class="logo" src="../assets/lion.jpeg" style="width: 100%; height:100%; position: absolute; left: 5%;">
 				<div style="position: absolute; top: 35%; width: 70%; left: 20%;">
-					<h3 style="font-size: 2.5vw; background-color: rgba(0, 0, 0, 0.623); padding-top:5px;">{{  this.chosenQuote }}</h3>
+					<h3 style="font-size: 2.5vw; background-color: rgba(0, 0, 0, 0.623); padding-top:5px; text-shadow: 2px 2px red">{{  this.chosenQuote }}</h3>
 				</div>
 			</div>
-			<h2 style="text-decoration: solid;" v-if="this.$store.state.user_details">Good {{ this.timeOfDay }}, {{ this.$store.state.user_details.username }}! How may I help you?</h2>
+			<h2 style="text-decoration: solid; font-size: 2.3vw;" v-if="this.$store.state.user_details">Good {{ this.timeOfDay }}, {{ this.$store.state.user_details.username }}! How may I help you?</h2>
 		</div>
 	</div>
 	
@@ -23,7 +23,7 @@
 	<div >
 		<div class="randomWorkout">
 			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.randomWorkout.type }}</em> workout!</h3>
-			<p v-for="item in this.workout"> {{ item }} </p>
+			<p v-for="item in this.randomWorkout"> {{ item }} </p>
 			<h4>Barbell Bench Press : {{this.repsBySets}}</h4>
 			<h4> </h4>
 			<button class="btn" style="background-color: #f0f0f0; color: #002540"><strong>Regenerate Workout</strong></button>
@@ -83,12 +83,13 @@ export default {
 			randomWorkout: {type:null, workout:null},
     		lastWorkout: null,
     		workoutSplits: ['push', 'pull', 'legs', 'upper'],
-			splitMuscles: {'push':['chest'], 'pull':['back'], 'legs':['quads'], 'upper':['chest']}, // 4 - 5 muscles per split
+			splitMuscles: {'push':['chest', 'tris'], 'pull':['back', 'bis'], 'legs':['quads', 'calves'], 'upper':['chest', 'back']}, // 4 - 5 muscles per split
 			repsBySets: null
 		}
 	},
 	methods:{
-        logout(){
+
+		logout(){
             this.$store.dispatch('logout')
         },
 
@@ -112,11 +113,12 @@ export default {
 			this.chosenQuote = this.quotes[chosenNum];
 		},
 
-		getRandomWorkout(){
+		async getRandomWorkout(){
 			var chosenNum = Math.floor(Math.random() * this.workoutSplits.length);
 			var chosenSplit = this.workoutSplits[chosenNum];
 			var muscles = null
-			var payload = '';
+			var payload = ``;
+			var queries = [];
 
 			if (chosenSplit == 'push')
 				muscles = this.splitMuscles['push'];
@@ -135,22 +137,30 @@ export default {
 							// built in pseudo-randomness in sql??		--> order by rand() limit 1
 
 
+			// don't even have to query
 
-			// for muscle in muscles:			== each muscle gets two workouts -- one with preferability >3, one random
-				// this.queries.append('select * from exercises where muscle group = muscle sort by rand limit 1')
-				// this.queries.append('select * from exercises where muscle group = muscle and preferability > 3 sort by rand limit 1')
-		
-			//var payload = '';
-			// for query in this.queries:
-				//payload = payload + '(' + query + ')'
+			for (let i = 0, len = muscles.length; i < len; i++) {
+				queries.push(`select * from exercises where muscle_force = 'Push'`);//${muscles[i]}'`);// sort by rand limit 1`);
+				queries.push(`select * from exercises where muscle_force = '${muscles[i]}'`);// and preferability > 3 sort by rand limit 1`);
+			}
 
-			// sql = 'select * from ' + payload + ';'
+
+			for (let i = 0, len = queries.length; i < len; i++) {
+				if (i < queries.length -1)
+					payload += ` (${queries[i]}), `;
+				else
+					payload += ` (${queries[i]})`;
+			}
+
+
+			console.log(payload)
+			var sql = `select * from ${payload};`;//'select * from ' + payload + ';'
+			console.log(sql)
+			var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
+
+			//console.log(resp)
 			
-			//var resp = await;
-			//axios.get('http://3.89.12.221:8004/db.py/?sql=${sql}');
-			
-			
-			this.randomWorkout.type = chosenSplit;
+			//this.randomWorkout.type = chosenSplit;
 			// for exercise in response
 				// this.getRepRange()
 				// this.randomWorkout.exercises.push('{{exercise}} + {{this.repsBySets}}')
@@ -216,8 +226,10 @@ export default {
     height: 100%;
 }
 .header {
-	color:rgb(5, 107, 37);
+	color:#002540;
+	text-shadow: 2px 2px #FFC631;
 	background-color: #002540;
+	font-size: 2.3vw;	
 }
 
 .quote {

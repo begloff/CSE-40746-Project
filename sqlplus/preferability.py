@@ -13,20 +13,19 @@ oCSV = open("exercises.csv", "r")
 
 searches = dict()
 count = 1
-with open("searchs.csv", "a") as f:
+with open("searchs2.csv", "w") as f:
     while line := oCSV.readline().strip():
-        if count > 756:
-            sleep(random.randint(1,3))
-            workout = line.split('~')[2].split(' ')
-            workout_s = '+'.join(workout)
-            search = requests.get(f"https://www.google.com/search?q={workout_s}", headers=headers)
+        sleep(random.randint(1,3))
+        workout = line.split('~')[2].split(' ')
+        workout_s = '+'.join(workout)
+        search = requests.get(f"https://www.google.com/search?q={workout_s}", headers=headers)
 
-            try:
-                num = int(re.search("About .{1,15} results", search.text)[0].split(' ')[1].replace(',', ''))
-                searches[' '.join(workout)] = num
-                f.write("%s, %s\n"%(' '.join(workout),num))
-                print('money yo')
-            except TypeError:
-                print("we're fucked")
-            print(count)
+        try:
+            num = int(re.search("About .{1,15} results", search.text)[0].split(' ')[1].replace(',', ''))
+            searches[' '.join(workout)] = num
+            f.write("%s, %s\n"%(' '.join(workout),num))
+            print('money yo')
+        except TypeError:
+            print("we're fucked")
+        print(count)
         count += 1
