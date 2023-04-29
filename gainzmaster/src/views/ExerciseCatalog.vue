@@ -27,9 +27,6 @@
     </div>
 
     <div class="row" style="padding-bottom: 20px; width: 95%;margin-left: auto;margin-right: auto;">
-        <div class="square0">
-            <p style="color:white; font-weight: bold;">0</p>
-        </div>
         <div class="square1">
             <p style="color:white; font-weight: bold;">1</p>
         </div>
@@ -231,9 +228,6 @@ export default {
         colorCell(range){
             if (range == 1){
                 return 'background-color: #1fcc4d; color: white;'
-            }
-            else if (range == 0){
-                return 'background-color: #1aed76; color: white;'
             }
             else if (range == 2){
                 return 'background-color: #45de43; color: white;'
