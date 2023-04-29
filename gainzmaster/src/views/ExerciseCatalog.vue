@@ -193,6 +193,7 @@ export default {
                     this.forceList.push(this.exerciseData[i][6])
                 }
             }
+
         },
 
         getSrc(muscle){
