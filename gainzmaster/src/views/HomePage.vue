@@ -26,12 +26,12 @@
 			<p v-for="item in this.randomWorkout"> {{ item }} </p>
 			<h4>Barbell Bench Press : {{this.repsBySets}}</h4>
 			<h4> </h4>
-			<button class="btn" style="background-color: #f0f0f0; color: #002540"><strong>Regenerate Workout</strong></button>
+			<button class="homeBtn" style="background-color: #f0f0f0; color: #002540"><strong>Regenerate Workout</strong></button>
 		</div>
 		<div class="workoutLog">
 			<h3>This is your last logged workout:</h3>
 			<p v-for="item in this.lastWorkout"> {{ item }} </p>
-			<button class="btn" style="background-color: #fafafa; color: #002540"><strong>View More Logs</strong></button>
+			<button class="homeBtn" style="background-color: #fafafa; color: #002540"><strong>View More Logs</strong></button>
 		</div>
 	</div>
 

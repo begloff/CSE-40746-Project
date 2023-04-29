@@ -1,7 +1,7 @@
 <template>
-    <div class="row">
+    <div class="row" style="margin-top:1%; margin-bottom:1%;">
         <div class="col">
-            <h1 v-if="muscleData">{{ muscleData[0][0] }}</h1>
+            <div class="muscleHeader" v-if="muscleData">{{ muscleData[0][0] }}</div>
         </div>
     </div>
 
@@ -12,12 +12,13 @@
             <div class="searchEngine">
                 <div class="row">
                     <div class="col" v-if="muscleImg">
-                        <img :src="muscleImg">
+                        <img style="width:20%; margin-top: 2%;" :src="muscleImg">
                     </div>
                 </div>
-                <div v-if="muscleData" class="row">
+                <div class="row">
                     <div class="col">
-                        <h5>{{ muscleData[0][6] }}</h5>
+                        <h5 v-if="muscleData">{{ muscleData[0][6] }}</h5>
+                        <h3 v-if="muscleData">Sorry, <b>bros</b> we are unable to provide sufficient data on this muscle :(</h3>
                     </div>
                 </div>
                 <div class="row" v-if="muscleData">
@@ -31,15 +32,15 @@
                         <h3>Related Muscles</h3>
                     </div>
                 </div>
-                <div class="row" v-if="muscleData">
+                <div class="row" style="margin-bottom: 2%;" v-if="muscleData">
                     <div class="col" v-if="muscleData[0][3]">
-                        <h3>{{ muscleData[0][3] }}</h3>
+                        {{ muscleData[0][3] }}
                     </div>
                     <div class="col" v-if="muscleData[0][4]">
-                        <h3>{{ muscleData[0][4] }}</h3>
+                        {{ muscleData[0][4] }}
                     </div>
                     <div class="col" v-if="muscleData[0][5]">
-                        <h3>{{ muscleData[0][5] }}</h3>
+                        {{ muscleData[0][5] }}
                     </div>
                 </div>
 			</div>
@@ -53,13 +54,13 @@
     </div>
     <div class="row" v-if="targeted_exercises">
         <div class="col">
-            <h5 v-for="exercise in targeted_exercises[0]">{{ exercise[2] }}</h5>
+            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[0]">{{ exercise[2] }}<br><br></router-link>
         </div>
         <div class="col">
-            <h5 v-for="exercise in targeted_exercises[1]">{{ exercise[2] }}</h5>
+            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[1]">{{ exercise[2] }}<br><br></router-link>
         </div>
         <div class="col">
-            <h5 v-for="exercise in targeted_exercises[2]">{{ exercise[2] }}</h5>
+            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[2]">{{ exercise[2] }}<br><br></router-link>
         </div>
     </div>
 
@@ -240,7 +241,17 @@ tr:nth-child(odd) {
     margin-left: auto;
     margin-right: auto;
     background-color: #80828336;
-    
+}
+
+.muscleHeader{
+    font-size:4vw;
+    font-family:serif
+
+}
+
+a{
+    text-decoration: none;
+    color: #002540
 }
 
 </style>
