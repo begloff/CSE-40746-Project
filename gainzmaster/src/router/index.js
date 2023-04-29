@@ -3,11 +3,12 @@ import LoginPage from '../views/LoginPage.vue'
 import SignupPage from '../views/SignupPage.vue'
 import HomePage from '../views/HomePage.vue'
 import PublicHomePage from '../views/PublicHomePage'
-import WorkoutMaker from '../views/WorkoutMaker.vue'
+import WorkoutCreator from '../views/WorkoutCreator.vue'
 import MuscleCatalog from '../views/MuscleCatalog.vue'
 import MuscleDescription from '../views/MuscleDescription.vue'
 import ExerciseCatalog from '../views/ExerciseCatalog.vue'
 import ExerciseDescription from '../views/ExerciseDescription.vue'
+import WorkoutLog from '../views/WorkoutLog.vue'
 
 import { auth } from '../firebase'
 
@@ -68,12 +69,12 @@ const routes = [
     }
   },
   {
-    path: '/workoutmaker',
-    name: 'workoutmaker',
-    component: WorkoutMaker,
+    path: '/workoutlog',
+    name: 'workoutlog',
+    component: WorkoutLog,
     beforeEnter: requireAuth,
     meta:{
-      title: 'Gainzmaster - Workout Maker'
+      title: 'Gainzmaster - Workout Log',
     }
   },
   {
@@ -119,6 +120,15 @@ const routes = [
     beforeEnter: requireAuth,
     meta:{
       title: 'Gainzmaster - Exercises Description'
+    }
+  },
+  {
+    path: '/workoutCreator',
+    name: 'workoutCreator',
+    component: WorkoutCreator,
+    beforeEnter: requireAuth,
+    meta:{
+      title: 'Gainzmaster - Workout Creator'
     }
   },
   {

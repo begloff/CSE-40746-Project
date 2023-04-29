@@ -10,18 +10,23 @@ searches = dict()
 
 with open("searchs.csv", "r") as f:
     while line := f.readline().strip():
-        workout, n = line.split(', ')
-        searches[workout] = int(n)
+        try:
+            workout, n = line.split(', ')
+            searches[workout] = int(n)
+        except ValueError:
+            workout, w2, n = line.split(', ')
+            searches[f"{workout}{w2}"] = int(n)
 
 sortedSearches = sorted(searches, key=lambda x: searches[x], reverse=True)
 
 for n, key in enumerate(sortedSearches):
-    searches[key] = ceil(n/64)
+    searches[key] = ceil(n/150)
+    print(searches[key])
 
 with open("exercises.csv", "r") as f:
-    with open("exercisesWithPref.csv", "w") as g:
+    with open("exercisesWithPref2.csv", "w") as g:
         while line := f.readline().strip():
             try:
-                g.write(f"{line}~{6-searches[line.split('~')[2]]}\n")
+                g.write(f"{line}~{searches[line.split('~')[2]]}\n")
             except:
-                g.write(f"{line}~3")
+                g.write(f"{line}~5")
