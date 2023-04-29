@@ -46,6 +46,23 @@
 		</div>
 	</div>
 
+    <div class="row" v-if="targeted_exercises">
+        <div class="col">
+            <h2>Check out some exercises that target this muscle:</h2>
+        </div>
+    </div>
+    <div class="row" v-if="targeted_exercises">
+        <div class="col">
+            <h5 v-for="exercise in targeted_exercises[0]">{{ exercise[2] }}</h5>
+        </div>
+        <div class="col">
+            <h5 v-for="exercise in targeted_exercises[1]">{{ exercise[2] }}</h5>
+        </div>
+        <div class="col">
+            <h5 v-for="exercise in targeted_exercises[2]">{{ exercise[2] }}</h5>
+        </div>
+    </div>
+
 </template>
 
 
@@ -59,42 +76,78 @@ import axios from 'axios'
 export default {
     methods:{
         async loadData(){
-            var sql = `select * from detail_muscles where detail_id = ${this.muscleId}`
-            var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
-            resp = resp.data
-            this.muscleData = resp
-            this.muscleImg = resp[0][7]
 
-            console.log(this.muscleImg)
+            console.log(this.$router)
 
-            console.log(resp)
+            this.muscleData = this.$store.state.muscleData.filter(muscle => muscle[1] == this.muscleId)
 
-            this.filteredMuscleData = this.muscleData
+            const targeted_exercises = this.$store.state.exerciseData.filter(exercise => exercise[1] == this.muscleData[0][1])
 
-            sql = `select * from general_muscles`
-            resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
-            resp = resp.data
-            this.muscleDict = resp
+            const modulo = targeted_exercises.length % 3
+            
+            const target1 = []
+            const target2 = []
+            const target3 = []
 
-        },
+            if (modulo == 0) {
+                const index = targeted_exercises.length / 3
 
-        filterMuscles(arg){
-            if(arg == 'category'){
+                for (let i = 0; i < index; i++) {
+                    target1.push(targeted_exercises[i])
+                }
 
-                //Find id from muscleDict
-                var checkId = this.selectedCategory[1]
+                for (let i = index; i < index*2; i++) {
+                    target2.push(targeted_exercises[i])
+                }
 
-                this.filteredMuscleData = this.filteredMuscleData.filter(function(entry){
-                    return entry[2] == checkId
-                })
+                for (let i = index*2; i < targeted_exercises.length; i++) {
+                    target3.push(targeted_exercises[i])
+                }
 
-                console.log(this.filteredMuscleData)
+            } else if (modulo == 1) {
+                const index = (targeted_exercises.length -1) / 3
+
+                for (let i = 0; i < index; i++) {
+                    target1.push(targeted_exercises[i])
+                }
+
+                for (let i = index; i < index*2 + 1; i++) {
+                    target2.push(targeted_exercises[i])
+                }
+
+                for (let i = index*2 + 1; i < targeted_exercises.length; i++) {
+                    target3.push(targeted_exercises[i])
+                }
+
+            } else if (modulo == 2) {
+                const index = (targeted_exercises.length -2) / 3
+
+                for (let i = 0; i < index + 1; i++) {
+                    target1.push(targeted_exercises[i])
+                }
+
+                for (let i = index + 1; i < index*2 + 1; i++) {
+                    target2.push(targeted_exercises[i])
+                }
+
+                for (let i = index*2 + 1; i < targeted_exercises.length; i++) {
+                    target3.push(targeted_exercises[i])
+                }
+
             }
+
+            this.targeted_exercises = [target1]
+            this.targeted_exercises.push(target2)
+            this.targeted_exercises.push(target3)
+
+            this.muscleImg = this.muscleData[0][7]
+            
         }
     },
 
     data(){
         return{
+            targeted_exercises: null,
             muscleData: null,
             muscleDict: null,
             muscleImg: null,

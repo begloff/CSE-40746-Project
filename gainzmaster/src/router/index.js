@@ -7,6 +7,7 @@ import WorkoutMaker from '../views/WorkoutMaker.vue'
 import MuscleCatalog from '../views/MuscleCatalog.vue'
 import MuscleDescription from '../views/MuscleDescription.vue'
 import ExerciseCatalog from '../views/ExerciseCatalog.vue'
+import ExerciseDescription from '../views/ExerciseDescription.vue'
 
 import { auth } from '../firebase'
 
@@ -109,6 +110,15 @@ const routes = [
     beforeEnter: requireAuth,
     meta:{
       title: 'Gainzmaster - Muscles Description'
+    }
+  },
+  {
+    path: '/exercisecatalog/:id',
+    name: 'detailedExercise',
+    componenet: ExerciseDescription,
+    beforeEnter: requireAuth,
+    meta:{
+      title: 'Gainzmaster - Exercises Description'
     }
   },
   {
