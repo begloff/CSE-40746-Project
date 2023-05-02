@@ -22,16 +22,17 @@
 
 	<div style="width:100%; height:auto; display: flex;">
 		<div class="randomWorkout">
-			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.randomWorkout.type }}</em> workout!</h3>
-			<p v-for="item in this.randomWorkout"> {{ item }} </p>
-			<h4>Barbell Bench Press : {{this.repsBySets}}</h4>
-			<h4> </h4>
-			<button class="homeBtn2" style=""><strong class="buttonHover">Regenerate Workout</strong></button>
+			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.currWorkout[2] }}</em> workout!</h3>
+
+			<div style="margin-bottom:2%" v-for="exercise in this.currWorkout[3]">{{exercise[0][1]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
+			<button class="homeBtn2"  style="margin-right:20%;" v-on:click="goToLog(); $router.push('/workoutcreator')"><strong class="buttonHover">Add to Log</strong></button>
+			<button class="homeBtn2" v-on:click="getRandomWorkout()"><strong class="buttonHover">Regenerate Workout</strong></button>
 		</div>
 		<div class="workoutLog">
 			<h3>This is your last logged workout:</h3>
-			<p v-for="item in this.lastWorkout"> {{ item }} </p>
-			<button class="homeBtn2" style=""><strong>View More Logs</strong></button>
+			<div style="margin-bottom:2%" v-for="exercise in this.lastWorkout">{{exercise[0]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
+
+			<button class="homeBtn2" @click="$router.push('/workoutlog')"><strong>View More Logs</strong></button>
 		</div>
 	</div>
 
@@ -49,6 +50,9 @@ export default {
 	components: {},
 	data(){
 		return {
+			currWorkout: this.$store.state.creatorData[7],
+			lastWorkout: null,
+
 			quotes: [
       			'If the door says PUSH, pull it. It\'s not a direction, it\'s a challenge',
       			'You don\'t need a spot for back. You don\'t even need to do back. Back is the legs of the upper body',
@@ -74,11 +78,17 @@ export default {
       			'This is the whey'
     		],
 			chosenQuote: null,
-			randomWorkout: {type:null, workout:null},
-    		lastWorkout: null,
-    		workoutSplits: ['push', 'pull', 'legs', 'upper'],
-			splitMuscles: {'push':['chest', 'tris'], 'pull':['back', 'bis'], 'legs':['quads', 'calves'], 'upper':['chest', 'back']}, // 4 - 5 muscles per split
-			repsBySets: null
+    		workoutSplits: ['Push', 'Pull', 'Legs', 'Upper'],
+			sets: 0,
+			reps: 0,
+
+
+			muscleGroups: { 
+                            'Push':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 2 or general_id = 3 or general_id = 6) and muscle_force = 'Push' and (preferability = 1 or preferability = 2 ) order by dbms_random.value`,
+                            'Pull':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 3 or general_id = 4 or general_id = 5) and muscle_force = 'Pull' and (preferability = 1 or preferability = 2 ) order by dbms_random.value`,
+                            'Upper': `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 2 or general_id = 3 or general_id = 6 or general_id = 4 or general_id = 5) and (muscle_force = 'Push' or muscle_force ='Pull') and (preferability = 1) order by dbms_random.value`,
+                            'Legs':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 7 or general_id = 8 or general_id = 9 or general_id = 10) and (preferability = 1 or preferability = 2 or preferability = 3) order by dbms_random.value`
+                        },
 		}
 	},
 	methods:{
@@ -107,57 +117,36 @@ export default {
 			this.chosenQuote = this.quotes[chosenNum];
 		},
 
+		clearWorkout(){
+            this.currWorkout = ['Untitled Workout','', '', []]
+        },
+
 		async getRandomWorkout(){
+			this.clearWorkout()
 			var chosenNum = Math.floor(Math.random() * this.workoutSplits.length);
-			var chosenSplit = this.workoutSplits[chosenNum];
-			var muscles = null
-			var payload = ``;
-			var queries = [];
-
-			if (chosenSplit == 'push')
-				muscles = this.splitMuscles['push'];
-			else if (chosenSplit == 'pull')
-				muscles = this.splitMuscles['pull'];
-			else if (chosenSplit == 'upper')
-				muscles = this.splitMuscles['upper'];
-			else if (chosenSplit == 'legs')
-				muscles = this.splitMuscles['legs'];
-
-			// once we have the muscles, we want to query for workouts. How?
-				// one way would be to loop through the muscles and do a query for every single workout  - easy, not efficient
-				// another way would be to somehow figure out one query with a ton of subqueries in there ----- posssssible, more efficient
-					// building on this, we can make a base subquery for each, somehow have to implement a sense of randomness . . .
-						// otherwise each "random" push will be the same, as base query will return same shit everytime
-							// built in pseudo-randomness in sql??		--> order by rand() limit 1
-
-
-			// don't even have to query
-
-			for (let i = 0, len = muscles.length; i < len; i++) {
-				queries.push(`select * from exercises where muscle_force = 'Push'`);//${muscles[i]}'`);// sort by rand limit 1`);
-				queries.push(`select * from exercises where muscle_force = '${muscles[i]}'`);// and preferability > 3 sort by rand limit 1`);
-			}
-
-
-			for (let i = 0, len = queries.length; i < len; i++) {
-				if (i < queries.length -1)
-					payload += ` (${queries[i]}), `;
-				else
-					payload += ` (${queries[i]})`;
-			}
-
-
-			console.log(payload)
-			var sql = `select * from ${payload};`;//'select * from ' + payload + ';'
-			console.log(sql)
-			var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
-
-			//console.log(resp)
+			var chosenSplit = this.workoutSplits[chosenNum]
 			
-			//this.randomWorkout.type = chosenSplit;
-			// for exercise in response
-				// this.getRepRange()
-				// this.randomWorkout.exercises.push('{{exercise}} + {{this.repsBySets}}')
+			var muscles = null
+
+			if (chosenSplit == 'Push'){
+				var muscles = this.muscleGroups['Push'];}
+			else if (chosenSplit == 'Pull'){
+				var muscles = this.muscleGroups['Pull'];}
+			else if (chosenSplit == 'Upper'){
+				var muscles = this.muscleGroups['Upper'];}
+			else if (chosenSplit == 'Legs'){
+				var muscles = this.muscleGroups['Legs'];}
+
+			this.currWorkout[2] = chosenSplit
+            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${muscles}`);
+            var lift = resp.data.slice(1,8)
+
+            for( let i = 0; i < lift.length; i++){
+                this.getRepRange()
+                this.currWorkout[3].push([[lift[i][1], lift[i][0]], this.sets, this.reps])
+            }
+
+
 		},
 
 		getRepRange(){
@@ -165,27 +154,40 @@ export default {
 			var chosenNum = Math.floor(Math.random() * 3);
 			if (chosenNum == 0){
 				var totalReps 	=  Math.floor(Math.random() * (18-15 + 1) + 15);
-				var sets 		=  Math.floor(Math.random() * (5 - 3 + 1 ) + 3);
-				var reps 		=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (HEAVY)';
+				this.sets 		=  Math.floor(Math.random() * (5 - 3 + 1 ) + 3);
+				this.reps 		=  Math.floor(totalReps/this.sets);
 			}
 			else if (chosenNum == 1){
 				var totalReps 	=  Math.floor(Math.random() * (36 - 24 + 1) + 24);
-				var sets 		=  Math.floor(Math.random() * (4 - 3 + 1) + 3);
-				var reps	  	=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (MEDIUM)';
+				this.sets 		=  Math.floor(Math.random() * (4 - 3 + 1) + 3);
+				this.reps	  	=  Math.floor(totalReps/this.sets);
 			}
 			else if (chosenNum == 2){
 				var totalReps 	=  Math.floor(Math.random() * (40 - 36 + 1) + 36);
-				var sets 		=  Math.floor(Math.random() * (3 - 2 + 1) + 2);
-				var reps	  	=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (LIGHT)';
+				this.sets 		=  Math.floor(Math.random() * (3 - 2 + 1) + 2);
+				this.reps	  	=  Math.floor(totalReps/this.sets);
 			}
 		},
 
-		getLastWorkout() {
+		goToLog(){
+			this.$store.state.creatorData[7] = this.currWorkout
+		},
 
+		async getLastWorkout() {
+				// get username
+			var sql = `select user_id from users where username = '${this.$store.state.user_details.username}'`;
+            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            var userID = resp.data[0]
 
+				// get session id
+			var sql = `select session_id from sessions where user_id = ${userID} order by session_id desc`;
+            resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            var sessionID = resp.data[0][0]
+
+				// get workouts from session id
+			sql = `select unique exercises.exercise_name, log.reps, log.sets from log, sessions, exercises where log.session_id = ${sessionID} and log.exercise_id = exercises.exercise_id and sessions.user_id = ${userID}`
+            resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            this.lastWorkout = resp.data
 		}
     },
 	beforeMount(){
