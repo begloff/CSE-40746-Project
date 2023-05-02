@@ -157,7 +157,7 @@
 
 
     <div class="row">
-        <div class="col2">
+        <div class="col2" v-if="this.exerciseData">
             <table class="table">
                 <thead>
                     <tr>
@@ -171,7 +171,7 @@
                         <th scope="col">Preferability</th>
                     </tr>
                 </thead>
-                <tbody v-if="this.exerciseData">
+                <tbody>
                     <tr @click="$router.push({ path: `/exercisecatalog/${entry[0]}`})" v-for="entry in this.exerciseData" class="hoverable">
                         <th scope="row">{{entry[2]}}</th>
                         <th scope="row">
@@ -195,14 +195,10 @@
                         <th scope="row" :style="colorCell(entry[11])">{{entry[11]}}</th>
                     </tr>
                 </tbody>
-                <tbody v-else>
-                    <div class="row">
-                        <div class="col">
-                            <h3>Sorry! Your search returned no results.</h3>
-                        </div>
-                    </div>
-                </tbody>
             </table>
+        </div>
+        <div class="col" v-else>
+            <h3 style="color: red;">Sorry! Your search returned no results.</h3>
         </div>
     </div>
 
