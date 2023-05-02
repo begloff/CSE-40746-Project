@@ -1,3 +1,6 @@
+#&#34;
+#&#39;
+
 import csv
 
 f = open('exercisesWithPref4.csv',"r")

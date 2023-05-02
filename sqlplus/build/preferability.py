@@ -9,11 +9,11 @@ headers={'User-Agent':	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWeb
 
 
 
-oCSV = open("exercises.csv", "r")
+oCSV = open("moreExercises2.csv", "r")
 
 searches = dict()
 count = 1
-with open("searchs2.csv", "w") as f:
+with open("searchs3.csv", "w") as f:
     while line := oCSV.readline().strip():
         sleep(random.randint(1,3))
         workout = line.split('~')[2].split(' ')

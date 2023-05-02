@@ -29,7 +29,7 @@ for n, key in enumerate(sortedSearches):
     
 
 with open("exercises.csv", "r") as f:
-    with open("exercisesWithPref3.csv", "w") as g:
+    with open("exercisesWithPref4.csv", "w") as g:
         while line := f.readline().strip():
             try:
                 g.write(f"{line}~{searches[line.split('~')[2]]}~{searches2[line.split('~')[2]]}\n")

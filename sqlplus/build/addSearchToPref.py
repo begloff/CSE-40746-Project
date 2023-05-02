@@ -3,7 +3,7 @@ import csv
 
 
 
-a = open('exercisesWithPref2.csv', 'r')
+a = open('exercisesWithPref4.csv', 'r')
 b = open('searchs.csv', 'r')
 
 two = csv.reader(b,delimiter=',')
