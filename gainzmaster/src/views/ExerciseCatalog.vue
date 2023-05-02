@@ -202,11 +202,8 @@
 </template>
 
 <script>
-
 import axios from 'axios'
-
 export default {
-
     data(){
         return{
             exerciseData: null,
@@ -223,7 +220,6 @@ export default {
             forceList: []
         }
     },
-
     methods:{
         colorCell(range){
             if (range == 1){
@@ -258,9 +254,7 @@ export default {
             }
         },
         async loadData(){
-
             this.exerciseData = this.$store.state.exerciseData
-
             for( var i = 0; i < this.exerciseData.length; i++){
                 if (!this.equipmentList.includes(this.exerciseData[i][3])){
                     this.equipmentList.push(this.exerciseData[i][3])
@@ -275,91 +269,66 @@ export default {
                     this.forceList.push(this.exerciseData[i][6])
                 }
             }
-
             this.equipmentList = this.equipmentList.sort();
             this.utilityList = this.utilityList.sort();
             this.mechanicsList = this.mechanicsList.sort();
             this.forceList = this.forceList.sort();
-
         },
-
         getSrc(muscle){
             var images = require.context('../assets/muscles/', false, /\.jpg$/)
             return images('./' + muscle + ".jpg")
         },
-
         filterMuscles(){
             // TODO: Filter every column based on inputs
             this.exerciseData = this.$store.state.exerciseData
-
             if(this.exerciseName != null && this.exerciseName != ''){
                 //filter based on input
-
                 var name = this.exerciseName
-
                 this.exerciseData = this.exerciseData.filter(function(entry){
                     return entry[2].toLowerCase().includes(name.toLowerCase())
                 })
             }
-
             if (this.muscleGroup != 'All'){
-
                 var group = this.muscleGroup
                 var muscleData = this.$store.state.muscleData
                 var groupData = this.$store.state.groupData
-
                 this.exerciseData = this.exerciseData.filter(function(entry){
                     return groupData[muscleData[entry[1] - 1][2] - 1][0] == group[0]
                 })
-
             }
-
             if (this.detailedMuscle != 'All'){
-
                 var muscleData = this.$store.state.muscleData
                 var detailedMuscle = this.detailedMuscle
-
                 this.exerciseData = this.exerciseData.filter(function(entry){
                     return muscleData[entry[1] - 1][0] == detailedMuscle[0]
                 })
             }
-
             if(this.equipment != 'All'){
                 var equipment = this.equipment
-
                 this.exerciseData = this.exerciseData.filter(function(entry){
                     return entry[3] == equipment
                 })
             }
-
             if(this.utility != 'All'){
                 var utility = this.utility
-
                 this.exerciseData = this.exerciseData.filter(function(entry){
                     return entry[4] == utility
                 })
             }
-
             if(this.mechanics != 'All'){
                 var mechanics = this.mechanics
-
                 this.exerciseData = this.exerciseData.filter(function(entry){
                     return entry[5] == mechanics
                 })
             }
-
             if(this.force != 'All'){
                 var force = this.force
-
                 this.exerciseData = this.exerciseData.filter(function(entry){
                     return entry[6] == force
                 })
             }
-
         },
-
         resetFields(){
-
             this.exerciseName = ''
             this.detailedMuscle = 'All'
             this.muscleGroup = 'All'
@@ -370,16 +339,13 @@ export default {
             
         }
     },
-
     async mounted(){
         await this.loadData()
     }
-
 }
 </script>
 
 <style>
-
 .btn {
     border-color: #FFC631;
     background-color: #002540;
@@ -389,11 +355,9 @@ export default {
     margin-bottom: 50px;
     font-size: 1.0em;
 }
-
 .btn:hover {
 	background-color: #145c8b;
 }
-
 .square0{
   height: 50px;
   width: 50px;
@@ -411,63 +375,53 @@ export default {
   width: 50px;
   background-color: #45de43;  
   flex:1;    
-
 }
 .square3{
   height: 50px;
   width: 50px;
   background-color: #7bde43; 
   flex:1;    
-
 }
 .square4{
   height: 50px;
   width: 50px;
   background-color: #98de43;   
   flex:1;    
-
 }
 .square5{
   height: 50px;
   width: 50px;
   background-color: #b2de43;
   flex:1;    
-
 }
 .square6{
   height: 50px;
   width: 50px;
   background-color: #d6de43; 
   flex:1;    
-
 }
 .square7{
   height: 50px;
   width: 50px;
   background-color: #dec743;  
   flex:1;    
-
 }
 .square8{
   height: 50px;
   width: 50px;
   background-color: #dead43;  
   flex:1;    
-
 }
 .square9{
   height: 50px;
   width: 50px;
   background-color: #de9843; 
   flex:1;    
-
 }
 .square10{
   height: 50px;
   width: 50px;
   background-color: #de7b43; 
   flex:1;    
-
 }
-
 </style>
