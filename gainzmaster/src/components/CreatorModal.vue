@@ -3,17 +3,20 @@
         <div class="new-modal">
             <h2>Log Workout</h2>
 
-            <label for="name">Enter Workout Name:</label>
-            <input id="name" type="text" v-model="currWorkout[0]">
-            <br>
-            <label for="splt" >Enter Workout Split:</label>
-            <select id="split" v-model="currWorkout[2]">
-              <option v-for="split in this.splits">{{split}}</option>
-            </select>
-            <br>
-            <label for="date">Enter Workout Date:</label>
-            <input type="date" v-model="currWorkout[1]">
-            <br>
+              <div style="margin-bottom:.5%">
+                <label for="name">Enter Workout Name: </label>
+                <input id="name" type="text" v-model="currWorkout[0]">
+              </div>
+              <div style="margin-bottom:.5%">
+                <label for="splt" >Enter Workout Split: </label>
+                <select id="split" v-model="currWorkout[2]">
+                  <option v-for="split in this.splits">{{split}}</option>
+                </select>
+              </div>
+              <div style="margin-bottom:.5%">
+                <label for="date">Enter Workout Date: </label>
+                <input type="date" v-model="currWorkout[1]">
+              </div>
 
             <div v-if="currWorkout[1]!=null && currWorkout[2]!=''">
               <button class="split" style="height:auto" v-on:click="addWorkout(); submitModal()">Submit Workout</button>
@@ -101,8 +104,7 @@ export default {
   height: 100%;
 }
 
-  /* If you are updating style for one specific component need to use .modal */
-  .new-modal h1 {
+.new-modal h1 {
   color: #2c3e50;
   border: none;
   padding: 0;
@@ -126,19 +128,6 @@ export default {
   text-decoration: none;
   margin: 10px;
 }
-/* sale styles */
-.new-modal.sale {
-  background: crimson;
-  color: white;
-}
-.modal.sale h1 {
-  color: white;
-}
-.modal.sale .actions {
-  color: white;
-}
-.modal.sale .actions a {
-  color: white;
-}
+
 
 </style>

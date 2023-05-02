@@ -200,8 +200,8 @@ import axios from 'axios';
 import CreatorModal from '../components/CreatorModal.vue'
 
 
-export default {
 
+export default {
     components: {
         CreatorModal
     },
