@@ -44,10 +44,19 @@
             <div style="text-align: center;" v-else>
                 <p>No exercises selected 😭😭😭</p>
             </div>
+<<<<<<< HEAD
             
         </div>
     </div>
     <CreatorModal v-if="showModal" :currWorkout="currWorkout" :resetWorkout="resetFields" @close="toggleModal" @clearIt="toggleModal();clearWorkout()" />
+=======
+            <div style="text-align:center; margin-bottom: 2vh;">
+                <button class="split" style="width:30%; margin:auto;" v-on:click="toggleModal">Add workout to log</button>
+            </div>
+        </div>
+    </div>
+    <CreatorModal v-if="showModal" @close="toggleModal"/>
+>>>>>>> 8bb8c39 (modal work)
 
     <div class="row">
         <div class="col">
@@ -198,11 +207,17 @@
 <script>
 import axios from 'axios';
 import CreatorModal from '../components/CreatorModal.vue'
+<<<<<<< HEAD
 
 
 export default {
 
     components: {
+=======
+
+export default {
+	components: {
+>>>>>>> 8bb8c39 (modal work)
         CreatorModal
     },
 	data(){
@@ -409,6 +424,7 @@ export default {
             this.force= this.$store.state.creatorData[6]
         },
 
+<<<<<<< HEAD
         clearWorkout(){
             this.currWorkout = ['Untitled Workout','', '', []]
         },
@@ -474,6 +490,11 @@ export default {
 			var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
 		},
 
+=======
+        toggleModal(){
+            this.showModal = !this.showModal
+        }
+>>>>>>> 8bb8c39 (modal work)
 
     },
 
