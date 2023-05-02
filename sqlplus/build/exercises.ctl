@@ -1,4 +1,4 @@
-load data infile 'exercisesToInsert2.csv'
+load data infile 'finalExercises.csv'
 insert into table exercises
 fields terminated by "~" optionally enclosed by '"'
 (exercise_id, 
