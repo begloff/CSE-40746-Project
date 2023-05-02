@@ -10,12 +10,9 @@ export default createStore({
     pageLoaded: false,
     exerciseData: null,
     muscleData: null,
-    groupData: null,
-    randomWorkout: {type:"push", workout:["3x12 Bench", "2x12 Tricep Pushdown"]},
-    lastWorkout: ["3x12 Bench", "2x12 Tricep Pushdown"],
-    workoutSplits: ['push', 'pull', 'legs', 'upper'],
-		chosenQuote: null,
-    createdWorkout: ['', '', []]   // [name, split, [['exercise1', sets, reps],['exercise1', sets, reps]]]
+    groupData: null, 
+    creatorData: ['', 'All', 'All', 'All', 'All', 'All', 'All', ['Lift1', '3/12', []]]
+                                                                  // currentWorkout
     //  name = createdWorkout[0]  split = createdWorkout[1]  exercise_i_id = createdWorkout[2][i][0] exercise_i_sets = createdWorkout[2][i][1] ... reps
   },
   mutations: mutations,

@@ -15,22 +15,180 @@
         Current Workout:
         <div class="hl"></div>
         <div class="workouts">
-            <li style="font-size:larger;" v-for="workout in this.currWorkout">{{workout}}</li>
+            
+            <table class="table" style="text-align: center; margin-top: 2%; margin-bottom: 2%;" v-if="currWorkout[2].length > 0">
+                <thead>
+                    <tr>
+                        <th scope="col">Remove Exercise</th>
+                        <th scope="col">Exercise</th>
+                        <th scope="col">Sets</th>
+                        <th scope="col">Reps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  v-for="(exercise,index) in this.currWorkout[2]" class="hoverable">
+                        <th scope="row"><button class="removeFromWorkout" v-on:click.stop="removeFromWorkout(index)">-</button></th>
+                        <th scope="row">{{exercise[0][1]}}</th>
+                        <th scope="row"> <input type="text" v-model="exercise[1]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
+                        <th scope="row"> <input type="text" v-model="exercise[2]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="text-align: center;" v-else>
+                <p>No exercises selected 😭😭😭</p>
+            </div>
+            <div style="text-align:center; margin-bottom: 2vh;">
+                <button class="split" style="width:30%; margin:auto;" v-on:click="addWorkout()">Add workout to log</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="searchEngine">
+                <div class="row">
+                    <div class="col">
+                        <h3>Exercise Search</h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="exerciseName" class="text-label">Name</label>
+                    </div>
+                    <div class="col">
+                        <label for="muscleGroup" class="text-label">Muscle Group</label>
+                    </div>
+                    <div class="col">
+                        <label for="detailedMuscle" class="text-label">Detailed Muscle</label>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-bottom: 50px;">
+                    <div class="col">
+                        <input type="text" name="exerciseName" v-model="exerciseName" style="width: 75%;">
+                    </div>
+                    <div class="col">
+                        <select name="muscleGroup" v-model="muscleGroup" style="width: 75%;">
+                            <option value="All">All</option>
+                            <option :value="entry" v-for="entry in this.$store.state.groupData">{{entry[0]}}</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="detailedMuscle" v-model="detailedMuscle" style="width: 75%;">
+                            <option value="All">All</option>
+                            <option :value="entry" v-for="entry in this.$store.state.muscleData">{{entry[0]}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="equipment" class="text-label">Equipment</label>
+                    </div>
+                    <div class="col">
+                        <label for="utility" class="text-label">Utility</label>
+                    </div>
+                    <div class="col">
+                        <label for="mechanics" class="text-label">Mechanics</label>
+                    </div>
+                    <div class="col">
+                        <label for="force" class="text-label">Muscle Force</label>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-bottom: 50px;">
+                    <div class="col">
+                        <select name="equipment" v-model="equipment" style="width: 75%;">
+                            <option value="All">All</option>
+                            <option :value="entry" v-for="entry in this.equipmentList">{{entry}}</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="utility" v-model="utility" style="width: 75%;">
+                            <option value="All">All</option>
+                            <option :value="entry" v-for="entry in this.utilityList">{{entry}}</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="mechanics" v-model="mechanics" style="width: 75%;">
+                            <option value="All">All</option>
+                            <option :value="entry" v-for="entry in this.mechanicsList">{{entry}}</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="foce" v-model="force" style="width: 75%;">
+                            <option value="All">All</option>
+                            <option :value="entry" v-for="entry in this.forceList">{{entry}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button class="btn" @click="resetFields">Reset Fields</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn" @click="filterMuscles">Search</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
 
-    <div style="border-top:3px dotted #002540; width:90%; margin:auto; margin-top: 30px;">
-        <h2> Add an exercise by: </h2>
-        <div class="bySplit">
-            <h3>Split</h3>
-        </div>
-        <div class="byMuscle">
-            <h3>Muscle</h3>
+    <div class="row">
+        <div class="col2">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Add Exercise</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Muscle Group</th>
+                        <th scope="col">Detailed Muscle</th>
+                        <th scope="col">Equipment</th>
+                        <th scope="col">Utility</th>
+                        <th scope="col">Mechanics</th>
+                        <th scope="col">Muscle Force</th>
+                        <th scope="col">Preferability</th>
+                    </tr>
+                </thead>
+                <tbody v-if="this.exerciseData">
+                    <tr  v-for="entry in this.exerciseData" class="hoverable" @click="$router.push({ path: `/exercisecatalog/${entry[0]}`})">
+                        <td scope="row"><button class="addToWorkout" v-on:click.stop="addToWorkout(entry)">+</button></td> 
+                        <th scope="row">{{entry[2]}}</th>
+                        <th scope="row">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="center">{{this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2] - 1][0]}}</p>
+                                </div>
+                                <div class="col">
+                                    <img :src="getSrc(this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2]-1][0])" style="max-width: 100%; margin-top: 10px;">
+                                </div>
+                            </div>
+                        </th>
+                        
+                        <th scope="row">{{this.$store.state.muscleData[entry[1] - 1][0]}}</th>
+                        <th scope="row">{{entry[3]}}</th>
+                        <th scope="row" v-if="entry[4]">{{entry[4]}}</th>
+                        <th scope="row" v-else>~</th>
+                        <th scope="row" v-if="entry[5]">{{entry[5]}}</th>
+                        <th scope="row" v-else>~</th>
+                        <th scope="row" v-if="entry[6]">{{entry[6]}}</th>
+                        <th scope="row" v-else>~</th>
+                        <th scope="row" :style="colorCell(entry[11])">{{entry[11]}}</th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
 </template>
+
+
+
 
 <script>
 import axios from 'axios';
@@ -40,12 +198,22 @@ export default {
 	data(){
 		return {
 			splits: ['Push', 'Pull', 'Upper', 'Legs'],
-//            currWorkout: [],          MOVED TO STORE
-            date: '',
-            split: null,
-            reps: 0,
-            sets: 0
-		}
+            currWorkout: this.$store.state.creatorData[7],
+            date: '2023-28-06',
+
+            exerciseData: null,
+            exerciseName: this.$store.state.creatorData[0],
+            detailedMuscle: this.$store.state.creatorData[1],
+            muscleGroup: this.$store.state.creatorData[2],
+            equipment: this.$store.state.creatorData[3],
+            utility: this.$store.state.creatorData[4],
+            mechanics: this.$store.state.creatorData[5],
+            force: this.$store.state.creatorData[6],
+            equipmentList: [],
+            utilityList: [],
+            mechanicsList: [],
+            forceList: [],
+        }
 	},
 	methods:{
 
@@ -53,20 +221,27 @@ export default {
             this.$store.dispatch('logout')
         },
 
-
         async addWorkout(){         // money
-            var sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.date}', 'yyyy-dd-mm'), '${this.$store.state.createdWorkout[1]}', ${this.$store.state.user_details.username}, '${this.$store.createdWorkout[0]}')`;
+            var sql = `select user_id from users where username = '${this.$store.state.user_details.username}'`;
             var resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            sql = `select session_id from sessions order by session_id`;
-            resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            var seshID = resp[-1][0]
+            resp = resp.data
+            console.log(resp);
 
-            sql = ``
-            for (exercise in this.$store.state.createdWorkout[2])
-                sql += `insert into log (exercise_id, session_id, reps, sets) values (${exercise[0]}, ${seshID}, ${exercise[2]}, ${exercise[1]});`
 
+
+//            sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.date}', 'yyyy-dd-mm'), '${this.currWorkout[1]}', '${user_ID}'', '${this.currWorkout[0]}');`;
+            console.log(sql)
             resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            this.$store.state
+            //sql = `select session_id from sessions order by session_id`;
+            //resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            //var seshID = resp[-1][0]
+//
+            //sql = ``
+            //for (exercise in this.$store.state.createdWorkout[2])
+            //    sql += `insert into log (exercise_id, session_id, reps, sets) values (${exercise[0]}, ${seshID}, ${exercise[2]}, ${exercise[1]});`
+//
+            //resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            //this.$store.state
         },
 
         async deleteWorkout(seshID) {   // money??
@@ -75,18 +250,189 @@ export default {
             resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
         },
 
-        addToWorkout(id){           // good i think
-            var workout = [id, this.sets, this.reps];
-            this.$store.state.createdWorkout[2].push(workout)
+        addToWorkout(entry){           // money
+            var workout = [[entry[0], entry[2]], 0, 0];
+            this.currWorkout[2].push(workout)
         },
 
         removeFromWorkout(index){   // good i think
-            const garbage = this.$store.state.createdWorkout[2].splice(index,index)
+            if (index == 0){
+                this.currWorkout[2].splice(0,1);
+            }
+            else{
+                this.currWorkout[2].splice(index,index)
+            }
+        },
+
+
+
+        colorCell(range){
+            if (range == 1){
+                return 'background-color: #1fcc4d; color: white;'
+            }
+            else if (range == 2){
+                return 'background-color: #45de43; color: white;'
+            }
+            else if (range == 3){
+                return 'background-color: #7bde43; color: white;'
+            }
+            else if (range == 4){
+                return 'background-color: #98de43; color: white;'
+            }
+            else if (range == 5){
+                return 'background-color: #b2de43; color: white;'
+            }
+            else if (range == 6){
+                return 'background-color: #d6de43; color: white;'
+            }
+            else if (range == 7){
+                return 'background-color: #dec743; color: white;'
+            }
+            else if (range == 8){
+                return 'background-color: #dead43; color: white;'
+            }
+            else if (range == 9){
+                return 'background-color: #de9843; color: white;'
+            }
+            else if (range == 10){
+                return 'background-color: #de7b43; color: white;'
+            }
+        },
+        async loadData(){
+
+            this.exerciseData = this.$store.state.exerciseData
+
+            for( var i = 0; i < this.exerciseData.length; i++){
+                if (!this.equipmentList.includes(this.exerciseData[i][3])){
+                    this.equipmentList.push(this.exerciseData[i][3])
+                }
+                if (!this.utilityList.includes(this.exerciseData[i][4])){
+                    this.utilityList.push(this.exerciseData[i][4])
+                }
+                if (!this.mechanicsList.includes(this.exerciseData[i][5])){
+                    this.mechanicsList.push(this.exerciseData[i][5])
+                }
+                if (!this.forceList.includes(this.exerciseData[i][6])){
+                    this.forceList.push(this.exerciseData[i][6])
+                }
+            }
+
+            this.equipmentList = this.equipmentList.sort();
+            this.utilityList = this.utilityList.sort();
+            this.mechanicsList = this.mechanicsList.sort();
+            this.forceList = this.forceList.sort();
+
+        },
+
+        getSrc(muscle){
+            var images = require.context('../assets/muscles/', false, /\.jpg$/)
+            return images('./' + muscle + ".jpg")
+        },
+
+        filterMuscles(){
+            // TODO: Filter every column based on inputs
+            this.exerciseData = this.$store.state.exerciseData
+
+            if(this.exerciseName != null && this.exerciseName != ''){
+                //filter based on input
+
+                var name = this.exerciseName
+
+                this.exerciseData = this.exerciseData.filter(function(entry){
+                    return entry[2].toLowerCase().includes(name.toLowerCase())
+                })
+            }
+
+            if (this.muscleGroup != 'All'){
+
+                var group = this.muscleGroup
+                var muscleData = this.$store.state.muscleData
+                var groupData = this.$store.state.groupData
+
+                this.exerciseData = this.exerciseData.filter(function(entry){
+                    return groupData[muscleData[entry[1] - 1][2] - 1][0] == group[0]
+                })
+
+            }
+
+            if (this.detailedMuscle != 'All'){
+
+                var muscleData = this.$store.state.muscleData
+                var detailedMuscle = this.detailedMuscle
+
+                this.exerciseData = this.exerciseData.filter(function(entry){
+                    return muscleData[entry[1] - 1][0] == detailedMuscle[0]
+                })
+            }
+
+            if(this.equipment != 'All'){
+                var equipment = this.equipment
+
+                this.exerciseData = this.exerciseData.filter(function(entry){
+                    return entry[3] == equipment
+                })
+            }
+
+            if(this.utility != 'All'){
+                var utility = this.utility
+
+                this.exerciseData = this.exerciseData.filter(function(entry){
+                    return entry[4] == utility
+                })
+            }
+
+            if(this.mechanics != 'All'){
+                var mechanics = this.mechanics
+
+                this.exerciseData = this.exerciseData.filter(function(entry){
+                    return entry[5] == mechanics
+                })
+            }
+
+            if(this.force != 'All'){
+                var force = this.force
+
+                this.exerciseData = this.exerciseData.filter(function(entry){
+                    return entry[6] == force
+                })
+            }
+        },
+
+        resetFields(){
+
+            this.exerciseName = ''
+            this.detailedMuscle = 'All'
+            this.muscleGroup = 'All'
+            this.equipment = 'All'
+            this.utility = 'All'
+            this.mechanics = 'All'
+            this.force = 'All'
+
+        },
+
+        setFields(){
+            this.exerciseName= this.$store.state.creatorData[0]
+            this.detailedMuscle= this.$store.state.creatorData[1]
+            this.muscleGroup= this.$store.state.creatorData[2]
+            this.equipment= this.$store.state.creatorData[3]
+            this.utility= this.$store.state.creatorData[4]
+            this.mechanics= this.$store.state.creatorData[5]
+            this.force= this.$store.state.creatorData[6]
         }
 
     },
-	beforeMount(){
-	}
+
+    beforeMount(){
+        this.setFields()
+    },
+
+    beforeRouteLeave(){
+        this.$store.state.creatorData = [ this.exerciseName, this.detailedMuscle, this.muscleGroup, this.equipment, this.utility, this.mechanics, this.force, this.currWorkout ]
+    },
+
+	async mounted(){
+        await this.loadData()
+    },
 };
 </script>
 
@@ -146,8 +492,9 @@ export default {
 }
 .workouts {
     text-align: left;
-    margin-left: 20%;
-    font-size:large
+    width: 60%;
+    margin:auto;
+    font-size: large;
 }
 .rainbow{
     background-image: linear-gradient(to top left, red, orange, yellow, green, blue, indigo, violet);
@@ -185,6 +532,31 @@ export default {
     width:45%;
     margin:auto;
     float:right;
+}
+
+.addToWorkout{
+    background-color: green;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin:auto;
+}
+.removeFromWorkout{
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin:auto;
 }
 
 </style>
