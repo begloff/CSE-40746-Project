@@ -22,7 +22,7 @@ export default{
   },
   components:{
     PublicNavBar,
-    PrivateNavBar
+    PrivateNavBar,
   }
 }
 

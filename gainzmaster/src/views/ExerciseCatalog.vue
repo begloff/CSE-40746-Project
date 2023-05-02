@@ -195,7 +195,20 @@
                         <th scope="row" :style="colorCell(entry[11])">{{entry[11]}}</th>
                     </tr>
                 </tbody>
+                <tbody v-else>
+                    <div class="row">
+                        <div class="col">
+                            <h3>Sorry! Your search returned no results.</h3>
+                        </div>
+                    </div>
+                </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn" style="margin-top: 20px; margin-bottom: 20px;" @click="expandTable" :disabled="!expand">See More Entries</button>
         </div>
     </div>
 
@@ -217,10 +230,24 @@ export default {
             equipmentList: [],
             utilityList: [],
             mechanicsList: [],
-            forceList: []
+            forceList: [],
+            tableIndex: 50,
+            filteredData: null,
+            expand: true
         }
     },
     methods:{
+        expandTable(){
+            if (this.filteredData.length > this.exerciseData.length + 50){
+                //Can you expand more?
+                this.tableIndex += 50
+                this.exerciseData = this.filteredData.slice(0, this.tableIndex)
+                this.expand = true
+            } else {
+                this.exerciseData = this.filteredData
+                this.expand = false
+            }
+        },
         colorCell(range){
             if (range == 1){
                 return 'background-color: #1fcc4d; color: white;'
@@ -254,25 +281,28 @@ export default {
             }
         },
         async loadData(){
-            this.exerciseData = this.$store.state.exerciseData
-            for( var i = 0; i < this.exerciseData.length; i++){
-                if (!this.equipmentList.includes(this.exerciseData[i][3])){
-                    this.equipmentList.push(this.exerciseData[i][3])
+            for( var i = 0; i < this.$store.state.exerciseData.length; i++){
+                if (!this.equipmentList.includes(this.$store.state.exerciseData[i][3])){
+                    this.equipmentList.push(this.$store.state.exerciseData[i][3])
                 }
-                if (!this.utilityList.includes(this.exerciseData[i][4])){
-                    this.utilityList.push(this.exerciseData[i][4])
+                if (!this.utilityList.includes(this.$store.state.exerciseData[i][4])){
+                    this.utilityList.push(this.$store.state.exerciseData[i][4])
                 }
-                if (!this.mechanicsList.includes(this.exerciseData[i][5])){
-                    this.mechanicsList.push(this.exerciseData[i][5])
+                if (!this.mechanicsList.includes(this.$store.state.exerciseData[i][5])){
+                    this.mechanicsList.push(this.$store.state.exerciseData[i][5])
                 }
-                if (!this.forceList.includes(this.exerciseData[i][6])){
-                    this.forceList.push(this.exerciseData[i][6])
+                if (!this.forceList.includes(this.$store.state.exerciseData[i][6])){
+                    this.forceList.push(this.$store.state.exerciseData[i][6])
                 }
             }
             this.equipmentList = this.equipmentList.sort();
             this.utilityList = this.utilityList.sort();
             this.mechanicsList = this.mechanicsList.sort();
             this.forceList = this.forceList.sort();
+            this.expand = true
+            this.exerciseData = this.$store.state.exerciseData.slice(0, 50)
+            this.filteredData = this.$store.state.exerciseData
+
         },
         getSrc(muscle){
             var images = require.context('../assets/muscles/', false, /\.jpg$/)
@@ -280,11 +310,11 @@ export default {
         },
         filterMuscles(){
             // TODO: Filter every column based on inputs
-            this.exerciseData = this.$store.state.exerciseData
+            this.filteredData = this.$store.state.exerciseData
             if(this.exerciseName != null && this.exerciseName != ''){
                 //filter based on input
                 var name = this.exerciseName
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[2].toLowerCase().includes(name.toLowerCase())
                 })
             }
@@ -292,41 +322,56 @@ export default {
                 var group = this.muscleGroup
                 var muscleData = this.$store.state.muscleData
                 var groupData = this.$store.state.groupData
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return groupData[muscleData[entry[1] - 1][2] - 1][0] == group[0]
                 })
             }
             if (this.detailedMuscle != 'All'){
                 var muscleData = this.$store.state.muscleData
                 var detailedMuscle = this.detailedMuscle
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return muscleData[entry[1] - 1][0] == detailedMuscle[0]
                 })
             }
             if(this.equipment != 'All'){
                 var equipment = this.equipment
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[3] == equipment
                 })
             }
             if(this.utility != 'All'){
                 var utility = this.utility
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[4] == utility
                 })
             }
             if(this.mechanics != 'All'){
                 var mechanics = this.mechanics
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[5] == mechanics
                 })
             }
             if(this.force != 'All'){
                 var force = this.force
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[6] == force
                 })
             }
+
+            // Filtered Data contains the queried for data --> transfer 50 or however many are in there
+
+            if (this.filteredData.length > 50) {
+                this.exerciseData = this.filteredData.slice(0,50)
+                this.tableIndex = 50
+                this.expand = true
+            } else if (this.filteredData.length == 0){
+                this.exerciseData = null
+                this.tableIndex = 50
+            } else {
+                this.exerciseData = this.filteredData
+                this.expand = false
+            }
+
         },
         resetFields(){
             this.exerciseName = ''
@@ -357,6 +402,10 @@ export default {
 }
 .btn:hover {
 	background-color: #145c8b;
+}
+.btn:disabled {
+	background-color: #4e4f50;
+    cursor: not-allowed;
 }
 .square0{
   height: 50px;

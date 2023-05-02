@@ -20,26 +20,21 @@
 		</div>
 	</div>
 
-	<div style="width:100%; height:auto;">
+	<div style="width:100%; height:auto; display: flex;">
 		<div class="randomWorkout">
 			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.randomWorkout.type }}</em> workout!</h3>
 			<p v-for="item in this.randomWorkout"> {{ item }} </p>
 			<h4>Barbell Bench Press : {{this.repsBySets}}</h4>
 			<h4> </h4>
-			<button class="homeBtn" style="background-color: #f0f0f0; color: #002540"><strong>Regenerate Workout</strong></button>
+			<button class="homeBtn2" style=""><strong class="buttonHover">Regenerate Workout</strong></button>
 		</div>
 		<div class="workoutLog">
 			<h3>This is your last logged workout:</h3>
 			<p v-for="item in this.lastWorkout"> {{ item }} </p>
-			<button class="homeBtn" style="background-color: #fafafa; color: #002540"><strong>View More Logs</strong></button>
+			<button class="homeBtn2" style=""><strong>View More Logs</strong></button>
 		</div>
 	</div>
 
-	<div style="margin-top:10px; width:100%; float:left;">
-		<p>You are now logged in</p>
-		<p v-if="this.$store.state.user_details">Welcome: {{this.$store.state.user_details.username}}</p>
-		<button @click="logout">LOG OUT</button>
-	</div>
 	<div class="gainzmasterLLC">
 		<h2>Property of Gainzmaster LLC.</h2>
 		<h3>All rights reserved. </h3>
@@ -211,6 +206,7 @@ export default {
 	color: #0f0f10;
 	height:auto;
 	min-height: 100%;
+	flex: 1;
 }
 
 .workoutLog{
@@ -221,7 +217,9 @@ export default {
 	color: #050506;
 	min-height:auto;
 	min-height:100%;
+	flex: 1;
 }
+
 
 .break{
 	width: 1px;
@@ -256,6 +254,23 @@ export default {
 }
 .homeBtn:hover {
 	background-color: #145c8b;
+}
+
+.homeBtn2 {
+	border-color: #FFC631;
+	padding: 10px;
+	border-radius: 6px;
+	margin-bottom: 50px;
+	justify-content: space-around;
+	text-align:center;
+	margin: auto;
+	padding: 15px;
+	background-color: #fafafa; 
+	color: #002540
+}
+.homeBtn2:hover {
+	background-color: #62bdfa;
+	color: white;
 }
 
 .homeCentered {
