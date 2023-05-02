@@ -11,7 +11,7 @@ export default createStore({
     exerciseData: null,
     muscleData: null,
     groupData: null, 
-    creatorData: ['', 'All', 'All', 'All', 'All', 'All', 'All', ['Lift1', '3/12', []]]
+    creatorData: ['', 'All', 'All', 'All', 'All', 'All', 'All', ['Untitled Workout', null, '', []]]
                                                                   // currentWorkout
     //  name = createdWorkout[0]  split = createdWorkout[1]  exercise_i_id = createdWorkout[2][i][0] exercise_i_sets = createdWorkout[2][i][1] ... reps
   },

@@ -6,7 +6,7 @@
     <div class="create">
         Create me a random ___ workout:
         <div class="buttons">
-            <button class="split" v-for="split in this.splits">{{split}}</button>
+            <button class="split" v-for="split in this.splits" v-on:click="getRandomWorkout(split)">{{split}}</button>
         </div>
         <button class="rainbow"><b>Surprise me!</b></button>
     </div>
@@ -15,34 +15,39 @@
         Current Workout:
         <div class="hl"></div>
         <div class="workouts">
-            
-            <table class="table" style="text-align: center; margin-top: 2%; margin-bottom: 2%;" v-if="currWorkout[2].length > 0">
-                <thead>
-                    <tr>
-                        <th scope="col">Remove Exercise</th>
-                        <th scope="col">Exercise</th>
-                        <th scope="col">Sets</th>
-                        <th scope="col">Reps</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr  v-for="(exercise,index) in this.currWorkout[2]" class="hoverable">
-                        <th scope="row"><button class="removeFromWorkout" v-on:click.stop="removeFromWorkout(index)">-</button></th>
-                        <th scope="row">{{exercise[0][1]}}</th>
-                        <th scope="row"> <input type="text" v-model="exercise[1]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
-                        <th scope="row"> <input type="text" v-model="exercise[2]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
-                    </tr>
-                </tbody>
-            </table>
+            <div v-if="currWorkout[3].length > 0">
+                <table class="table" style="text-align: center; margin-top: 2%; margin-bottom: 2%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Remove Exercise</th>
+                            <th scope="col">Exercise</th>
+                            <th scope="col">Sets</th>
+                            <th scope="col">Reps</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  v-for="(exercise,index) in this.currWorkout[3]" class="hoverable">
+                            <th scope="row"><button class="removeFromWorkout" v-on:click.stop="removeFromWorkout(index)">-</button></th>
+                            <th scope="row">{{exercise[0][1]}}</th>
+                            <th scope="row"> <input type="text" v-model="exercise[1]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
+                            <th scope="row"> <input type="text" v-model="exercise[2]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="buttons" style="text-align:center; margin-bottom: 2vh;">
+                    <button class="split" style="width:30%; margin:auto;" v-on:click="clearWorkout">Clear workout</button>
+                    <button class="split" style="width:30%; margin:auto;" v-on:click="toggleModal"> Complete workout</button>
+                </div>
+            </div>
 
             <div style="text-align: center;" v-else>
                 <p>No exercises selected 😭😭😭</p>
             </div>
-            <div style="text-align:center; margin-bottom: 2vh;">
-                <button class="split" style="width:30%; margin:auto;" v-on:click="addWorkout()">Add workout to log</button>
-            </div>
+            
         </div>
     </div>
+    <CreatorModal v-if="showModal" :currWorkout="currWorkout" :resetWorkout="resetFields" @close="toggleModal" @clearIt="toggleModal();clearWorkout()" />
 
     <div class="row">
         <div class="col">
@@ -192,9 +197,14 @@
 
 <script>
 import axios from 'axios';
+import CreatorModal from '../components/CreatorModal.vue'
+
 
 export default {
-	components: {},
+
+    components: {
+        CreatorModal
+    },
 	data(){
 		return {
 			splits: ['Push', 'Pull', 'Upper', 'Legs'],
@@ -213,6 +223,8 @@ export default {
             utilityList: [],
             mechanicsList: [],
             forceList: [],
+
+            showModal: false
         }
 	},
 	methods:{
@@ -221,46 +233,23 @@ export default {
             this.$store.dispatch('logout')
         },
 
-        async addWorkout(){         // money
-            var sql = `select user_id from users where username = '${this.$store.state.user_details.username}'`;
-            var resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            resp = resp.data
-            console.log(resp);
-
-
-
-//            sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.date}', 'yyyy-dd-mm'), '${this.currWorkout[1]}', '${user_ID}'', '${this.currWorkout[0]}');`;
-            console.log(sql)
-            resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            //sql = `select session_id from sessions order by session_id`;
-            //resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            //var seshID = resp[-1][0]
-//
-            //sql = ``
-            //for (exercise in this.$store.state.createdWorkout[2])
-            //    sql += `insert into log (exercise_id, session_id, reps, sets) values (${exercise[0]}, ${seshID}, ${exercise[2]}, ${exercise[1]});`
-//
-            //resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            //this.$store.state
-        },
-
         async deleteWorkout(seshID) {   // money??
             var sql = `delete from log where session_id = ${seshID}`;
             sql += `delete from sessions where session_id = ${seshID}`;
-            resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            resp = await axios.post(`http//3.89.12.221:8004/db.py/?sql=${sql}`);
         },
 
         addToWorkout(entry){           // money
             var workout = [[entry[0], entry[2]], 0, 0];
-            this.currWorkout[2].push(workout)
+            this.currWorkout[3].push(workout)
         },
 
         removeFromWorkout(index){   // good i think
             if (index == 0){
-                this.currWorkout[2].splice(0,1);
+                this.currWorkout[3].splice(0,1);
             }
             else{
-                this.currWorkout[2].splice(index,index)
+                this.currWorkout[3].splice(index,index)
             }
         },
 
@@ -418,7 +407,73 @@ export default {
             this.utility= this.$store.state.creatorData[4]
             this.mechanics= this.$store.state.creatorData[5]
             this.force= this.$store.state.creatorData[6]
-        }
+        },
+
+        clearWorkout(){
+            this.currWorkout = ['Untitled Workout','', '', []]
+        },
+
+        toggleModal(){
+            this.showModal = !this.showModal
+        },
+        
+        getRepRange(){
+			// Heavy = 0, Medium = 1, Light = 2
+			var chosenNum = Math.floor(Math.random() * 3);
+			if (chosenNum == 0){
+				var totalReps 	=  Math.floor(Math.random() * (18-15 + 1) + 15);
+				var sets 		=  Math.floor(Math.random() * (5 - 3 + 1 ) + 3);
+				var reps 		=  Math.floor(totalReps/sets);
+				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (HEAVY)';
+			}
+			else if (chosenNum == 1){
+				var totalReps 	=  Math.floor(Math.random() * (36 - 24 + 1) + 24);
+				var sets 		=  Math.floor(Math.random() * (4 - 3 + 1) + 3);
+				var reps	  	=  Math.floor(totalReps/sets);
+				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (MEDIUM)';
+			}
+			else if (chosenNum == 2){
+				var totalReps 	=  Math.floor(Math.random() * (40 - 36 + 1) + 36);
+				var sets 		=  Math.floor(Math.random() * (3 - 2 + 1) + 2);
+				var reps	  	=  Math.floor(totalReps/sets);
+				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (LIGHT)';
+			}
+		},
+
+        async getRandomWorkout(chosenSplit){
+			var chosenNum = Math.floor(Math.random() * this.workoutSplits.length);
+			var muscles = null
+			var payload = ``;
+			var queries = [];
+
+			if (chosenSplit == 'push')
+				muscles = this.splitMuscles['push'];
+			else if (chosenSplit == 'pull')
+				muscles = this.splitMuscles['pull'];
+			else if (chosenSplit == 'upper')
+				muscles = this.splitMuscles['upper'];
+			else if (chosenSplit == 'legs')
+				muscles = this.splitMuscles['legs'];
+
+
+			for (let i = 0, len = muscles.length; i < len; i++) {
+				queries.push(`select * from exercises where muscle_force = '${chosenSplit}'`);
+			}
+
+
+			for (let i = 0, len = queries.length; i < len; i++) {
+				if (i < queries.length -1)
+					payload += ` (${queries[i]}), `;
+				else
+					payload += ` (${queries[i]})`;
+			}
+
+
+
+			var sql = `select * from ${payload};`;
+			var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
+		},
+
 
     },
 
