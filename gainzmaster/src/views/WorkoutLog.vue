@@ -88,7 +88,9 @@ export default {
                 this.sessions.splice(index,index)
             }
             var sql = `delete from log where session_id = ${sessionID}; delete from sessions where session_id = ${sessionID}`
-            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            console.log(sql)
+            var resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            console.log(resp)
         }
 
 

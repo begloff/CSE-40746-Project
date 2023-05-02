@@ -53,16 +53,18 @@ export default {
             var sql = `select user_id from users where username = '${this.$store.state.user_details.username}'`;
             var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
             var user_id = resp.data[0]
+            console.log(resp)
 
                 // post user session
             sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.currWorkout[1]}', 'yyyy-mm-dd'), '${this.currWorkout[2]}', '${user_id}', '${this.currWorkout[0]}');`;
             resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            console.log(sql)
+            console.log(resp)
 
                 // get session id
             sql = `select session_id from sessions where user_id = ${user_id} order by session_id desc`;
             resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
             var seshID = resp.data[0]
+            console.log(resp)
 
                 // push to log
             sql = ``
@@ -71,6 +73,8 @@ export default {
             }
 
             resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            console.log(resp)
+
             this.submitModal()
 
         }
