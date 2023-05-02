@@ -12,11 +12,11 @@
 		</div>
 	</div>
 	
-	<div style="background-color: #002540;">
+	<div style="background-color: #002540; margin-top: 80px;">
 		<div class="homeButtons">
-			<button class="homeBtn" id="workoutCreator"> Workout Creator </button>
-			<button class="homeBtn" id="exerciseCreator"> Exercise Catalog </button>
-			<button class="homeBtn" id="muscleCatalog"> Muscle Catalog </button>
+			<button class="homeBtn" id="workoutCreator" @click="$router.push('/workoutcreator')"> Workout Creator </button>
+			<button class="homeBtn" id="exerciseCreator" @click="$router.push('/exercisecatalog')"> Exercise Catalog </button>
+			<button class="homeBtn" id="muscleCatalog" @click="$router.push('/musclecatalog')"> Muscle Catalog </button>
 		</div>
 	</div>
 
