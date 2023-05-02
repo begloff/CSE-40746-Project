@@ -150,7 +150,7 @@ export default {
 			console.log(payload)
 			var sql = `select * from ${payload};`;//'select * from ' + payload + ';'
 			console.log(sql)
-			var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
+			var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
 
 			//console.log(resp)
 			
