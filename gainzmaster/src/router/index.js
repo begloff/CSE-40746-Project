@@ -116,7 +116,7 @@ const routes = [
   {
     path: '/exercisecatalog/:id',
     name: 'detailedExercise',
-    componenet: ExerciseDescription,
+    component: ExerciseDescription,
     beforeEnter: requireAuth,
     meta:{
       title: 'Gainzmaster - Exercises Description'

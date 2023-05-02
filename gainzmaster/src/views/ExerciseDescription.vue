@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
         <div class="col">
-            <h1>yo</h1>
+            <h1>{{exerciseData}}</h1>
         </div>
     </div>
 </template>
@@ -21,8 +21,10 @@ export default {
     methods:{
         async loadData(){
 
-            this.exerciseData = this.$store.state.exerciseData
-            console.log(this.exerciseData)
+            //Load data based on id
+            var sql = `select * from exercises where exercise_id = ${this.exerciseId}`
+            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
+            this.exerciseData = resp.data
         },
 
         getSrc(muscle){
