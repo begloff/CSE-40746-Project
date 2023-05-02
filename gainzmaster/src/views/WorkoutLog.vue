@@ -43,7 +43,6 @@ export default {
 	components: {},
 	data(){
 		return {
-			workoutHistory : [['bench','curls'],['bench','curls']],
             sessions: []
 		}
 	},

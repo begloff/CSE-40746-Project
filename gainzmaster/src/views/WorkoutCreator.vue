@@ -6,9 +6,9 @@
     <div class="create">
         Create me a random ___ workout:
         <div class="buttons">
-            <button class="split" v-for="split in this.splits" v-on:click="getRandomWorkout(split)">{{split}}</button>
+            <button class="split" v-for="split in this.splits" v-on:click="getRandomWorkout(split); clearWorkout()">{{split}}</button>
         </div>
-        <button class="rainbow"><b>Surprise me!</b></button>
+        <button class="rainbow" v-on:click="getRandomWorkout('rainbow'); clearWorkout()"><b>Surprise me!</b></button>
     </div>
 
     <div style="margin-top:20px; font-size: 3vw;">
@@ -211,6 +211,9 @@ export default {
             currWorkout: this.$store.state.creatorData[7],
             date: '2023-28-06',
 
+            sets: 0,
+            reps: 0,
+
             exerciseData: null,
             exerciseName: this.$store.state.creatorData[0],
             detailedMuscle: this.$store.state.creatorData[1],
@@ -223,6 +226,13 @@ export default {
             utilityList: [],
             mechanicsList: [],
             forceList: [],
+
+            muscleGroups: { 
+                            'push':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 2 or general_id = 3 or general_id = 6) and muscle_force = 'Push' and (preferability = 1 or preferability = 2 ) order by dbms_random.value`,
+                            'pull':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 3 or general_id = 4 or general_id = 5) and muscle_force = 'Pull' and (preferability = 1 or preferability = 2 ) order by dbms_random.value`,
+                            'upper': `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 2 or general_id = 3 or general_id = 6 or general_id = 4 or general_id = 5) and (muscle_force = 'Push' or muscle_force ='Pull') and (preferability = 1) order by dbms_random.value`,
+                            'legs':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 7 or general_id = 8 or general_id = 9 or general_id = 10) and (preferability = 1 or preferability = 2 or preferability = 3) order by dbms_random.value`
+                        },
 
             showModal: false
         }
@@ -422,56 +432,52 @@ export default {
 			var chosenNum = Math.floor(Math.random() * 3);
 			if (chosenNum == 0){
 				var totalReps 	=  Math.floor(Math.random() * (18-15 + 1) + 15);
-				var sets 		=  Math.floor(Math.random() * (5 - 3 + 1 ) + 3);
-				var reps 		=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (HEAVY)';
+				this.sets 		=  Math.floor(Math.random() * (5 - 3 + 1 ) + 3);
+				this.reps 		=  Math.floor(totalReps/this.sets);
 			}
 			else if (chosenNum == 1){
 				var totalReps 	=  Math.floor(Math.random() * (36 - 24 + 1) + 24);
-				var sets 		=  Math.floor(Math.random() * (4 - 3 + 1) + 3);
-				var reps	  	=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (MEDIUM)';
+				this.sets 		=  Math.floor(Math.random() * (4 - 3 + 1) + 3);
+				this.reps	  	=  Math.floor(totalReps/this.sets);
 			}
 			else if (chosenNum == 2){
 				var totalReps 	=  Math.floor(Math.random() * (40 - 36 + 1) + 36);
-				var sets 		=  Math.floor(Math.random() * (3 - 2 + 1) + 2);
-				var reps	  	=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (LIGHT)';
+				this.sets 		=  Math.floor(Math.random() * (3 - 2 + 1) + 2);
+				this.reps	  	=  Math.floor(totalReps/this.sets);
 			}
 		},
 
         async getRandomWorkout(chosenSplit){
-			var chosenNum = Math.floor(Math.random() * this.workoutSplits.length);
+            if (chosenSplit == 'random') {
+                var chosenNum = Math.floor(Math.random() * this.workoutSplits.length);
+                chosenSplit = this.splits[chosenNum]
+            }
+			
 			var muscles = null
-			var payload = ``;
-			var queries = [];
 
-			if (chosenSplit == 'push')
-				muscles = this.splitMuscles['push'];
-			else if (chosenSplit == 'pull')
-				muscles = this.splitMuscles['pull'];
-			else if (chosenSplit == 'upper')
-				muscles = this.splitMuscles['upper'];
-			else if (chosenSplit == 'legs')
-				muscles = this.splitMuscles['legs'];
-
-
-			for (let i = 0, len = muscles.length; i < len; i++) {
-				queries.push(`select * from exercises where muscle_force = '${chosenSplit}'`);
-			}
+			if (chosenSplit == 'Push'){
+				var muscles = this.muscleGroups['push'];}
+			else if (chosenSplit == 'Pull'){
+				var muscles = this.muscleGroups['pull'];}
+			else if (chosenSplit == 'Upper'){
+				var muscles = this.muscleGroups['upper'];}
+			else if (chosenSplit == 'Legs'){
+				var muscles = this.muscleGroups['legs'];}
+            else if (chosenSplit == 'rainbow'){
+                var muscles = `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (preferability = 1 or preferability = 2 ) order by dbms_random.value`
+            }
 
 
-			for (let i = 0, len = queries.length; i < len; i++) {
-				if (i < queries.length -1)
-					payload += ` (${queries[i]}), `;
-				else
-					payload += ` (${queries[i]})`;
-			}
+            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${muscles}`);
+            var lift = resp.data.slice(1,8)
+            console.log(lift)
+
+            for( let i = 0; i < lift.length; i++){
+                this.getRepRange()
+                this.currWorkout[3].push([[lift[i][1], lift[i][0]], this.sets, this.reps])
+            }
 
 
-
-			var sql = `select * from ${payload};`;
-			var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
 		},
 
 
