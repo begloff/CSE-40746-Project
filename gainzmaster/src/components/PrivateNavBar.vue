@@ -27,6 +27,9 @@
                 <router-link class="nav-link" active-class="active" to="/" style="color: #f8f8f8;">Log Out</router-link>
             </li>
         </ul>
+        <div class="row" style= "margin-top: 5px; margin-left: 5px; margin-bottom: 2px; height: 40px;">
+          <button class="btn" style="height: 100%;" @click="$router.go(-1)">&lt;&lt;Back</button>
+        </div>
 </template>
 
 <script>
