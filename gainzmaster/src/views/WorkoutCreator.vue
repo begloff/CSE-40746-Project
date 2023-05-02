@@ -16,7 +16,7 @@
         <div class="hl"></div>
         <div class="workouts">
             
-            <table class="table" style="text-align: center; margin-top: 2%; margin-bottom: 2%;" v-if="currWorkout[2].length > 0">
+            <table class="table" style="text-align: center; margin-top: 2%; margin-bottom: 2%;" v-if="currWorkout[3].length > 0">
                 <thead>
                     <tr>
                         <th scope="col">Remove Exercise</th>
@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr  v-for="(exercise,index) in this.currWorkout[2]" class="hoverable">
+                    <tr  v-for="(exercise,index) in this.currWorkout[3]" class="hoverable">
                         <th scope="row"><button class="removeFromWorkout" v-on:click.stop="removeFromWorkout(index)">-</button></th>
                         <th scope="row">{{exercise[0][1]}}</th>
                         <th scope="row"> <input type="text" v-model="exercise[1]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
@@ -38,8 +38,14 @@
             <div style="text-align: center;" v-else>
                 <p>No exercises selected 😭😭😭</p>
             </div>
-            <div style="text-align:center; margin-bottom: 2vh;">
-                <button class="split" style="width:30%; margin:auto;" v-on:click="addWorkout()">Add workout to log</button>
+            <div class="buttons" style="text-align:center; margin-bottom: 2vh;">
+                <button class="split" style="width:30%; margin:auto;" v-on:click="clearWorkout()">Clear workout</button>
+                <button class="split" style="width:30%; margin:auto;" v-on:click="clearWorkout()"> Complete workout</button>
+            </div>
+            
+            <div class="buttons" v-if="this.submit">
+                <button class="split" style="width:30%; margin:auto;" v-on:click="addWorkout(); this.submit=false">Add workout to log</button>
+
             </div>
         </div>
     </div>
@@ -193,8 +199,12 @@
 <script>
 import axios from 'axios';
 
+
 export default {
-	components: {},
+
+    components: {
+
+    },
 	data(){
 		return {
 			splits: ['Push', 'Pull', 'Upper', 'Legs'],
@@ -213,6 +223,8 @@ export default {
             utilityList: [],
             mechanicsList: [],
             forceList: [],
+
+            submit: false
         }
 	},
 	methods:{
@@ -222,26 +234,28 @@ export default {
         },
 
         async addWorkout(){         // money
+                // get user id
             var sql = `select user_id from users where username = '${this.$store.state.user_details.username}'`;
-            var resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            resp = resp.data
-            console.log(resp);
+            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            var user_id = resp.data[0]
 
-
-
-//            sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.date}', 'yyyy-dd-mm'), '${this.currWorkout[1]}', '${user_ID}'', '${this.currWorkout[0]}');`;
-            console.log(sql)
+                // post user session
+            sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.date}', 'yyyy-dd-mm'), '${this.currWorkout[1]}', '${user_id}', '${this.currWorkout[0]}');`;
             resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            //sql = `select session_id from sessions order by session_id`;
-            //resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            //var seshID = resp[-1][0]
-//
-            //sql = ``
-            //for (exercise in this.$store.state.createdWorkout[2])
-            //    sql += `insert into log (exercise_id, session_id, reps, sets) values (${exercise[0]}, ${seshID}, ${exercise[2]}, ${exercise[1]});`
-//
-            //resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
-            //this.$store.state
+
+                // get session id
+            sql = `select session_id from sessions where user_id = ${user_id} order by session_id desc`;
+            resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            var seshID = resp.data[0]
+
+                // push to log
+            sql = ``
+            for ( let i = 0; i < this.currWorkout[3].length; i++) {
+                sql += `insert into log (exercise_id, session_id, reps, sets) values (${this.currWorkout[3][i][0][0]}, ${seshID}, ${this.currWorkout[3][i][2]}, ${this.currWorkout[3][i][1]}); `
+            }
+
+            resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            console.log(sql)
         },
 
         async deleteWorkout(seshID) {   // money??
@@ -252,15 +266,15 @@ export default {
 
         addToWorkout(entry){           // money
             var workout = [[entry[0], entry[2]], 0, 0];
-            this.currWorkout[2].push(workout)
+            this.currWorkout[3].push(workout)
         },
 
         removeFromWorkout(index){   // good i think
             if (index == 0){
-                this.currWorkout[2].splice(0,1);
+                this.currWorkout[3].splice(0,1);
             }
             else{
-                this.currWorkout[2].splice(index,index)
+                this.currWorkout[3].splice(index,index)
             }
         },
 
@@ -418,6 +432,10 @@ export default {
             this.utility= this.$store.state.creatorData[4]
             this.mechanics= this.$store.state.creatorData[5]
             this.force= this.$store.state.creatorData[6]
+        },
+
+        clearWorkout(){
+            this.currWorkout = ['','', '', []]
         }
 
     },
