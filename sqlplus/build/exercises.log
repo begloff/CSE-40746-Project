@@ -1,11 +1,11 @@
 
-SQL*Loader: Release 11.2.0.2.0 - Production on Tue May 2 03:01:19 2023
+SQL*Loader: Release 11.2.0.2.0 - Production on Wed May 3 03:44:55 2023
 
 Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
 
 Control File:   exercises.ctl
-Data File:      finalExercises.csv
-  Bad File:     finalExercises.bad
+Data File:      finalExercises2.csv
+  Bad File:     finalExercises2.bad
   Discard File:  none specified
  
  (Allow all discards)
@@ -62,8 +62,8 @@ Total logical records read:          2690
 Total logical records rejected:         0
 Total logical records discarded:        0
 
-Run began on Tue May 02 03:01:19 2023
-Run ended on Tue May 02 03:01:20 2023
+Run began on Wed May 03 03:44:55 2023
+Run ended on Wed May 03 03:44:55 2023
 
-Elapsed time was:     00:00:00.67
-CPU time was:         00:00:00.07
+Elapsed time was:     00:00:00.69
+CPU time was:         00:00:00.08
