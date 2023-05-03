@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-var sql = 'delete from log where session_id = 203; delete from sessions where session_id = 203'
-const x = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
+// var sql = "select * from exercises where exercise_name = USERINPUT:h'drop table exercises; --END"
+// var sql = "select * from exercises where exercise_name = USERINPUT:abcdh'scsldkc' drop table exercisesEND"
+const x = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
 
 console.log(x.data)

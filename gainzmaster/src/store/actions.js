@@ -58,8 +58,10 @@ const registerUser = async (context, details) => {
     // 2. Overlapping username
     // 3. Malicious Username and Email / SQL injection
 
+    //TO prevent sql injection gonna send a code with
+
     //1
-    sql = `select * from users where username = '${username}'`
+    sql = `select * from users where username = USERINPUT:${username}END`
     resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
     resp = resp.data
     if (resp.length){
@@ -68,7 +70,7 @@ const registerUser = async (context, details) => {
     }
 
     //2
-    sql = `select * from users where user_email = '${email}'`
+    sql = `select * from users where user_email = USERINPUT:${email}END`
     resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
     resp = resp.data
     if (resp.length){

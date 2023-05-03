@@ -27,11 +27,11 @@
                     </thead>
                     <tbody>
                         <!-- @click="$router.push({ path: `/exercisecatalog/${exercise[0][0]}`})" -->
-                        <tr  v-for="(exercise,index) in this.currWorkout[3]" class="hoverable" @click="$router.push({ path: `/exercisecatalog/${exercise[0][0]}`})">
+                        <tr  v-for="(exercise,index) in this.currWorkout[3]" class="hoverable" @click.self="$router.push({ path: `/exercisecatalog/${exercise[0][0]}`})">
                             <th scope="row"><button class="removeFromWorkout" v-on:click.stop="removeFromWorkout(index)">-</button></th>
                             <th scope="row">{{exercise[0][1]}}</th>
-                            <th scope="row"> <input type="text" v-model="exercise[1]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
-                            <th scope="row"> <input type="text" v-model="exercise[2]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
+                            <th scope="row"> <input type="number" v-model="exercise[1]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
+                            <th scope="row"> <input type="number" v-model="exercise[2]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
                         </tr>
                     </tbody>
                 </table>
@@ -168,7 +168,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="entry in this.exerciseData" class="hoverable" @click="$router.push({ path: `/exercisecatalog/${entry[0]}`})">
+                    <tr v-for="entry in this.exerciseData" class="hoverable" @click.self="$router.push({ path: `/exercisecatalog/${entry[0]}`})">
                         <td scope="row"><button class="addToWorkout" v-on:click.stop="addToWorkout(entry)">+</button></td> 
                         <th scope="row">{{entry[2]}}</th>
                         <th scope="row">

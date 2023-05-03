@@ -56,7 +56,7 @@ export default {
             console.log(resp)
 
                 // post user session
-            sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.currWorkout[1]}', 'yyyy-mm-dd'), '${this.currWorkout[2]}', '${user_id}', '${this.currWorkout[0]}');`;
+            sql = `insert into sessions (sdate, workout_type, user_id, name) values (to_date('${this.currWorkout[1]}', 'yyyy-mm-dd'), '${this.currWorkout[2]}', '${user_id}', USERINPUT:${this.currWorkout[0]})END`;
             resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
             console.log(resp)
 
