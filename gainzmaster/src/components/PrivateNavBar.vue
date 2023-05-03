@@ -1,42 +1,47 @@
 <template>
-      <!-- <div class="container-fluid">
-        <a class="navbar-brand" href="#" style="color: #f8f8f8;">
-        <img src="../assets/smallgainzmaster.png" class="d-inline-block align-center pl-3 img-fluid">  
-        Gainzmaster   
-        </a> -->
-        <ul class="navbar-nav">
-            <li>
-                <router-link to="/" class="image-link">
-                    <img src="../assets/smallgainzmaster.png" alt="">
-                    <p><b>Gainzmaster</b></p>
-                </router-link>
-            </li>  
-            <li class="nav-item" >
-            <router-link class="nav-link" active-class="active" to="/workoutCreator" style="color: #f8f8f8;">Workout Creator</router-link>
-            </li>
-            <li class="nav-item" >
-            <router-link class="nav-link" active-class="active" to="/workoutlog" style="color: #f8f8f8;">Workout Log</router-link>
-            </li>
-            <li class="nav-item" >
-            <router-link class="nav-link" active-class="active" to="/exercisecatalog" style="color: #f8f8f8;">Exercise Catalog</router-link>
-            </li>
-            <li class="nav-item" >
-            <router-link class="nav-link" active-class="active" to="/musclecatalog" style="color: #f8f8f8;">Muscle Catalog</router-link>
-            </li>
-            <li class="nav-item" @click="$store.dispatch('logout')">
-                <router-link class="nav-link" active-class="active" to="/" style="color: #f8f8f8;">Log Out</router-link>
-            </li>
-        </ul>
-        <div class="row" style= "margin-top: 5px; margin-left: 5px; margin-bottom: 2px; height: 30px;">
-          <button class="backbtn" @click="$router.go(-1)">
-            <img src="../assets/backarrowwhite.png" style="height: 100%;">
-            <p style="padding: 0; top: -8px; padding-left: 5px;">Back</p>
-          </button>
-        </div>
+  <ul class="navbar-nav" >
+      <li>
+          <router-link to="/" class="image-link" :style="testActive('/home')">
+              <img src="../assets/smallgainzmaster.png" alt="">
+              <p><b>Gainzmaster</b></p>
+          </router-link>
+      </li>  
+      <li class="nav-item" >
+      <router-link class="nav-link" active-class="active" to="/workoutcreator" :style="testActive('/workoutcreator')">Workout Creator</router-link>
+      </li>
+      <li class="nav-item" >
+      <router-link class="nav-link" active-class="active" to="/workoutlog" :style="testActive('/workoutlog')">Workout Log</router-link>
+      </li>
+      <li class="nav-item" >
+      <router-link class="nav-link" active-class="active" to="/exercisecatalog" :style="testActive('/exercisecatalog')">Exercise Catalog</router-link>
+      </li>
+      <li class="nav-item" >
+      <router-link class="nav-link" active-class="active" to="/musclecatalog" :style="testActive('/musclecatalog')">Muscle Catalog</router-link>
+      </li>
+      <li class="nav-item" @click="$store.dispatch('logout')">
+          <router-link class="nav-link" active-class="active" to="/" style="color: #f8f8f8;">Log Out</router-link>
+      </li>
+  </ul>
+  <div class="row" style= "margin-top: 5px; margin-left: 5px; margin-bottom: 2px; height: 30px;">
+    <button class="backbtn" @click="$router.go(-1)">
+      <img src="../assets/backarrowwhite.png" style="height: 100%;">
+      <p style="padding: 0; top: -8px; padding-left: 5px;">Back</p>
+    </button>
+  </div>
 </template>
 
 <script>
 export default {
+  methods:{
+    testActive(route){
+
+      if(this.$route.path == route){
+        return 'background-color: rgb(255, 198, 49, .8); height: 100%;'
+      } else {
+        return 'color: #f8f8f8; height: 100%;'
+      }
+    }
+  }
 
 }
 </script>

@@ -53,14 +53,14 @@
         </div>
     </div>
     <div class="row" v-if="targeted_exercises">
-        <div class="col">
-            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[0]">{{ exercise[2] }}<br><br></router-link>
+        <div class="col" style="width: 28%;">
+            <router-link class="links" :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[0]">{{ exercise[2] }}<br><br></router-link>
         </div>
-        <div class="col">
-            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[1]">{{ exercise[2] }}<br><br></router-link>
+        <div class="col" style="width: 28%;">
+            <router-link class="links" :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[1]">{{ exercise[2] }}<br><br></router-link>
         </div>
-        <div class="col">
-            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[2]">{{ exercise[2] }}<br><br></router-link>
+        <div class="col" style="width: 28%;">
+            <router-link class="links" :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[2]">{{ exercise[2] }}<br><br></router-link>
         </div>
     </div>
 
@@ -82,7 +82,11 @@ export default {
 
             this.muscleData = this.$store.state.muscleData.filter(muscle => muscle[1] == this.muscleId)
 
-            const targeted_exercises = this.$store.state.exerciseData.filter(exercise => exercise[1] == this.muscleData[0][1])
+            var targeted_exercises = this.$store.state.exerciseData.filter(exercise => exercise[1] == this.muscleData[0][1])
+
+            if(targeted_exercises.length > 18){
+                targeted_exercises = targeted_exercises.slice(0,18)
+            }
 
             const modulo = targeted_exercises.length % 3
             
@@ -244,14 +248,20 @@ tr:nth-child(odd) {
 }
 
 .muscleHeader{
-    font-size:4vw;
-    font-family:serif
-
+    font-size:2.5vw;
+    font-family:serif;
+    padding-bottom: 20px;
+    font-weight: bold;
 }
 
 a{
     text-decoration: none;
     color: #002540
+}
+
+.links:hover{
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 </style>

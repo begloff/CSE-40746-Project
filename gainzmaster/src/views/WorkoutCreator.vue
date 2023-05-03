@@ -26,7 +26,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr  v-for="(exercise,index) in this.currWorkout[3]" class="hoverable">
+                        <!-- @click="$router.push({ path: `/exercisecatalog/${exercise[0][0]}`})" -->
+                        <tr  v-for="(exercise,index) in this.currWorkout[3]" class="hoverable" @click="$router.push({ path: `/exercisecatalog/${exercise[0][0]}`})">
                             <th scope="row"><button class="removeFromWorkout" v-on:click.stop="removeFromWorkout(index)">-</button></th>
                             <th scope="row">{{exercise[0][1]}}</th>
                             <th scope="row"> <input type="text" v-model="exercise[1]" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align: center; width:30%;"> </th>
@@ -68,6 +69,9 @@
                     <div class="col">
                         <label for="detailedMuscle" class="text-label">Detailed Muscle</label>
                     </div>
+                    <div class="col">
+                        <label for="sortByPref" class="text-label">Sort By Preferability</label>
+                    </div>
                 </div>
 
                 <div class="row" style="margin-bottom: 50px;">
@@ -86,11 +90,14 @@
                             <option :value="entry" v-for="entry in this.$store.state.muscleData">{{entry[0]}}</option>
                         </select>
                     </div>
+                    <div class="col">
+                        <input type="checkbox" v-model="preferabilityCheck" @click="sortPref" name="sortByPref">
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <label for="equipment" class="text-label">Equipment</label>
+                        <label for="equipment" class="text-label">Equipment/Method</label>
                     </div>
                     <div class="col">
                         <label for="utility" class="text-label">Utility</label>
@@ -145,7 +152,7 @@
 
 
     <div class="row">
-        <div class="col2">
+        <div class="col2" v-if="this.exerciseData">
             <table class="table">
                 <thead>
                     <tr>
@@ -153,23 +160,23 @@
                         <th scope="col">Name</th>
                         <th scope="col">Muscle Group</th>
                         <th scope="col">Detailed Muscle</th>
-                        <th scope="col">Equipment</th>
+                        <th scope="col">Equipment/Method</th>
                         <th scope="col">Utility</th>
                         <th scope="col">Mechanics</th>
                         <th scope="col">Muscle Force</th>
                         <th scope="col">Preferability</th>
                     </tr>
                 </thead>
-                <tbody v-if="this.exerciseData">
-                    <tr  v-for="entry in this.exerciseData" class="hoverable" @click="$router.push({ path: `/exercisecatalog/${entry[0]}`})">
+                <tbody>
+                    <tr v-for="entry in this.exerciseData" class="hoverable" @click="$router.push({ path: `/exercisecatalog/${entry[0]}`})">
                         <td scope="row"><button class="addToWorkout" v-on:click.stop="addToWorkout(entry)">+</button></td> 
                         <th scope="row">{{entry[2]}}</th>
                         <th scope="row">
                             <div class="row">
-                                <div class="col">
+                                <div class="col" style="width: 50%;">
                                     <p class="center">{{this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2] - 1][0]}}</p>
                                 </div>
-                                <div class="col">
+                                <div class="col" style="width: 50%;">
                                     <img :src="getSrc(this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2]-1][0])" style="max-width: 100%; margin-top: 10px;">
                                 </div>
                             </div>
@@ -187,6 +194,15 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="col" v-else>
+            <h3 style="color: red;">Sorry! Your search returned no results.</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn" style="margin-top: 20px; margin-bottom: 20px;" @click="expandTable" :disabled="!expand">See More Entries</button>
         </div>
     </div>
 
@@ -234,11 +250,25 @@ export default {
                             'legs':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 7 or general_id = 8 or general_id = 9 or general_id = 10) and (preferability = 1 or preferability = 2 or preferability = 3) order by dbms_random.value`
                         },
 
-            showModal: false
+            showModal: false,
+            filteredData: null,
+            tableIndex: 50,
+            expand: true,
+            preferabilityCheck: false,
         }
 	},
 	methods:{
-
+        expandTable(){
+            if (this.filteredData.length > this.exerciseData.length + 50){
+                //Can you expand more?
+                this.tableIndex += 50
+                this.exerciseData = this.filteredData.slice(0, this.tableIndex)
+                this.expand = true
+            } else {
+                this.exerciseData = this.filteredData
+                this.expand = false
+            }
+        },
 		logout(){
             this.$store.dispatch('logout')
         },
@@ -250,7 +280,7 @@ export default {
         },
 
         addToWorkout(entry){           // money
-            var workout = [[entry[0], entry[2]], 0, 0];
+            var workout = [[entry[0], entry[2], entry[10]], 0, 0];
             this.currWorkout[3].push(workout)
         },
 
@@ -320,6 +350,9 @@ export default {
             this.utilityList = this.utilityList.sort();
             this.mechanicsList = this.mechanicsList.sort();
             this.forceList = this.forceList.sort();
+            this.expand = true
+            this.exerciseData = this.$store.state.exerciseData.slice(0, 50)
+            this.filteredData = this.$store.state.exerciseData
 
         },
 
@@ -328,72 +361,75 @@ export default {
             return images('./' + muscle + ".jpg")
         },
 
-        filterMuscles(){
-            // TODO: Filter every column based on inputs
-            this.exerciseData = this.$store.state.exerciseData
+        async filterMuscles(){
+
+            if(this.preferabilityCheck){
+                var sql = `select * from exercises order by preferability asc`
+                var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
+                this.filteredData = resp.data
+            } else {
+                this.filteredData = this.$store.state.exerciseData
+            }
 
             if(this.exerciseName != null && this.exerciseName != ''){
                 //filter based on input
-
                 var name = this.exerciseName
-
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[2].toLowerCase().includes(name.toLowerCase())
                 })
             }
-
             if (this.muscleGroup != 'All'){
-
                 var group = this.muscleGroup
                 var muscleData = this.$store.state.muscleData
                 var groupData = this.$store.state.groupData
-
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return groupData[muscleData[entry[1] - 1][2] - 1][0] == group[0]
                 })
-
             }
-
             if (this.detailedMuscle != 'All'){
-
                 var muscleData = this.$store.state.muscleData
                 var detailedMuscle = this.detailedMuscle
-
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return muscleData[entry[1] - 1][0] == detailedMuscle[0]
                 })
             }
-
             if(this.equipment != 'All'){
                 var equipment = this.equipment
-
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[3] == equipment
                 })
             }
-
             if(this.utility != 'All'){
                 var utility = this.utility
-
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[4] == utility
                 })
             }
-
             if(this.mechanics != 'All'){
                 var mechanics = this.mechanics
-
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[5] == mechanics
                 })
             }
-
             if(this.force != 'All'){
                 var force = this.force
-
-                this.exerciseData = this.exerciseData.filter(function(entry){
+                this.filteredData = this.filteredData.filter(function(entry){
                     return entry[6] == force
                 })
+            }
+
+            // Filtered Data contains the queried for data --> transfer 50 or however many are in there
+
+            if (this.filteredData.length > 50) {
+                this.exerciseData = this.filteredData.slice(0,50)
+                this.tableIndex = 50
+                this.expand = true
+            } else if (this.filteredData.length == 0){
+                this.exerciseData = null
+                this.tableIndex = 50
+            } else {
+                this.exerciseData = this.filteredData
+                this.expand = false
             }
         },
 
@@ -406,6 +442,7 @@ export default {
             this.utility = 'All'
             this.mechanics = 'All'
             this.force = 'All'
+            this.preferabilityCheck = false
 
         },
 
@@ -464,7 +501,7 @@ export default {
 			else if (chosenSplit == 'Legs'){
 				var muscles = this.muscleGroups['legs'];}
             else if (chosenSplit == 'rainbow'){
-                var muscles = `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (preferability = 1 or preferability = 2 ) order by dbms_random.value`
+                var muscles = `select exercise_name, exercise_id, exercises.img from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (preferability = 1 or preferability = 2 ) order by dbms_random.value`
             }
 
 
@@ -474,7 +511,7 @@ export default {
 
             for( let i = 0; i < lift.length; i++){
                 this.getRepRange()
-                this.currWorkout[3].push([[lift[i][1], lift[i][0]], this.sets, this.reps])
+                this.currWorkout[3].push([[lift[i][1], lift[i][0], lift[i][2]], this.sets, this.reps])
             }
 
 

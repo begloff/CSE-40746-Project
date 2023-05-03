@@ -1,8 +1,6 @@
 <template>
-    <div class="row">
-        <div class="col">
-            <h1>Muscle Catalog</h1>
-        </div>
+    <div class="header">
+        <h1>Muscle Catalog</h1>
     </div>
 
     <div class="row">
@@ -61,10 +59,10 @@
                         <th scope="row">{{muscle[0]}}</th>
                         <th scope="row">
                             <div class="row">
-                                <div class="col">
+                                <div class="col" style="width: 50%;">
                                     <p class="center">{{this.$store.state.groupData[muscle[2] - 1][0]}}</p>
                                 </div>
-                                <div class="col">
+                                <div class="col" style="width: 50%;">
                                     <img :src="getSrc(this.$store.state.groupData[muscle[2] - 1][0])" style="width: 100px; margin-top: 10px;">
                                 </div>
                             </div>
