@@ -1,8 +1,6 @@
 <template>
-    <div class="row">
-        <div class="col">
-            <h1>Exercise Catalog</h1>
-        </div>
+    <div class="header">
+        <h1>Exercise Catalog</h1>
     </div>
 
     <div class="row">
@@ -80,6 +78,9 @@
                     <div class="col">
                         <label for="detailedMuscle" class="text-label">Detailed Muscle</label>
                     </div>
+                    <div class="col">
+                        <label for="sortByPref" class="text-label">Sort By Preferability</label>
+                    </div>
                 </div>
 
                 <div class="row" style="margin-bottom: 50px;">
@@ -98,11 +99,14 @@
                             <option :value="entry" v-for="entry in this.$store.state.muscleData">{{entry[0]}}</option>
                         </select>
                     </div>
+                    <div class="col">
+                        <input type="checkbox" v-model="preferabilityCheck" @click="sortPref" name="sortByPref">
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <label for="equipment" class="text-label">Equipment</label>
+                        <label for="equipment" class="text-label">Equipment/Method</label>
                     </div>
                     <div class="col">
                         <label for="utility" class="text-label">Utility</label>
@@ -164,7 +168,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Muscle Group</th>
                         <th scope="col">Detailed Muscle</th>
-                        <th scope="col">Equipment</th>
+                        <th scope="col">Equipment/Method</th>
                         <th scope="col">Utility</th>
                         <th scope="col">Mechanics</th>
                         <th scope="col">Muscle Force</th>
@@ -176,10 +180,10 @@
                         <th scope="row">{{entry[2]}}</th>
                         <th scope="row">
                             <div class="row">
-                                <div class="col">
+                                <div class="col" style="width: 50%;">
                                     <p class="center">{{this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2] - 1][0]}}</p>
                                 </div>
-                                <div class="col">
+                                <div class="col" style="width: 50%;">
                                     <img :src="getSrc(this.$store.state.groupData[this.$store.state.muscleData[entry[1] - 1][2]-1][0])" style="max-width: 100%; margin-top: 10px;">
                                 </div>
                             </div>
@@ -229,7 +233,8 @@ export default {
             forceList: [],
             tableIndex: 50,
             filteredData: null,
-            expand: true
+            expand: true,
+            preferabilityCheck: false,
         }
     },
     methods:{
@@ -304,9 +309,19 @@ export default {
             var images = require.context('../assets/muscles/', false, /\.jpg$/)
             return images('./' + muscle + ".jpg")
         },
-        filterMuscles(){
+        async filterMuscles(){
             // TODO: Filter every column based on inputs
-            this.filteredData = this.$store.state.exerciseData
+
+            //preferabilityCheck is true when box is unchecked --> true = random,
+            if(this.preferabilityCheck){
+                var sql = `select * from exercises order by preferability asc`
+                var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
+                console.log(resp.data)
+                this.filteredData = resp.data
+            } else {
+                this.filteredData = this.$store.state.exerciseData
+            }
+
             if(this.exerciseName != null && this.exerciseName != ''){
                 //filter based on input
                 var name = this.exerciseName
@@ -377,6 +392,7 @@ export default {
             this.utility = 'All'
             this.mechanics = 'All'
             this.force = 'All'
+            this.preferabilityCheck = false
             
         }
     },

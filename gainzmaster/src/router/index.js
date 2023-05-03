@@ -123,8 +123,8 @@ const routes = [
     }
   },
   {
-    path: '/workoutCreator',
-    name: 'workoutCreator',
+    path: '/workoutcreator',
+    name: 'workoutcreator',
     component: WorkoutCreator,
     beforeEnter: requireAuth,
     meta:{

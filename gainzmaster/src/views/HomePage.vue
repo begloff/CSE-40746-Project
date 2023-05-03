@@ -1,7 +1,7 @@
 <template>
 	<div class="homeHeader">
 		<div style="width:60%; background-color:white; margin: auto;">
-			<h1 style="font-family: monospace;"> Gainzmaster Home </h1>
+			<h1 style="font-family: monospace;"> Gainzmaster </h1>
 			<div class ="quote">
 				<img class="logo" src="../assets/lion.jpeg" style="width: 100%; height:100%; position: absolute; left: 5%;">
 				<div style="position: absolute; top: 35%; width: 70%; left: 20%;">
@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	
-	<div style="background-color: #002540; margin-top: 80px;">
+	<div style="background-color: #002540; margin-top: 7%;">
 		<div class="homeButtons">
 			<button class="homeBtn" id="workoutCreator" @click="$router.push('/workoutcreator')"> Workout Creator </button>
 			<button class="homeBtn" id="exerciseCreator" @click="$router.push('/exercisecatalog')"> Exercise Catalog </button>
@@ -24,13 +24,13 @@
 		<div class="randomWorkout">
 			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.currWorkout[2] }}</em> workout!</h3>
 
-			<div style="margin-bottom:2%" v-for="exercise in this.currWorkout[3]">{{exercise[0][1]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
+			<div class="links" style="margin-bottom:2%" v-for="exercise in this.currWorkout[3]" @click="$router.push({ path: `/exercisecatalog/${exercise[0][0]}`})">{{exercise[0][1]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
 			<button class="homeBtn2"  style="margin-right:20%;" v-on:click="goToLog(); $router.push('/workoutcreator')"><strong class="buttonHover">Add to Log</strong></button>
 			<button class="homeBtn2" v-on:click="getRandomWorkout()"><strong class="buttonHover">Regenerate Workout</strong></button>
 		</div>
 		<div class="workoutLog">
 			<h3>This is your last logged workout:</h3>
-			<div style="margin-bottom:2%" v-for="exercise in this.lastWorkout">{{exercise[0]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
+			<div class="links" style="margin-bottom:2%" v-for="exercise in this.lastWorkout" @click="$router.push({ path: `/exercisecatalog/${exercise[3]}`})">{{exercise[0]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
 
 			<button class="homeBtn2" @click="$router.push('/workoutlog')"><strong>View More Logs</strong></button>
 		</div>
@@ -185,7 +185,7 @@ export default {
             var sessionID = resp.data[0][0]
 
 				// get workouts from session id
-			sql = `select unique exercises.exercise_name, log.reps, log.sets from log, sessions, exercises where log.session_id = ${sessionID} and log.exercise_id = exercises.exercise_id and sessions.user_id = ${userID}`
+			sql = `select unique exercises.exercise_name, log.reps, log.sets, log.exercise_id from log, sessions, exercises where log.session_id = ${sessionID} and log.exercise_id = exercises.exercise_id and sessions.user_id = ${userID}`
             resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
             this.lastWorkout = resp.data
 		}
