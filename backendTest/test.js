@@ -1,5 +1,6 @@
 import axios from 'axios'
 
-sql = 'delete from log where session_id = 204; delete from sessions where session_id = 204'
-const x = await axios.post(`http://34.206.226.160/hello.py?sql=${sql}`)
+var sql = 'delete from log where session_id = 203; delete from sessions where session_id = 203'
+const x = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
+
 console.log(x.data)

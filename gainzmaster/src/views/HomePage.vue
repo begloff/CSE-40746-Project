@@ -1,6 +1,6 @@
 <template>
-	<div class="header">
-		<div style="width:60%; background-color: white; margin: auto;">
+	<div class="homeHeader">
+		<div style="width:60%; background-color:white; margin: auto;">
 			<h1 style="font-family: monospace;"> Gainzmaster Home </h1>
 			<div class ="quote">
 				<img class="logo" src="../assets/lion.jpeg" style="width: 100%; height:100%; position: absolute; left: 5%;">
@@ -12,35 +12,30 @@
 		</div>
 	</div>
 	
-	<div style="background-color: #002540;">
-		<div class="buttons">
-			<button class="btn" id="workoutCreator"> Workout Creator </button>
-			<button class="btn" id="exerciseCreator"> Exercise Catalog </button>
-			<button class="btn" id="muscleCatalog"> Muscle Catalog </button>
+	<div style="background-color: #002540; margin-top: 80px;">
+		<div class="homeButtons">
+			<button class="homeBtn" id="workoutCreator" @click="$router.push('/workoutcreator')"> Workout Creator </button>
+			<button class="homeBtn" id="exerciseCreator" @click="$router.push('/exercisecatalog')"> Exercise Catalog </button>
+			<button class="homeBtn" id="muscleCatalog" @click="$router.push('/musclecatalog')"> Muscle Catalog </button>
 		</div>
 	</div>
 
-	<div >
+	<div style="width:100%; height:auto; display: flex;">
 		<div class="randomWorkout">
-			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.randomWorkout.type }}</em> workout!</h3>
-			<p v-for="item in this.randomWorkout"> {{ item }} </p>
-			<h4>Barbell Bench Press : {{this.repsBySets}}</h4>
-			<h4> </h4>
-			<button class="btn" style="background-color: #f0f0f0; color: #002540"><strong>Regenerate Workout</strong></button>
+			<h3>Looking for a workout? Here's a randomly curated <em>{{ this.currWorkout[2] }}</em> workout!</h3>
+
+			<div style="margin-bottom:2%" v-for="exercise in this.currWorkout[3]">{{exercise[0][1]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
+			<button class="homeBtn2"  style="margin-right:20%;" v-on:click="goToLog(); $router.push('/workoutcreator')"><strong class="buttonHover">Add to Log</strong></button>
+			<button class="homeBtn2" v-on:click="getRandomWorkout()"><strong class="buttonHover">Regenerate Workout</strong></button>
 		</div>
-		<div class="break"></div>
-		<div class="log">
+		<div class="workoutLog">
 			<h3>This is your last logged workout:</h3>
-			<p v-for="item in this.lastWorkout"> {{ item }} </p>
-			<button class="btn" style="background-color: #fafafa; color: #002540"><strong>View More Logs</strong></button>
+			<div style="margin-bottom:2%" v-for="exercise in this.lastWorkout">{{exercise[0]}} {{ exercise[1] }} x {{ exercise[2] }}</div>
+
+			<button class="homeBtn2" @click="$router.push('/workoutlog')"><strong>View More Logs</strong></button>
 		</div>
 	</div>
 
-	<div style="margin-top:50px;">
-		<p>You are now logged in</p>
-		<p v-if="this.$store.state.user_details">Welcome: {{this.$store.state.user_details.username}}</p>
-		<button @click="logout">LOG OUT</button>
-	</div>
 	<div class="gainzmasterLLC">
 		<h2>Property of Gainzmaster LLC.</h2>
 		<h3>All rights reserved. </h3>
@@ -55,6 +50,9 @@ export default {
 	components: {},
 	data(){
 		return {
+			currWorkout: this.$store.state.creatorData[7],
+			lastWorkout: null,
+
 			quotes: [
       			'If the door says PUSH, pull it. It\'s not a direction, it\'s a challenge',
       			'You don\'t need a spot for back. You don\'t even need to do back. Back is the legs of the upper body',
@@ -80,11 +78,17 @@ export default {
       			'This is the whey'
     		],
 			chosenQuote: null,
-			randomWorkout: {type:null, workout:null},
-    		lastWorkout: null,
-    		workoutSplits: ['push', 'pull', 'legs', 'upper'],
-			splitMuscles: {'push':['chest', 'tris'], 'pull':['back', 'bis'], 'legs':['quads', 'calves'], 'upper':['chest', 'back']}, // 4 - 5 muscles per split
-			repsBySets: null
+    		workoutSplits: ['Push', 'Pull', 'Legs', 'Upper'],
+			sets: 0,
+			reps: 0,
+
+
+			muscleGroups: { 
+                            'Push':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 2 or general_id = 3 or general_id = 6) and muscle_force = 'Push' and (preferability = 1 or preferability = 2 ) order by dbms_random.value`,
+                            'Pull':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 3 or general_id = 4 or general_id = 5) and muscle_force = 'Pull' and (preferability = 1 or preferability = 2 ) order by dbms_random.value`,
+                            'Upper': `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 2 or general_id = 3 or general_id = 6 or general_id = 4 or general_id = 5) and (muscle_force = 'Push' or muscle_force ='Pull') and (preferability = 1) order by dbms_random.value`,
+                            'Legs':  `select exercise_name, exercise_id from exercises, detail_muscles where exercises.detail_id = detail_muscles.detail_id and (general_id = 7 or general_id = 8 or general_id = 9 or general_id = 10) and (preferability = 1 or preferability = 2 or preferability = 3) order by dbms_random.value`
+                        },
 		}
 	},
 	methods:{
@@ -113,57 +117,36 @@ export default {
 			this.chosenQuote = this.quotes[chosenNum];
 		},
 
+		clearWorkout(){
+            this.currWorkout = ['Untitled Workout','', '', []]
+        },
+
 		async getRandomWorkout(){
+			this.clearWorkout()
 			var chosenNum = Math.floor(Math.random() * this.workoutSplits.length);
-			var chosenSplit = this.workoutSplits[chosenNum];
-			var muscles = null
-			var payload = ``;
-			var queries = [];
-
-			if (chosenSplit == 'push')
-				muscles = this.splitMuscles['push'];
-			else if (chosenSplit == 'pull')
-				muscles = this.splitMuscles['pull'];
-			else if (chosenSplit == 'upper')
-				muscles = this.splitMuscles['upper'];
-			else if (chosenSplit == 'legs')
-				muscles = this.splitMuscles['legs'];
-
-			// once we have the muscles, we want to query for workouts. How?
-				// one way would be to loop through the muscles and do a query for every single workout  - easy, not efficient
-				// another way would be to somehow figure out one query with a ton of subqueries in there ----- posssssible, more efficient
-					// building on this, we can make a base subquery for each, somehow have to implement a sense of randomness . . .
-						// otherwise each "random" push will be the same, as base query will return same shit everytime
-							// built in pseudo-randomness in sql??		--> order by rand() limit 1
-
-
-			// don't even have to query
-
-			for (let i = 0, len = muscles.length; i < len; i++) {
-				queries.push(`select * from exercises where muscle_force = 'Push'`);//${muscles[i]}'`);// sort by rand limit 1`);
-				queries.push(`select * from exercises where muscle_force = '${muscles[i]}'`);// and preferability > 3 sort by rand limit 1`);
-			}
-
-
-			for (let i = 0, len = queries.length; i < len; i++) {
-				if (i < queries.length -1)
-					payload += ` (${queries[i]}), `;
-				else
-					payload += ` (${queries[i]})`;
-			}
-
-
-			console.log(payload)
-			var sql = `select * from ${payload};`;//'select * from ' + payload + ';'
-			console.log(sql)
-			var resp = await axios.get(`http://3.89.12.221/db.py/?sql=${sql}`)
-
-			//console.log(resp)
+			var chosenSplit = this.workoutSplits[chosenNum]
 			
-			//this.randomWorkout.type = chosenSplit;
-			// for exercise in response
-				// this.getRepRange()
-				// this.randomWorkout.exercises.push('{{exercise}} + {{this.repsBySets}}')
+			var muscles = null
+
+			if (chosenSplit == 'Push'){
+				var muscles = this.muscleGroups['Push'];}
+			else if (chosenSplit == 'Pull'){
+				var muscles = this.muscleGroups['Pull'];}
+			else if (chosenSplit == 'Upper'){
+				var muscles = this.muscleGroups['Upper'];}
+			else if (chosenSplit == 'Legs'){
+				var muscles = this.muscleGroups['Legs'];}
+
+			this.currWorkout[2] = chosenSplit
+            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${muscles}`);
+            var lift = resp.data.slice(1,8)
+
+            for( let i = 0; i < lift.length; i++){
+                this.getRepRange()
+                this.currWorkout[3].push([[lift[i][1], lift[i][0]], this.sets, this.reps])
+            }
+
+
 		},
 
 		getRepRange(){
@@ -171,27 +154,40 @@ export default {
 			var chosenNum = Math.floor(Math.random() * 3);
 			if (chosenNum == 0){
 				var totalReps 	=  Math.floor(Math.random() * (18-15 + 1) + 15);
-				var sets 		=  Math.floor(Math.random() * (5 - 3 + 1 ) + 3);
-				var reps 		=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (HEAVY)';
+				this.sets 		=  Math.floor(Math.random() * (5 - 3 + 1 ) + 3);
+				this.reps 		=  Math.floor(totalReps/this.sets);
 			}
 			else if (chosenNum == 1){
 				var totalReps 	=  Math.floor(Math.random() * (36 - 24 + 1) + 24);
-				var sets 		=  Math.floor(Math.random() * (4 - 3 + 1) + 3);
-				var reps	  	=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (MEDIUM)';
+				this.sets 		=  Math.floor(Math.random() * (4 - 3 + 1) + 3);
+				this.reps	  	=  Math.floor(totalReps/this.sets);
 			}
 			else if (chosenNum == 2){
 				var totalReps 	=  Math.floor(Math.random() * (40 - 36 + 1) + 36);
-				var sets 		=  Math.floor(Math.random() * (3 - 2 + 1) + 2);
-				var reps	  	=  Math.floor(totalReps/sets);
-				this.repsBySets =  sets.toString() + ' x ' + reps.toString() + ' (LIGHT)';
+				this.sets 		=  Math.floor(Math.random() * (3 - 2 + 1) + 2);
+				this.reps	  	=  Math.floor(totalReps/this.sets);
 			}
 		},
 
-		getLastWorkout() {
+		goToLog(){
+			this.$store.state.creatorData[7] = this.currWorkout
+		},
 
+		async getLastWorkout() {
+				// get username
+			var sql = `select user_id from users where username = '${this.$store.state.user_details.username}'`;
+            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            var userID = resp.data[0]
 
+				// get session id
+			var sql = `select session_id from sessions where user_id = ${userID} order by session_id desc`;
+            resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            var sessionID = resp.data[0][0]
+
+				// get workouts from session id
+			sql = `select unique exercises.exercise_name, log.reps, log.sets from log, sessions, exercises where log.session_id = ${sessionID} and log.exercise_id = exercises.exercise_id and sessions.user_id = ${userID}`
+            resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`);
+            this.lastWorkout = resp.data
 		}
     },
 	beforeMount(){
@@ -210,22 +206,29 @@ export default {
 	padding:2.5%;
 	background-color: #f0f0f0;
 	color: #0f0f10;
+	height:auto;
+	min-height: 100%;
+	flex: 1;
 }
 
-.log{
+.workoutLog{
 	float:right;
 	width:45%;
 	padding:2.5%;
 	background-color: #fafafa;
 	color: #050506;
+	min-height:auto;
+	min-height:100%;
+	flex: 1;
 }
+
 
 .break{
 	width: 1px;
     background-color: #ccc;
     height: 100%;
 }
-.header {
+.homeHeader {
 	color:#002540;
 	text-shadow: 2px 2px #FFC631;
 	background-color: #002540;
@@ -239,7 +242,7 @@ export default {
 }
 
 
-.btn {
+.homeBtn {
 	border-color: #FFC631;
 	background-color: #002540;
 	color: white;
@@ -251,11 +254,28 @@ export default {
 	margin: auto;
 	padding: 15px;
 }
-.btn:hover {
+.homeBtn:hover {
 	background-color: #145c8b;
 }
 
-.centered {
+.homeBtn2 {
+	border-color: #FFC631;
+	padding: 10px;
+	border-radius: 6px;
+	margin-bottom: 50px;
+	justify-content: space-around;
+	text-align:center;
+	margin: auto;
+	padding: 15px;
+	background-color: #fafafa; 
+	color: #002540
+}
+.homeBtn2:hover {
+	background-color: #62bdfa;
+	color: white;
+}
+
+.homeCentered {
   position: absolute;
   top: 47%;
   left: 50%;
@@ -267,7 +287,7 @@ export default {
   max-width:400px;
 }
 
-.buttons {
+.homeButtons {
 	width: 70%;
 	height: 100px;
 	display: flex;
@@ -278,7 +298,9 @@ export default {
 
 .gainzmasterLLC {
 	color: grey;
-	margin-bottom: 15px
+	margin-bottom: 15px;
+	width:100%;
+	float:left;
 
 }
 </style>

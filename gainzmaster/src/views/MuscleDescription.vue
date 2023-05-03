@@ -1,7 +1,7 @@
 <template>
-    <div class="row">
+    <div class="row" style="margin-top:1%; margin-bottom:1%;">
         <div class="col">
-            <h1 v-if="muscleData">{{ muscleData[0][0] }}</h1>
+            <div class="muscleHeader" v-if="muscleData">{{ muscleData[0][0] }}</div>
         </div>
     </div>
 
@@ -12,12 +12,13 @@
             <div class="searchEngine">
                 <div class="row">
                     <div class="col" v-if="muscleImg">
-                        <img :src="muscleImg">
+                        <img style="width:20%; margin-top: 2%;" :src="muscleImg">
                     </div>
                 </div>
-                <div v-if="muscleData" class="row">
+                <div class="row">
                     <div class="col">
-                        <h5>{{ muscleData[0][6] }}</h5>
+                        <h5 v-if="muscleData">{{ muscleData[0][6] }}</h5>
+                        <h3 v-if="muscleData">Sorry, <b>bros</b> we are unable to provide sufficient data on this muscle :(</h3>
                     </div>
                 </div>
                 <div class="row" v-if="muscleData">
@@ -31,20 +32,37 @@
                         <h3>Related Muscles</h3>
                     </div>
                 </div>
-                <div class="row" v-if="muscleData">
+                <div class="row" style="margin-bottom: 2%;" v-if="muscleData">
                     <div class="col" v-if="muscleData[0][3]">
-                        <h3>{{ muscleData[0][3] }}</h3>
+                        {{ muscleData[0][3] }}
                     </div>
                     <div class="col" v-if="muscleData[0][4]">
-                        <h3>{{ muscleData[0][4] }}</h3>
+                        {{ muscleData[0][4] }}
                     </div>
                     <div class="col" v-if="muscleData[0][5]">
-                        <h3>{{ muscleData[0][5] }}</h3>
+                        {{ muscleData[0][5] }}
                     </div>
                 </div>
 			</div>
 		</div>
 	</div>
+
+    <div class="row" v-if="targeted_exercises">
+        <div class="col">
+            <h2>Check out some exercises that target this muscle:</h2>
+        </div>
+    </div>
+    <div class="row" v-if="targeted_exercises">
+        <div class="col">
+            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[0]">{{ exercise[2] }}<br><br></router-link>
+        </div>
+        <div class="col">
+            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[1]">{{ exercise[2] }}<br><br></router-link>
+        </div>
+        <div class="col">
+            <router-link :to="`/exerciseCatalog/${exercise[0]}`" v-for="exercise in targeted_exercises[2]">{{ exercise[2] }}<br><br></router-link>
+        </div>
+    </div>
 
 </template>
 
@@ -59,42 +77,78 @@ import axios from 'axios'
 export default {
     methods:{
         async loadData(){
-            var sql = `select * from detail_muscles where detail_id = ${this.muscleId}`
-            var resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
-            resp = resp.data
-            this.muscleData = resp
-            this.muscleImg = resp[0][7]
 
-            console.log(this.muscleImg)
+            console.log(this.$router)
 
-            console.log(resp)
+            this.muscleData = this.$store.state.muscleData.filter(muscle => muscle[1] == this.muscleId)
 
-            this.filteredMuscleData = this.muscleData
+            const targeted_exercises = this.$store.state.exerciseData.filter(exercise => exercise[1] == this.muscleData[0][1])
 
-            sql = `select * from general_muscles`
-            resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
-            resp = resp.data
-            this.muscleDict = resp
+            const modulo = targeted_exercises.length % 3
+            
+            const target1 = []
+            const target2 = []
+            const target3 = []
 
-        },
+            if (modulo == 0) {
+                const index = targeted_exercises.length / 3
 
-        filterMuscles(arg){
-            if(arg == 'category'){
+                for (let i = 0; i < index; i++) {
+                    target1.push(targeted_exercises[i])
+                }
 
-                //Find id from muscleDict
-                var checkId = this.selectedCategory[1]
+                for (let i = index; i < index*2; i++) {
+                    target2.push(targeted_exercises[i])
+                }
 
-                this.filteredMuscleData = this.filteredMuscleData.filter(function(entry){
-                    return entry[2] == checkId
-                })
+                for (let i = index*2; i < targeted_exercises.length; i++) {
+                    target3.push(targeted_exercises[i])
+                }
 
-                console.log(this.filteredMuscleData)
+            } else if (modulo == 1) {
+                const index = (targeted_exercises.length -1) / 3
+
+                for (let i = 0; i < index; i++) {
+                    target1.push(targeted_exercises[i])
+                }
+
+                for (let i = index; i < index*2 + 1; i++) {
+                    target2.push(targeted_exercises[i])
+                }
+
+                for (let i = index*2 + 1; i < targeted_exercises.length; i++) {
+                    target3.push(targeted_exercises[i])
+                }
+
+            } else if (modulo == 2) {
+                const index = (targeted_exercises.length -2) / 3
+
+                for (let i = 0; i < index + 1; i++) {
+                    target1.push(targeted_exercises[i])
+                }
+
+                for (let i = index + 1; i < index*2 + 1; i++) {
+                    target2.push(targeted_exercises[i])
+                }
+
+                for (let i = index*2 + 1; i < targeted_exercises.length; i++) {
+                    target3.push(targeted_exercises[i])
+                }
+
             }
+
+            this.targeted_exercises = [target1]
+            this.targeted_exercises.push(target2)
+            this.targeted_exercises.push(target3)
+
+            this.muscleImg = this.muscleData[0][7]
+            
         }
     },
 
     data(){
         return{
+            targeted_exercises: null,
             muscleData: null,
             muscleDict: null,
             muscleImg: null,
@@ -187,7 +241,17 @@ tr:nth-child(odd) {
     margin-left: auto;
     margin-right: auto;
     background-color: #80828336;
-    
+}
+
+.muscleHeader{
+    font-size:4vw;
+    font-family:serif
+
+}
+
+a{
+    text-decoration: none;
+    color: #002540
 }
 
 </style>

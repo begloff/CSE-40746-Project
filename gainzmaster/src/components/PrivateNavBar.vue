@@ -12,7 +12,10 @@
                 </router-link>
             </li>  
             <li class="nav-item" >
-            <router-link class="nav-link" active-class="active" to="/home" style="color: #f8f8f8;">Workout Creator</router-link>
+            <router-link class="nav-link" active-class="active" to="/workoutCreator" style="color: #f8f8f8;">Workout Creator</router-link>
+            </li>
+            <li class="nav-item" >
+            <router-link class="nav-link" active-class="active" to="/workoutlog" style="color: #f8f8f8;">Workout Log</router-link>
             </li>
             <li class="nav-item" >
             <router-link class="nav-link" active-class="active" to="/exercisecatalog" style="color: #f8f8f8;">Exercise Catalog</router-link>
@@ -24,6 +27,12 @@
                 <router-link class="nav-link" active-class="active" to="/" style="color: #f8f8f8;">Log Out</router-link>
             </li>
         </ul>
+        <div class="row" style= "margin-top: 5px; margin-left: 5px; margin-bottom: 2px; height: 30px;">
+          <button class="backbtn" @click="$router.go(-1)">
+            <img src="../assets/backarrowwhite.png" style="height: 100%;">
+            <p style="padding: 0; top: -8px; padding-left: 5px;">Back</p>
+          </button>
+        </div>
 </template>
 
 <script>
@@ -79,6 +88,21 @@ p{
     margin-bottom: 10px;
     height: 3em;
     padding: 14px 16px;
+}
+
+.backbtn {
+	border-color: #FFC631;
+	background-color: #002540;
+	color: white;
+	padding: 10px;
+	border-radius: 6px;
+	margin-bottom: 50px;
+  height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.backbtn:hover {
+	background-color: #145c8b;
 }
 
 </style>
