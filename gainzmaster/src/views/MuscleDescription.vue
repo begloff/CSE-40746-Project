@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col">
                         <h5 v-if="muscleData">{{ muscleData[0][6] }}</h5>
-                        <h3 v-if="!muscleData">Sorry, <b>bros</b> we are unable to provide sufficient data on this muscle :(</h3>
+                        <h3 v-if="muscleData == null">Sorry, <b>bros</b> we are unable to provide sufficient data on this muscle :(</h3>
                     </div>
                 </div>
                 <div class="row" v-if="muscleData">
