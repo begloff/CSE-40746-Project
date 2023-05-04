@@ -48,7 +48,7 @@
             </div>
         </div>
         <div style="margin-bottom: 10px;">
-            <h2 v-if="!this.sessions">No workouts logged 😭😭😭</h2>
+            <h2 v-if="this.sessions.length == 0">No workouts logged 😭😭😭</h2>
         </div>
     </div>
     <div style="height:20px;"></div>
