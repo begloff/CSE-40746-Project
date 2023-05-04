@@ -64,6 +64,7 @@ const registerUser = async (context, details) => {
     sql = `select * from users where username = USERINPUT:${username}END`
     resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
     resp = resp.data
+    
     if (resp.length){
         alert('Username already exists: please use another name')
         return
