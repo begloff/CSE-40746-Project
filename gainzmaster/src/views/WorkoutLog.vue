@@ -39,7 +39,7 @@
                                         <img :src="exercise[3]" :style="`height:${60/workout[4].length}%; max-width: 40%;`" v-if='exercise[0] == "Rider" || exercise[0] == "Wave Machine" || exercise[0] == "Sprint" || exercise[0] == "Crunch"'>
                                         <img v-else :src="exercise[3]" :style="`height:${60/workout[4].length}%;`">
                                     </th>
-                                    <th class="logth">{{exercise[1]}} x {{exercise[2]}}</th>
+                                    <th class="logth">{{exercise[2]}} x {{exercise[1]}}</th>
                                 </tr>
                             </tbody>
                         </table>
