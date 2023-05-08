@@ -64,9 +64,10 @@ const registerUser = async (context, details) => {
     sql = `select * from users where username = USERINPUT:${username}END`
     resp = await axios.get(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
     resp = resp.data
+    console.log(resp)
     
     if (resp.length){
-        alert('Username already exists: please use another name')
+        alert('Username already exists or restricted username: please use another name')
         return
     }
 
@@ -109,9 +110,10 @@ const registerUser = async (context, details) => {
 
     //What if error occurs in between here --> not good
 
-    sql = `insert into users (user_email, username) values ('${email}', '${username}')`
+    sql = `insert into users (user_email, username) values (USERINPUT:${email}, ${username})END`
     resp = await axios.post(`http://3.89.12.221:8004/db.py/?sql=${sql}`)
     var result = resp.data.includes('Successfully executed')
+    console.log(resp.data)
     if (!result){
         alert('Error creating user. Please try again')
         return

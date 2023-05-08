@@ -29,6 +29,7 @@ const requireAuth= async (to,from,next)=>{
 
 const notRequireAuth=(to,from,next)=>{
   let user=auth.currentUser
+  console.log(auth.currentUser)
   if(user){
     next({name:'home'})
   }else{
