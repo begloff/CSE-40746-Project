@@ -33,12 +33,14 @@ try:
         sql = sql.split(';')
         if len(sql[-1]) == 0:
             sql = sql[:-1]
+            
+    if len(sql) == 1:
+        sql = sql[0]
     
     con = cx_Oracle.connect('timmy/timmy@localhost:1521/xe')
     
     #Need to protect against sql injection in usercreation and exercise creation
     #Method use USERINPUT tag to extract user input and put in necessary spot
-    
     #Won't have multiple queries with USER INPUT, so read user input and extract
     if 'USERINPUT' in sql:
         
@@ -64,24 +66,51 @@ try:
             
         elif method == 'POST': #POST WILL HANDLE ALL UPDATE,READ,and DELETE
             
-            val = sql.index('USERINPUT') + 10
-            val2 = sql.index('END')
-            val = str(sql[val:val2-1])
-            sql2 = str(sql[:sql.index('USERINPUT')])
-
-            #sql contains appropriate query
-            #val contains the user submitted value
-
-            sql2 += ":x" + sql[val2-1]
-            sql = sql2
+           #Only post requests --> naming workout and making new user
+           if 'insert into sessions' in sql:
             
-            cursor = con.cursor()
-            
-            cursor.execute(sql, {'x':val})
-            con.commit()
+                val = sql.index('USERINPUT') + 10
+                val2 = sql.index('END')
+                val = str(sql[val:val2-1])
+                sql2 = str(sql[:sql.index('USERINPUT')])
 
-            con.commit()  
-            print(f'Successfully executed {sql}', end='')
+                #sql contains appropriate query
+                #val contains the user submitted value
+
+                sql2 += ":x" + sql[val2-1]
+                sql = sql2
+                
+                cursor = con.cursor()
+                
+                cursor.execute(sql, {'x':val})
+                con.commit()
+
+                con.commit()  
+                print(f'Successfully executed {sql}', end='')
+            
+           elif 'insert into users' in sql:
+               
+                #Need to split into email and username
+                ind = sql.index('USERINPUT') + 10
+                ind2 = sql.index('END')
+                ind3 = str(sql[ind:ind2-1])
+                sql2 = str(sql[:sql.index('USERINPUT')])
+                
+                email = ind3[:ind3.index(', ')]
+                user = ind3[ind3.index(', ')+2:]
+                # #sql contains appropriate query
+                # #val contains the user submitted value
+
+                sql2 += ":x" + ", :y" + ")"
+                sql = sql2
+                
+                cursor = con.cursor()
+                
+                cursor.execute(sql, {'x':email, 'y':user})
+                con.commit()
+
+                con.commit()  
+                print(f'Successfully executed {sql}', end='') 
             
         
         cursor.close()
@@ -121,6 +150,7 @@ try:
             
         elif method == 'POST': #POST WILL HANDLE ALL UPDATE,READ,and DELETE
             
+        #     #TODO: ROBUST ERROR CHECKING --> verify no select
         #     #EXAMPLES:
         #         #insert into general_muscles(muscle_group, general_id) values ('Hello',11)
         #         #update general_muscles set muscle_group = 'Hell', general_id = 11 where muscle_group = 'Hello'
